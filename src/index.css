@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #0B1F33;
+  --color-navy-800: #123352;
+  --color-teal-600: #0D9488;
+  --color-teal-500: #14B8A6;
+  --color-ice-50: #F4F8FB;
+  --color-slate-600: #475569;
+  --color-amber-500: #F59E0B;
+  --color-rose-600: #E11D48;
+  --color-emerald-600: #059669;
+  --color-soft-gold: #C6A75E;
+}
+
+:root {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: #0B1F33;
+  background: #F4F8FB;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Subtle editorial page texture (not casino) */
+.page-mesh {
+  background-color: #F4F8FB;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(13, 148, 136, 0.08), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(11, 31, 51, 0.06), transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 220px);
+}
+
+.card-surface {
+  background: #fff;
+  border: 1px solid rgba(11, 31, 51, 0.08);
+  box-shadow:
+    0 1px 2px rgba(11, 31, 51, 0.04),
+    0 8px 24px rgba(11, 31, 51, 0.04);
+}
+
+.card-surface:hover {
+  box-shadow:
+    0 2px 4px rgba(11, 31, 51, 0.05),
+    0 12px 28px rgba(11, 31, 51, 0.07);
+}
+
+.tally-glass {
+  background:
+    linear-gradient(145deg, rgba(18, 51, 82, 0.95), rgba(11, 31, 51, 0.98)),
+    radial-gradient(circle at 85% 15%, rgba(20, 184, 166, 0.18), transparent 40%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(11, 31, 51, 0.28);
+}
+
+.exclusive-accent {
+  border-color: rgba(198, 167, 94, 0.45);
+  background:
+    linear-gradient(180deg, rgba(198, 167, 94, 0.08), transparent 48%),
+    #fff;
+}
+
+.btn-primary {
+  background: #0D9488;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.25);
+}
+.btn-primary:hover {
+  background: #14B8A6;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+}
+
+.btn-ghost {
+  background: #fff;
+  border: 1px solid rgba(11, 31, 51, 0.12);
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.btn-ghost:hover {
+  border-color: #0D9488;
+  color: #0D9488;
+}
+
+.section-kicker {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0D9488;
+}

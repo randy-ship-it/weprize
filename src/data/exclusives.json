@@ -1,0 +1,83 @@
+[
+  {
+    "id": "ex-001",
+    "slug": "home-humanoid-12mo",
+    "title": "12-month home humanoid instruct/use (pre-order)",
+    "sponsor": "Scale Health",
+    "sponsor_url": "https://scalehealth.ca",
+    "summary": "Flagship WePrize exclusive on our rails. Winner gets 12 months instructing and using a home humanoid (pre-order), quietly previewing future in-home physio / PT with Scale / Align.",
+    "prize_text": "12-month home humanoid instruct/use (pre-order)",
+    "arv_cad_estimate": 24000,
+    "status": "preview",
+    "first_party": true,
+    "lane": "humanoid",
+    "highlights": [
+      "First-party exclusive on WePrize rails",
+      "Free-entry path when live",
+      "Soft promo for future in-home physio / PT",
+      "Household rules we write because first-party",
+      "EXAMPLE ARV only · not a medical claim"
+    ],
+    "cta_label": "Notify me",
+    "contest_slug": "scale-health-home-humanoid"
+  },
+  {
+    "id": "ex-002",
+    "slug": "align-home-pt-kit",
+    "title": "Scale / Align home-PT starter kit",
+    "sponsor": "Scale Health",
+    "sponsor_url": "https://scalehealth.ca",
+    "summary": "EXAMPLE future exclusive: Align recovery starter kit for home mobility practice. Wellness accessories only.",
+    "prize_text": "Align home-PT starter kit (EXAMPLE)",
+    "arv_cad_estimate": 450,
+    "status": "coming",
+    "first_party": true,
+    "lane": "home_pt",
+    "highlights": [
+      "Coming on WePrize rails",
+      "No disease-cure claims",
+      "Free entry when live"
+    ],
+    "cta_label": "Notify me",
+    "contest_slug": "scale-health-align-home-pt-kit"
+  },
+  {
+    "id": "ex-003",
+    "slug": "align-recovery-pack",
+    "title": "Align recovery accessories pack",
+    "sponsor": "Scale Health",
+    "sponsor_url": "https://scalehealth.ca",
+    "summary": "EXAMPLE coming exclusive: recovery accessories pack for home practice days.",
+    "prize_text": "Align recovery accessories pack (EXAMPLE)",
+    "arv_cad_estimate": 180,
+    "status": "coming",
+    "first_party": true,
+    "lane": "align",
+    "highlights": [
+      "First-party rails",
+      "EXAMPLE only",
+      "Canada-first"
+    ],
+    "cta_label": "Notify me"
+  },
+  {
+    "id": "ex-004",
+    "slug": "scale-community-challenge",
+    "title": "Scale Health community challenge badge",
+    "sponsor": "Scale Health",
+    "sponsor_url": "https://scalehealth.ca",
+    "summary": "EXAMPLE community challenge badge + merch pack for WePrize members who stay on the board.",
+    "prize_text": "Community challenge badge pack (EXAMPLE)",
+    "arv_cad_estimate": 75,
+    "status": "coming",
+    "first_party": true,
+    "lane": "other",
+    "highlights": [
+      "Soft engagement exclusive",
+      "Not live yet",
+      "EXAMPLE"
+    ],
+    "cta_label": "Notify me",
+    "contest_slug": "scale-health-community-challenge"
+  }
+]

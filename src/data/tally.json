@@ -1,0 +1,26 @@
+{
+  "label": "EXAMPLE operator book",
+  "person_entries": 107,
+  "unique_contests": 68,
+  "face_pool_cad": 12310000,
+  "haircut_pool_cad": 10930000,
+  "est_ev_mid_cad": 198,
+  "est_ev_high_field_cad": 75,
+  "p_ge_100_pct": 8.1,
+  "open_inventory_range": "150-400",
+  "disclaimer": "ESTIMATE \u00b7 EXAMPLE \u00b7 not a guarantee \u00b7 face/haircut/EV from last full-pool rebook 2026-09-14 ~6:25pm ET \u2014 full-pool rebook pending for PE 107 delta",
+  "open_inventory_note": "PE 107 / 68 unique (Contest Bot 2026-09-15 AM). EV mid $198 / stress $75 kept from last rebook; full-pool rebook pending for +6 PE delta.",
+  "as_of": "2026-09-15T06:35:00-04:00",
+  "public_show": [
+    "expected_value_pm",
+    "total_pot",
+    "person_entries",
+    "unique_contests",
+    "closing_soon"
+  ],
+  "public_hide": [
+    "stress",
+    "p_ge_100"
+  ],
+  "ux_note": "Public UI: expected \u00b1 and total pot only; no stress $"
+}

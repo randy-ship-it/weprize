@@ -1,0 +1,11 @@
+# WePrize - draft crawl policy
+# Placeholder host: weprize.ca (domain not attached yet)
+
+User-agent: *
+Allow: /
+
+# Agent-readable product facts
+# llms.txt: https://weprize.ca/llms.txt
+# llms-full.txt: https://weprize.ca/llms-full.txt
+
+Sitemap: https://weprize.ca/sitemap.xml
