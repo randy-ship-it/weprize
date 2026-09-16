@@ -8,6 +8,7 @@ import { PricingCards } from '../components/PricingCards'
 import { ContestCard } from '../components/ContestCard'
 import { ExclusiveCard } from '../components/ExclusiveCard'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
+import { PrizeCollage } from '../components/PrizeCollage'
 import { sortContests } from '../lib/filters'
 import type { Exclusive, Tally } from '../types/contest'
 
@@ -18,32 +19,40 @@ export function Home() {
 
   return (
     <div className="space-y-10">
-      <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-start">
+      <section className="space-y-4">
         <div>
-          <p className="section-kicker mb-3">Canada-first</p>
-          <h1 className="text-3xl sm:text-[2.6rem] font-bold text-navy-950 leading-[1.12] tracking-tight mb-3">
+          <p className="section-kicker mb-2">WePrize · Canada-first</p>
+          <h1 className="text-3xl sm:text-[2.6rem] font-bold text-navy-950 leading-[1.12] tracking-tight mb-2">
             Don&apos;t gamble with your time.
           </h1>
-          <p className="text-lg text-slate-700 mb-2 max-w-xl leading-relaxed">
-            We apply to free contests for you.
+          <p className="text-base sm:text-lg text-slate-700 max-w-xl leading-relaxed">
+            We apply to free contests for you. You tap the codes when asked.
           </p>
-          <p className="text-sm text-slate-500 mb-6 max-w-xl leading-relaxed">
-            You tap the codes when a contest asks. Estimates update from entries we submitted. Not a guarantee.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/contests" className="btn-primary px-5 py-2.5 text-sm">
-              Browse contests
-            </Link>
-            <Link to="/waitlist" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
-              Start free
-            </Link>
-            <Link to="/submit" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
-              Suggest a contest
-            </Link>
-          </div>
-          <p className="mt-4 text-xs text-slate-500">
-            Ready to apply this week:{' '}
-            <span className="tabular font-semibold text-navy-950">{autoOkCount}</span>
+        </div>
+
+        <PrizeCollage />
+
+        <div className="flex flex-wrap gap-3 pt-1">
+          <Link to="/contests" className="btn-primary px-5 py-2.5 text-sm">
+            Browse contests
+          </Link>
+          <Link to="/waitlist" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+            Start free
+          </Link>
+          <Link to="/submit" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+            Suggest a contest
+          </Link>
+        </div>
+        <p className="text-xs text-slate-500">
+          Ready to apply this week:{' '}
+          <span className="tabular font-semibold text-navy-950">{autoOkCount}</span>
+        </p>
+      </section>
+
+      <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        <div className="hidden lg:block">
+          <p className="text-sm text-slate-600 leading-relaxed max-w-xl">
+            Estimates update from entries we submitted. Not a guarantee. Free contests only on WePrize.
           </p>
         </div>
         <LiveTally tally={tally as Tally} autoOkLive={autoOkCount} />
