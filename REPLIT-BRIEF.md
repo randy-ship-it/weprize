@@ -19,7 +19,7 @@ Also read:
 - [`NAME.md`](./NAME.md) - WePrize lock; EnterBook = primary runner-up
 - [`LEAPFROG-PACK.md`](./LEAPFROG-PACK.md) · [`PRODUCT.md`](./PRODUCT.md) · [`MARKETING-MANTRA.md`](./MARKETING-MANTRA.md)
 - [`SCHEMA.md`](./SCHEMA.md) · [`EV-MODEL.md`](./EV-MODEL.md) · [`GEO.md`](./GEO.md) · [`ADOPTION.md`](./ADOPTION.md)
-- [`PERSONAL-TALLY.md`](./PERSONAL-TALLY.md) - EXAMPLE tally numbers (~$189 EV mid, 61 entries)
+- [`PERSONAL-TALLY.md`](./PERSONAL-TALLY.md) - EXAMPLE tally numbers (~$198 EV mid, 123 PE / 77 unique)
 
 ---
 
@@ -77,7 +77,7 @@ Avoid for v1:
 
 ## Pages (minimum = REPLIT-PASTE set)
 
-1. **Home** - hero + **live tally above fold** (EXAMPLE from PERSONAL-TALLY: ~$189 EV mid, 61 entries - label ESTIMATE) + Birch hero strip
+1. **Home** - hero + **live tally above fold** (EXAMPLE from PERSONAL-TALLY: ~$198 EV mid, 123 PE / 77 unique - label ESTIMATE) + Birch hero strip
 2. **Contests feed** - cards, friction badges before click, filters, Birch rail / between cards
 3. **Contest detail** - badges, EV band, rules, enter CTA, Birch mid
 4. **How it works** - BYO identity, assist queue stops before CAPTCHA

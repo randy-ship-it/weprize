@@ -1,14 +1,19 @@
-> **107 PE** 2026-09-15 ~6:35am ET — 107 PE / 68 unique. EV mid **$198** / stress **$75** ESTIMATE (last full-pool rebook 2026-09-14 ~6:25pm; full-pool rebook pending for PE 107 delta).
+> **123 PE** 2026-09-16 ~12:30pm ET — 123 PE / 77 unique. EV mid **$198** / stress **$75** ESTIMATE (last full-pool rebook 2026-09-14 ~6:25pm; full-pool rebook pending for PE 123 delta). Bump from 107/68; soft CA continues.
 
 # Personal Contest Tally (Randy + Michael)
 
-Updated: 2026-09-15 ~6:35am ET — **107 PE / 68 unique** (EV ESTIMATE carry-forward)
+Updated: 2026-09-16 ~12:30pm ET — **123 PE / 77 unique** (EV ESTIMATE carry-forward; bump from 107/68; soft CA continues)
 
 ## Scoreboard now
-- **Person-entries:** 107
-- **Unique contests entered:** 68
-- **Est. portfolio EV (carry-forward ESTIMATE):** **$198 CAD** mid / **$75** stress (field-high) — last full-pool rebook 2026-09-14 ~6:25pm; full-pool rebook pending for PE 107 delta
+- **Person-entries:** 123
+- **Unique contests entered:** 77
+- **Est. portfolio EV (carry-forward ESTIMATE):** **$198 CAD** mid / **$75** stress (field-high) — last full-pool rebook 2026-09-14 ~6:25pm; full-pool rebook pending for PE 123 delta
 - **Face pool / haircut pool:** $12,310,000 / $10,930,000 (last rebook rounded; ESTIMATE)
+
+## Milestone — TRUE 120 PE (Emma unlock)
+- HIT **120 / 75** with **Asphalt Kingdom R2** dual + **Kia EV5** dual (KrollTravel dual same day)
+- Live tracker may already be slightly ahead — stamp **120/75** as Emma unlocked
+- EV mid **$198** / stress **$75** kept from last rebook; EXAMPLE · full-pool rebook pending for PE 120 delta
 
 ## INVALID duals (both entered; household_rule=household|unknown)
 - MDT Coyote Hunter Giveaway 2026 — `unknown` — counted as **1 ticket** — https://mdttac.ca/pages/coyote-hunter-giveaway-2026
@@ -97,4 +102,11 @@ Updated: 2026-09-15 ~6:35am ET — **107 PE / 68 unique** (EV ESTIMATE carry-for
 - EV mid **$198** ESTIMATE (was ~$189) · stress ~$75
 - Top mid: Jamieson $127, Q107 $10K $19, Fabricland $11
 - SoT: PERSONAL-TALLY.md + prize_pools.json (Contest Bot)
+
+## EXAMPLE bump 2026-09-16 ~12:26pm ET (Emma seed / zip)
+- **120 person-entries** / **75 unique** — HIT unlocked
+- Asphalt Kingdom R2 dual + Kia EV5 dual (KrollTravel dual same day)
+- Face ~$12.31M · haircut ~$10.93M (carry-forward)
+- EV mid **$198** ESTIMATE · stress ~$75 — full-pool rebook pending for PE 120 delta
+- SoT: PERSONAL-TALLY.md + tally.json (Contest Bot / Emma zip)
 
