@@ -9,6 +9,7 @@ import { ContestCard } from '../components/ContestCard'
 import { ExclusiveCard } from '../components/ExclusiveCard'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
 import { PrizeCollage } from '../components/PrizeCollage'
+import { BrandReel } from '../components/BrandReel'
 import { sortContests } from '../lib/filters'
 import type { Exclusive, Tally } from '../types/contest'
 
@@ -29,6 +30,8 @@ export function Home() {
             We apply to free contests for you. You tap the codes when asked.
           </p>
         </div>
+
+        <BrandReel />
 
         <PrizeCollage />
 

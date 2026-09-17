@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Coca-Cola",
+    "logo": "/brand/reel/coca-cola.png",
+    "logoAlt": "Coca-Cola",
+    "eyebrow": "Tuition opportunity",
+    "prize": "$10,000 tuition cheque + 70× $500 prepaid gift cards ($45k total)",
+    "contest": "Coca-Cola 2026 Back to School Tuition Contest",
+    "slug": "coca-cola-2026-back-to-school-tuition-contest"
+  },
+  {
+    "name": "GMC",
+    "logo": "/brand/reel/gmc.png",
+    "logoAlt": "GMC",
+    "eyebrow": "Vehicle opportunity",
+    "prize": "Up to $75,000 towards a new GMC",
+    "contest": "The GMC Contest",
+    "slug": "the-gmc-contest"
+  },
+  {
+    "name": "The Home Depot",
+    "logo": "/brand/reel/home-depot.png",
+    "logoAlt": "The Home Depot",
+    "eyebrow": "Gift card opportunity",
+    "prize": "$3,000 Home Depot gift card",
+    "contest": "Home Depot Canada — Customer Survey $3,000 Gift Card",
+    "slug": "home-depot-canada-customer-survey-3-000-gift-card"
+  },
+  {
+    "name": "Sleep Country",
+    "logo": "/brand/reel/sleep-country.png",
+    "logoAlt": "Sleep Country",
+    "eyebrow": "Sleep opportunity",
+    "prize": "Sleep Country prize pack",
+    "contest": "CFOX Fall Back Asleep with Sleep Country",
+    "slug": "cfox-fall-back-asleep-with-sleep-country"
+  },
+  {
+    "name": "Mary Brown's",
+    "logo": "/brand/reel/mary-browns.svg",
+    "logoAlt": "Mary Brown's Chicken",
+    "eyebrow": "Gift card opportunity",
+    "prize": "$100–$250 Mary Brown gift cards (multi)",
+    "contest": "Mary Brown's — Tell Mary Survey Gift Cards",
+    "slug": "mary-brown-s-tell-mary-survey-gift-cards"
+  },
+  {
+    "name": "Jamieson",
+    "logo": "/brand/reel/jamieson.png",
+    "logoAlt": "Jamieson",
+    "eyebrow": "Gift card opportunity",
+    "prize": "1 of 100 × $100 Jamieson gift cards",
+    "contest": "Jamieson Win $100 Gift Cards",
+    "slug": "jamieson-win-100-gift-cards"
+  },
+  {
+    "name": "Chrysler",
+    "logo": "/brand/reel/chrysler.png",
+    "logoAlt": "Chrysler",
+    "eyebrow": "Vehicle opportunity",
+    "prize": "Voucher up to $85,000 toward purchase/lease of a new Chrysler/Dodge/Jeep/Ram",
+    "contest": "Chrysler 2026 Win Your Wheels",
+    "slug": "chrysler-2026-win-your-wheels"
+  },
+  {
+    "name": "Honda",
+    "logo": "/brand/reel/honda.svg",
+    "logoAlt": "Honda",
+    "eyebrow": "Store credit opportunity",
+    "prize": "$10,000 CAD Honda dealer store credit",
+    "contest": "Honda $10K Your Way Store Credit",
+    "slug": "honda-10k-your-way-store-credit"
+  }
+]
