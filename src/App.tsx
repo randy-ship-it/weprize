@@ -13,6 +13,7 @@ import { Advertise } from './pages/Advertise'
 import { Terms, Privacy, Disclaimer } from './pages/Legal'
 import { Profiles } from './pages/Profiles'
 import { Agents } from './pages/Agents'
+import { Prizes } from './pages/Prizes'
 
 export default function App() {
   return (
@@ -22,6 +23,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="contests" element={<Contests />} />
           <Route path="contests/:slug" element={<ContestDetail />} />
+          <Route path="prizes" element={<Prizes />} />
+          <Route path="what-you-could-win" element={<Navigate to="/prizes" replace />} />
           <Route path="exclusives" element={<Exclusives />} />
           <Route path="how-it-works" element={<HowItWorks />} />
           <Route path="pricing" element={<Pricing />} />
