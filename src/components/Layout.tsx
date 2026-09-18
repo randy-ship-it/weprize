@@ -6,6 +6,7 @@ import { DisclaimerStrip } from './DisclaimerStrip'
 const nav = [
   { to: '/', label: 'Home', end: true },
   { to: '/contests', label: 'Contests' },
+  { to: '/prizes', label: 'Prizes' },
   { to: '/submit', label: 'Suggest' },
   { to: '/exclusives', label: 'Exclusives' },
   { to: '/how-it-works', label: 'How it works' },
@@ -61,6 +62,7 @@ export function Layout() {
           <div className="text-xs space-y-1.5">
             <Link to="/methodology" className="block hover:text-teal-500">Methodology</Link>
             <Link to="/for-agents" className="block hover:text-teal-500">For agents</Link>
+            <Link to="/prizes" className="block hover:text-teal-500">What you could win</Link>
             <Link to="/exclusives" className="block hover:text-teal-500">Scale exclusives</Link>
             <Link to="/disclaimer" className="block hover:text-teal-500">Disclaimer</Link>
             <Link to="/terms" className="block hover:text-teal-500">Terms</Link>
