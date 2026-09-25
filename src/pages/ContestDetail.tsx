@@ -17,7 +17,7 @@ export function ContestDetail() {
     return (
       <div className="rounded-2xl border border-dashed border-navy-950/20 bg-white p-10 text-center">
         <p className="text-navy-950 font-semibold mb-2">Contest not found</p>
-        <p className="text-sm text-slate-600 mb-4">That slug is not in the draft seed.</p>
+        <p className="text-sm text-slate-600 mb-4">That contest is not on the board. Try Exclusives or Contests.</p>
         <Link to="/contests" className="text-teal-600 hover:underline text-sm">
           Back to feed
         </Link>
@@ -58,6 +58,30 @@ export function ContestDetail() {
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">{contest.name}</h1>
         <p className="text-slate-600 leading-relaxed">{contest.prize_text}</p>
       </header>
+
+      {exclusive && contest.source === 'scale_health' ? (
+        <section className="card-surface rounded-2xl p-5 space-y-3 border border-soft-gold/30">
+          <h2 className="text-sm font-semibold text-navy-950">Industry insider hubs</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Scale connects wellness supply brands to industry insider hubs. Example store on the network:{' '}
+            <span className="font-medium text-navy-950">DR-HO</span>. If you win, your store credit works on any participating insider hub — pick the brand store you actually want.
+          </p>
+          <ul className="text-sm text-slate-600 list-disc pl-5 space-y-1">
+            <li>Browse cool Scale supply brands on hub storefronts</li>
+            <li>Example hub: DR-HO&apos;s store</li>
+            <li>Prize = store credit across participating hubs (not locked to one SKU)</li>
+            <li>Free entry · official rules when entry fully opens · estimates only</li>
+          </ul>
+          <a
+            href="https://scalehealth.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex text-sm text-teal-600 hover:underline"
+          >
+            Scale Health →
+          </a>
+        </section>
+      ) : null}
 
       <section className="card-surface rounded-2xl p-5 space-y-3">
         <h2 className="text-sm font-semibold text-navy-950">Prize</h2>

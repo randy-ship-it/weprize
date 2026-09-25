@@ -19,11 +19,11 @@ export function Exclusives() {
           WePrize exclusives · powered with Scale Health
         </h1>
         <p className="text-slate-600 text-sm leading-relaxed">
-          First-party giveaways on our rails. We write the household rules. Soft sponsor:{' '}
+          First-party exclusives on our rails with{' '}
           <a href="https://scalehealth.ca" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline">
-            ScaleHealth.ca
+            Scale Health
           </a>
-          . Notify only. Not medical advice. No disease-cure claims.
+          . Cool supply brands on industry insider hubs — example store: DR-HO. Win store credit you can use on any participating hub. Free entry when open. Estimates only — not a win guarantee. Not medical advice.
         </p>
       </header>
 
