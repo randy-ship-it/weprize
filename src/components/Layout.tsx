@@ -1,5 +1,4 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { DraftBanner } from './DraftBanner'
 import { CanadaChip } from './CanadaChip'
 import { DisclaimerStrip } from './DisclaimerStrip'
 
@@ -23,8 +22,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 export function Layout() {
   return (
     <div className="min-h-screen flex flex-col page-mesh">
-      <DraftBanner />
-      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-[40px] z-40 backdrop-blur">
+      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-0 z-40 backdrop-blur">
         <div className="mx-auto max-w-[1200px] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5 group">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-teal-600/20 ring-1 ring-teal-500/40 text-teal-500 font-bold text-sm">
@@ -45,7 +43,7 @@ export function Layout() {
         </div>
         <div className="border-t border-white/5">
           <p className="mx-auto max-w-[1200px] px-4 py-1.5 text-[11px] text-slate-400">
-            Contest Bot is the engine behind WePrize · Canada-first · draft preview
+            Contest Bot is the engine behind WePrize · Canada-first · live on weprize.net
           </p>
         </div>
       </header>
@@ -57,7 +55,7 @@ export function Layout() {
           <div>
             <p className="font-semibold text-white mb-1.5 text-lg">WePrize</p>
             <p className="text-xs leading-relaxed text-slate-400">
-              Don't gamble with your time. We apply to free contests for you. Draft preview only.
+              Don't gamble with your time. We apply to free contests for you. Canada-first · live on weprize.net.
             </p>
           </div>
           <div className="text-xs space-y-1.5">

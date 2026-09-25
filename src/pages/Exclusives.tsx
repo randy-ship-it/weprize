@@ -23,7 +23,7 @@ export function Exclusives() {
           <a href="https://scalehealth.ca" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline">
             ScaleHealth.ca
           </a>
-          . Draft preview / notify only. Not medical advice. No disease-cure claims.
+          . Notify / interest list only. Not medical advice. No disease-cure claims.
         </p>
       </header>
 

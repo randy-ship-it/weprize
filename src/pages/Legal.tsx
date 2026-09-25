@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 
 export function Terms() {
   return (
-    <LegalShell title="Terms (draft stub)">
+    <LegalShell title="Terms">
       <p>
-        WePrize is a draft Canada-first contest board + assist preview. Contests remain free on brand sites. Any future fee is for research and time, not for influencing outcomes. Contest Bot is the engine behind WePrize.
+        WePrize is a Canada-first contest board and assist service at weprize.net. Contests remain free on brand sites. Any fee is for research and time, not for influencing outcomes. Contest Bot is the engine behind WePrize.
       </p>
       <p>
         You bring your own legal identity. We do not provision extra emails as tickets. Assist stops before CAPTCHA / OTP.
@@ -16,9 +16,9 @@ export function Terms() {
 
 export function Privacy() {
   return (
-    <LegalShell title="Privacy (draft stub)">
+    <LegalShell title="Privacy">
       <p>
-        Waitlist emails in this draft are stored in your browser localStorage only (`weprize_waitlist`). No ESP. No third-party sale of PII. Birch Reserve ads are soft-linked display inventory, not data resale.
+        Waitlist emails may be stored in your browser localStorage (`weprize_waitlist`) until a server waitlist ships. No ESP. No third-party sale of PII. Birch Reserve ads are soft-linked display inventory, not data resale.
       </p>
       <p>Health checks and profiles are local stubs for ops demos.</p>
     </LegalShell>
