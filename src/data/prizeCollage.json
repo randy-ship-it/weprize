@@ -1,23 +1,51 @@
 [
   {
-    "id": "car-suv",
-    "src": "/prizes/car-suv.jpg",
-    "alt": "Midnight blue electric SUV in a bright showroom",
-    "label": "Cars & vehicles",
+    "id": "wellness",
+    "src": "/prizes/wellness.jpg",
+    "alt": "Yoga mat, resistance bands, foam roller, and tea in a sunlit room",
+    "label": "Recovery & fitness",
+    "aspect": "portrait"
+  },
+  {
+    "id": "gadgets",
+    "src": "/prizes/gadgets.jpg",
+    "alt": "Smartwatch, wireless headphones, and tablet flat lay",
+    "label": "Wearables & recovery gear",
     "aspect": "square"
   },
   {
     "id": "cash-lifestyle",
     "src": "/prizes/cash-lifestyle.jpg",
-    "alt": "Lifestyle still with cash stacks and a gold card on marble",
-    "label": "Cash & lifestyle",
+    "alt": "Lifestyle still with gift cards on marble",
+    "label": "Nutrition & wellness GCs",
     "aspect": "portrait"
+  },
+  {
+    "id": "adventure-travel",
+    "src": "/prizes/adventure-travel.jpg",
+    "alt": "Glacial lake with kayak and camping gear at sunrise",
+    "label": "Active getaways",
+    "aspect": "square"
   },
   {
     "id": "tropical-travel",
     "src": "/prizes/tropical-travel.jpg",
     "alt": "Passport and suitcase with tropical ocean view",
-    "label": "Travel getaways",
+    "label": "Rest & reset travel",
+    "aspect": "square"
+  },
+  {
+    "id": "shopping-spree",
+    "src": "/prizes/shopping-spree.jpg",
+    "alt": "Shopping bags on marble floor",
+    "label": "Beauty & self-care",
+    "aspect": "portrait"
+  },
+  {
+    "id": "car-suv",
+    "src": "/prizes/car-suv.jpg",
+    "alt": "Midnight blue electric SUV in a bright showroom",
+    "label": "Cars & vehicles",
     "aspect": "square"
   },
   {
@@ -28,17 +56,10 @@
     "aspect": "portrait"
   },
   {
-    "id": "gadgets",
-    "src": "/prizes/gadgets.jpg",
-    "alt": "Wireless headphones, smartwatch, and tablet flat lay",
-    "label": "Gadgets",
-    "aspect": "square"
-  },
-  {
-    "id": "wellness",
-    "src": "/prizes/wellness.jpg",
-    "alt": "Yoga mat, bands, foam roller, and tea in sunlit room",
-    "label": "Wellness",
+    "id": "condo-keys",
+    "src": "/prizes/condo-keys.jpg",
+    "alt": "Condo keys on walnut tray with city skyline view",
+    "label": "Home & lifestyle",
     "aspect": "portrait"
   },
   {
@@ -47,26 +68,5 @@
     "alt": "Friendly home humanoid robot in a bright living room",
     "label": "Home humanoid",
     "aspect": "square"
-  },
-  {
-    "id": "shopping-spree",
-    "src": "/prizes/shopping-spree.jpg",
-    "alt": "Elegant shopping bags on marble floor",
-    "label": "Shopping spree",
-    "aspect": "portrait"
-  },
-  {
-    "id": "adventure-travel",
-    "src": "/prizes/adventure-travel.jpg",
-    "alt": "Glacial lake with kayak and camping gear at sunrise",
-    "label": "Adventure travel",
-    "aspect": "square"
-  },
-  {
-    "id": "condo-keys",
-    "src": "/prizes/condo-keys.jpg",
-    "alt": "Condo keys on walnut tray with city skyline view",
-    "label": "Home & lifestyle",
-    "aspect": "portrait"
   }
 ]

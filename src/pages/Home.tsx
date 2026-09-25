@@ -14,19 +14,22 @@ import type { Exclusive, Tally } from '../types/contest'
 
 export function Home() {
   const { contests, autoOkCount, exclusives: scaleContests } = useContests()
-  const preview = sortContests(contests.filter((c) => c.health !== 'dead' && !c.exclusive)).slice(0, 6)
-  const flagship = (exclusives as Exclusive[]).find((e) => e.lane === 'humanoid') ?? (exclusives as Exclusive[])[0]
+  const hwRe = /jamieson|sleep.?country|wellness|nutrition|vitamin|fitness|yoga|recovery|physio|massage|hydration|electrolyt|beauty|skincare|natracare|biosteel|bodyarmor|celsius|omega|ergonomic|mattress|sleep|guardian|remedy|clinic|therap|pill|supplement|protein/i
+  const live = contests.filter((c) => c.health !== 'dead' && !c.exclusive)
+  const hw = live.filter((c) => hwRe.test(`${c.name} ${c.prize_text || ''}`))
+  const preview = sortContests(hw.length >= 4 ? hw : live).slice(0, 6)
+  const flagship = (exclusives as Exclusive[]).find((e) => e.lane !== 'humanoid') ?? (exclusives as Exclusive[])[0]
 
   return (
     <div className="space-y-10">
       <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-start">
         <div>
-          <p className="section-kicker mb-3">WePrize · Canada-first</p>
+          <p className="section-kicker mb-3">WePrize · Health & wellness</p>
           <h1 className="text-3xl sm:text-[2.6rem] font-bold text-navy-950 leading-[1.12] tracking-tight mb-3">
-            Don&apos;t gamble with your time.
+            Win recovery, sleep, nutrition, and fitness gear.
           </h1>
           <p className="text-lg text-slate-700 mb-2 max-w-xl leading-relaxed">
-            We apply to free contests for you.
+            Free Canada-first contests in health & wellness. We mass-apply for you.
           </p>
           <p className="text-sm text-slate-500 mb-6 max-w-xl leading-relaxed">
             You tap the codes when a contest asks. Estimates update from entries we submitted. Not a guarantee.
@@ -53,7 +56,7 @@ export function Home() {
       <BrandReel />
 
       <p className="text-sm text-slate-600">
-        Illustrative prize types only — not live contests.{' '}
+        Recovery, fitness, nutrition, sleep, and wellness gear first — illustrative types, not live contests.{' '}
         <Link to="/prizes" className="text-teal-600 hover:underline">
           What you could win →
         </Link>
