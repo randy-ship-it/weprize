@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS orders (
   amount_cents INTEGER,
   currency TEXT,
   year_round BOOLEAN NOT NULL DEFAULT FALSE,
+  client_reference_id TEXT,
   created_at TIMESTAMPTZ NOT NULL
 );
 CREATE TABLE IF NOT EXISTS identities (
@@ -67,6 +68,7 @@ function mapOrder(r) {
     amount_cents: r.amount_cents,
     currency: r.currency,
     year_round: Boolean(r.year_round),
+    client_reference_id: r.client_reference_id || null,
     created_at: iso(r.created_at),
   }
 }
@@ -119,6 +121,7 @@ export async function createPgStore(connectionString) {
     ssl: process.env.PGSSL === '0' ? false : { rejectUnauthorized: false },
   })
   await pool.query(SCHEMA)
+  await pool.query('ALTER TABLE orders ADD COLUMN IF NOT EXISTS client_reference_id TEXT')
 
   return {
     kind: 'postgres',
@@ -144,7 +147,7 @@ export async function createPgStore(connectionString) {
       return mapOrder(rows[0])
     },
 
-    async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency }) {
+    async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       const client = await pool.connect()
       try {
         await client.query('BEGIN')
@@ -176,12 +179,13 @@ export async function createPgStore(connectionString) {
           amount_cents: amountCents ?? null,
           currency: currency || 'cad',
           year_round: pack === 'year_round',
+          client_reference_id: clientReferenceId || null,
           created_at: nowIso(),
         }
         await client.query(
           `INSERT INTO orders
-            (id, token, stripe_session_id, stripe_payment_link, pack, status, customer_id, amount_cents, currency, year_round, created_at)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+            (id, token, stripe_session_id, stripe_payment_link, pack, status, customer_id, amount_cents, currency, year_round, client_reference_id, created_at)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
           [
             order.id,
             order.token,
@@ -193,6 +197,7 @@ export async function createPgStore(connectionString) {
             order.amount_cents,
             order.currency,
             order.year_round,
+            order.client_reference_id,
             order.created_at,
           ],
         )

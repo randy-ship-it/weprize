@@ -8,6 +8,7 @@ import { PricingCards } from '../components/PricingCards'
 import { ContestCard } from '../components/ContestCard'
 import { ExclusiveCard } from '../components/ExclusiveCard'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
+import { ShareButton } from '../components/ShareButton'
 import { BrandReel } from '../components/BrandReel'
 import { sortContests } from '../lib/filters'
 import type { Exclusive, Tally } from '../types/contest'
@@ -44,6 +45,7 @@ export function Home() {
             <Link to="/submit" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
               Suggest a contest
             </Link>
+            <ShareButton />
           </div>
           <p className="mt-4 text-xs text-slate-500">
             Ready to apply this week:{' '}
