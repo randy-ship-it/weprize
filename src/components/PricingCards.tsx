@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { paymentLinkWithRef } from '../data/stripe'
+import { createCheckout } from '../lib/api'
 import { getInboundRef } from '../lib/shareRef'
 import { loadPrepayIdentity, savePrepayIdentity } from '../lib/prepayIdentity'
 import type { PackId } from '../types/assist'
@@ -17,7 +18,7 @@ type Plan = {
   featured?: boolean
 }
 
-/** Rough pack EV band from operator mid EV / contests applied — estimates only. */
+/** Rough pack EV band from operator mid EV / contests applied - estimates only. */
 function packEvLine(pack: PackId | undefined, autoOkLive: number, estEvMidCad: number): string {
   if (!pack || estEvMidCad <= 0 || autoOkLive <= 0) return ''
   // Scale example book (~$198 mid over ~77 contests) onto this week's AUTO_OK count / pack size.
@@ -65,44 +66,63 @@ const plans = (n: number): Plan[] => [
 export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: Props) {
   const list = plans(autoOkLive)
   const inbound = getInboundRef()
-  const [pendingHref, setPendingHref] = useState<string | null>(null)
+  const [pendingPack, setPendingPack] = useState<PackId | null>(null)
+  const [busyPack, setBusyPack] = useState<PackId | null>(null)
+  const checkoutBusy = busyPack !== null
   const [preEmail, setPreEmail] = useState('')
   const [preName, setPreName] = useState('')
 
-  function goCheckout(href: string) {
-    window.open(href, '_blank', 'noopener,noreferrer')
-    setPendingHref(null)
+  async function startCheckout(pack: PackId) {
+    setBusyPack(pack)
+    try {
+      const { url } = await createCheckout(pack, inbound)
+      if (url) {
+        window.location.href = url
+        return
+      }
+      throw new Error('missing_url')
+    } catch {
+      // Fallback: Payment Links only if server Checkout fails. Prefer /api/checkout.
+      const href = paymentLinkWithRef(pack, inbound)
+      window.location.href = href
+    } finally {
+      setBusyPack(null)
+      setPendingPack(null)
+    }
   }
 
-  function onUnlockClick(e: MouseEvent<HTMLAnchorElement>, href: string) {
-    if (loadPrepayIdentity()) return // already saved — navigate normally
+  function onUnlockClick(e: MouseEvent<HTMLButtonElement>, pack: PackId) {
     e.preventDefault()
-    setPendingHref(href)
+    if (checkoutBusy) return
+    if (loadPrepayIdentity()) {
+      void startCheckout(pack)
+      return
+    }
+    setPendingPack(pack)
     setPreEmail('')
     setPreName('')
   }
 
   function onSavePrepay(e: FormEvent) {
     e.preventDefault()
-    if (!pendingHref) return
+    if (!pendingPack) return
     const email = preEmail.trim()
     const name = preName.trim()
     if (email.includes('@') && name) {
       savePrepayIdentity(email, name)
     }
-    goCheckout(pendingHref)
+    void startCheckout(pendingPack)
   }
 
   function onSkipPrepay() {
-    if (!pendingHref) return
-    goCheckout(pendingHref)
+    if (!pendingPack) return
+    void startCheckout(pendingPack)
   }
 
   return (
     <>
       <div className={`grid gap-4 ${teaser ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2'}`}>
         {list.map((p) => {
-          const href = p.pack ? paymentLinkWithRef(p.pack, inbound) : undefined
           const evLine = packEvLine(p.pack, autoOkLive, estEvMidCad)
           return (
             <div
@@ -119,18 +139,17 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
               {evLine ? (
                 <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">{evLine}</p>
               ) : null}
-              {href ? (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => onUnlockClick(e, href)}
-                  className={`mt-4 inline-flex justify-center px-4 py-2.5 text-sm ${
+              {p.pack ? (
+                <button
+                  type="button"
+                  disabled={checkoutBusy}
+                  onClick={(e) => onUnlockClick(e, p.pack!)}
+                  className={`mt-4 inline-flex justify-center px-4 py-2.5 text-sm disabled:opacity-60 ${
                     p.featured ? 'btn-primary' : 'btn-ghost text-navy-950'
                   }`}
                 >
-                  {p.cta}
-                </a>
+                  {busyPack === p.pack ? 'Starting checkout…' : p.cta}
+                </button>
               ) : (
                 <Link
                   to={p.to!}
@@ -146,7 +165,7 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
         })}
       </div>
 
-      {pendingHref ? (
+      {pendingPack ? (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-navy-950/40 p-4"
           role="dialog"
@@ -188,19 +207,24 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
                   value={preEmail}
                   onChange={(e) => setPreEmail(e.target.value)}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  placeholder="Same email you’ll use at checkout"
+                  placeholder="Same email you will use at checkout"
                 />
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
                 <button
                   type="button"
+                  disabled={checkoutBusy}
                   onClick={onSkipPrepay}
-                  className="btn-ghost inline-flex justify-center px-4 py-2.5 text-sm text-navy-950"
+                  className="btn-ghost inline-flex justify-center px-4 py-2.5 text-sm text-navy-950 disabled:opacity-60"
                 >
                   Skip. Continue to pay
                 </button>
-                <button type="submit" className="btn-primary inline-flex justify-center px-4 py-2.5 text-sm">
-                  Save & continue
+                <button
+                  type="submit"
+                  disabled={checkoutBusy}
+                  className="btn-primary inline-flex justify-center px-4 py-2.5 text-sm disabled:opacity-60"
+                >
+                  {checkoutBusy ? 'Starting checkout…' : 'Save & continue'}
                 </button>
               </div>
             </form>
