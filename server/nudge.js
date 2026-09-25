@@ -25,7 +25,7 @@ export async function sendNeedsYouNudge(opts) {
     return { sent: false, reason: 'no_recipient' }
   }
 
-  const base = (process.env.APP_BASE_URL || 'https://weprize.ca').replace(/\/$/, '')
+  const base = (process.env.APP_BASE_URL || 'https://weprize.net').replace(/\/$/, '')
   const orderUrl = `${base}/order/${opts.orderToken}`
   const title = opts.contestTitle || 'a contest'
   const reason = opts.reason || 'A brand site needs a code or confirmation from you.'

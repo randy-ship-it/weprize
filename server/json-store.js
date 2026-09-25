@@ -75,7 +75,7 @@ export function createJsonStore() {
       return load().orders.find((o) => o.stripe_session_id === sessionId) || null
     },
 
-    async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency }) {
+    async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       return withLock(() => {
         const db = load()
         const existing = db.orders.find((o) => o.stripe_session_id === sessionId)
@@ -98,6 +98,7 @@ export function createJsonStore() {
           amount_cents: amountCents ?? null,
           currency: currency || 'cad',
           year_round: pack === 'year_round',
+          client_reference_id: clientReferenceId || null,
           created_at: nowIso(),
         }
         db.orders.push(order)

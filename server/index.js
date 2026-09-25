@@ -220,6 +220,11 @@ async function fulfillCheckoutSession(store, session) {
       ? session.payment_link
       : session.payment_link?.id || session.metadata?.payment_link || null
 
+  const clientReferenceId =
+    typeof session.client_reference_id === 'string' && session.client_reference_id.trim()
+      ? session.client_reference_id.trim().slice(0, 64)
+      : null
+
   const order = await store.upsertPaidOrderFromStripe({
     sessionId: session.id,
     paymentLink,
@@ -227,6 +232,7 @@ async function fulfillCheckoutSession(store, session) {
     email: String(email).toLowerCase(),
     amountCents: session.amount_total ?? null,
     currency: session.currency || 'cad',
+    clientReferenceId,
   })
   return order
 }

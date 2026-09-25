@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
+import { ShareButton } from '../components/ShareButton'
 import { createOrder, fetchOrderBySession, type ServerOrder } from '../lib/api'
 import { isPackId, PACK_LABELS, type PackId } from '../types/assist'
 import { useContests } from '../hooks/useContests'
@@ -130,6 +131,7 @@ export function Success() {
         <Link to={continueTo} className="btn-primary inline-flex w-full justify-center px-6 py-3 text-sm sm:w-auto">
           {liveOrder ? 'Open your order' : 'Continue to identity'}
         </Link>
+        <ShareButton label="Share with a friend" variant="next" />
       </div>
 
       <div className="space-y-2 rounded-2xl border border-dashed border-navy-950/12 bg-white/60 p-4">

@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { NavLink, Outlet, Link } from 'react-router-dom'
+import { captureInboundRef } from '../lib/shareRef'
 import { CanadaChip } from './CanadaChip'
 import { DisclaimerStrip } from './DisclaimerStrip'
 
@@ -20,6 +22,10 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
   }`
 
 export function Layout() {
+  useEffect(() => {
+    captureInboundRef()
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col page-mesh">
       <header className="bg-navy-950 text-white border-b border-white/5 sticky top-0 z-40 backdrop-blur">

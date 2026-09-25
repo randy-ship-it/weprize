@@ -14,3 +14,19 @@ export const STRIPE_SUCCESS_URLS: Record<PackId, string> = {
 }
 
 export const PACK_FROM_QUERY = STRIPE_SUCCESS_URLS
+
+/**
+ * Append Stripe Payment Link attribution when inbound peer ref is known.
+ * client_reference_id is supported as a URL param on Payment Links.
+ */
+export function paymentLinkWithRef(pack: PackId, ref?: string | null): string {
+  const base = STRIPE_LINKS[pack]
+  const code = (ref || '').trim().toLowerCase()
+  if (!/^[a-z0-9]{6,8}$/.test(code)) return base
+  const u = new URL(base)
+  u.searchParams.set('client_reference_id', code)
+  u.searchParams.set('utm_source', 'peer')
+  u.searchParams.set('utm_medium', 'share')
+  u.searchParams.set('utm_content', code)
+  return u.toString()
+}
