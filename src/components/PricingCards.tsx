@@ -27,14 +27,14 @@ function packEvLine(pack: PackId | undefined, autoOkLive: number, estEvMidCad: n
   const mid = Math.round(perContest * n * (pack === 'triple' ? 0.9 : 1) * Math.min(rounds, 2))
   const low = Math.max(1, Math.round(mid * 0.5))
   const high = Math.round(mid * 1.6)
-  return `Suggested expected value ~$${low}–$${high} CAD if we apply to ~${Math.round(n)} contests this cycle — estimate only, not a guarantee.`
+  return `Suggested expected value ~$${low} to $${high} CAD if we apply to ~${Math.round(n)} contests this cycle. Estimate only, not a guarantee.`
 }
 
 const plans = (n: number): Plan[] => [
   {
     name: 'Free',
     price: '$0',
-    print: 'Browse and track. We apply to 10 contests for you. Share a peer link — no cash rewards.',
+    print: 'Browse and track. We apply to 10 contests for you. Share a peer link. No cash rewards.',
     cta: 'Browse contests',
     to: '/contests',
     featured: true,
@@ -42,14 +42,14 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Once',
     price: '$9',
-    print: `One round of applies for one person — your profile. About ${n} contests ready this week. Desire the queue, not bulk farm accounts.`,
+    print: `One round of applies for one person (your profile). About ${n} contests ready this week. Hundreds vs one on time. Desire the queue, not bulk farm accounts.`,
     cta: 'Unlock Once pack',
     pack: 'once',
   },
   {
     name: 'Triple',
     price: '$15',
-    print: 'Three people you know (with their consent + identity), or three apply rounds. Real adults only — not a business entry desk.',
+    print: 'Three people you know (with their consent + identity), or three apply rounds. Real adults only. Not a business entry desk.',
     cta: 'Get Triple pack',
     pack: 'triple',
   },
@@ -155,7 +155,7 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
         >
           <div className="card-surface w-full max-w-md space-y-4 rounded-2xl p-5 shadow-xl sm:p-6">
             <p id="prepay-title" className="text-sm font-semibold text-navy-950">
-              Optional — save name & email before checkout
+              Optional: save name and email before checkout
             </p>
             <p className="text-xs leading-relaxed text-slate-600">
               Soft step only. You can skip. Full mailing address is collected after payment on your order page (legal
@@ -197,7 +197,7 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
                   onClick={onSkipPrepay}
                   className="btn-ghost inline-flex justify-center px-4 py-2.5 text-sm text-navy-950"
                 >
-                  Skip — continue to pay
+                  Skip. Continue to pay
                 </button>
                 <button type="submit" className="btn-primary inline-flex justify-center px-4 py-2.5 text-sm">
                   Save & continue

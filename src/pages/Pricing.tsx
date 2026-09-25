@@ -14,8 +14,11 @@ export function Pricing() {
         <p className="section-kicker mb-1">Assist</p>
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">Pricing</h1>
         <p className="text-slate-600 text-sm mt-1.5 leading-relaxed">
-          Browse free. Unlock Once / Triple / year-round assist (CAD) when you want us to apply for you.
-          One personal profile for you. Friends = apply-on-behalf with their consent and identity. You tap codes when asked.
+          You would never fill all these contests yourself. Not worth your time. What if it was worth your time, because you can apply to hundreds in the time it takes to apply to one?
+        </p>
+        <p className="text-slate-600 text-sm mt-1.5 leading-relaxed">
+          Contests stay free. Unlock Once / Triple / year-round assist (CAD) when you want research and time back.
+          One personal profile for you. Friends = apply-on-behalf with their consent and identity. You tap codes when asked. Estimates only. Never better odds for paying.
         </p>
       </div>
       <PricingCards autoOkLive={autoOkCount} estEvMidCad={tally.est_ev_mid_cad} />
@@ -24,13 +27,13 @@ export function Pricing() {
         <p className="font-semibold text-navy-950 text-xs uppercase tracking-wide">Personal use · not a bulk business tool</p>
         <ul className="list-disc pl-5 space-y-1 text-sm">
           <li>
-            <strong className="text-navy-950">1 profile for you</strong> — one primary legal identity on WePrize.
+            <strong className="text-navy-950">1 profile for you</strong>. One primary legal identity on WePrize.
           </li>
           <li>
-            <strong className="text-navy-950">Friends OK</strong> — apply on their behalf only with their consent and their real identity (never fake emails).
+            <strong className="text-navy-950">Friends OK</strong>. Apply on their behalf only with their consent and their real identity (never fake emails).
           </li>
           <li>
-            <strong className="text-navy-950">Max 10 purchases per buyer</strong> — soft cap against ROI / farm accounts. WePrize is personal contest assist, not a wholesale entry service.
+            <strong className="text-navy-950">Max 10 purchases per buyer</strong>. Soft cap against ROI / farm accounts. WePrize is personal contest assist, not a wholesale entry service.
           </li>
         </ul>
         <p className="text-xs text-slate-500">

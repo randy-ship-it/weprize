@@ -11,7 +11,7 @@ const steps = [
   },
   {
     title: 'Contest Bot queues AUTO_OK',
-    body: 'Statuses: queued → applying → applied → confirm_sent → needs_you → confirmed | failed. Dashboard nudges when you must tap a code.',
+    body: 'Statuses: queued → applying → applied → confirm_sent → needs_you → confirmed | failed. Leverage: hundreds of free applies in the time of one. Dashboard nudges when you must tap a code.',
   },
   {
     title: 'Stop before CAPTCHA / OTP',
@@ -32,7 +32,10 @@ export function HowItWorks() {
     <div className="max-w-3xl space-y-6">
       <h1 className="text-2xl font-bold text-navy-950">How it works</h1>
       <p className="text-slate-600 text-sm leading-relaxed">
-        Assist spine for Day 1 story. Contest Bot is the engine behind WePrize. Fee is for research and time to complete eligible free entries. Contests are free. We cannot influence the outcome.
+        You would never fill all these free contests yourself. Not worth your time. What if it was, because you can apply to hundreds in the time it takes to apply to one?
+      </p>
+      <p className="text-slate-600 text-sm leading-relaxed">
+        Contests stay free. Fee is research and time assist on eligible forms. Estimates only. We do not know what you will get. We cannot influence who wins.
       </p>
       <ol className="space-y-4">
         {steps.map((s, i) => (
