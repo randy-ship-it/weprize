@@ -1,5 +1,47 @@
 [
   {
+    "id": "c-scale-001",
+    "slug": "scale-store-credit-insider-hubs",
+    "name": "Scale Health store credit \u00b7 industry insider hubs",
+    "url": "https://weprize.net/contests/scale-store-credit-insider-hubs",
+    "rules_url": "https://weprize.net/exclusives",
+    "prize_text": "Store credit for Scale industry insider hubs (example: DR-HO\u2019s store). Credit usable on any participating insider hub.",
+    "prize_tiers": [
+      {
+        "n": 1,
+        "arv_cad": 500.0,
+        "type": "store_credit"
+      }
+    ],
+    "prize_pool_cad": 500.0,
+    "close_at_et": "2026-12-31T23:59:59-05:00",
+    "days_left": 97,
+    "region": "ca",
+    "qc_ok": true,
+    "free_entry": true,
+    "platform_family": "scale_health",
+    "friction_badges": [
+      "form"
+    ],
+    "auto_class": "NEEDS_YOU",
+    "household_rule": "one_per_household",
+    "ev_low": 0.0,
+    "ev_mid": 0.0,
+    "ev_high": 0.0,
+    "minutes_to_enter": 2,
+    "health": "live",
+    "last_ok_at": "2026-09-25T16:10:00-04:00",
+    "third_party_entry_banned": false,
+    "confirm_email_expected": true,
+    "pool_source": "estimated",
+    "soft_field": true,
+    "source": "scale_health",
+    "new_live": true,
+    "eligibility_summary": "Canada residents 18+; free entry; official rules on Scale / WePrize exclusives when entry opens fully. Estimates only \u2014 not a guarantee of winning.",
+    "exclusive": true,
+    "notes": "EXAMPLE hub shown: DR-HO industry insider store. Winner store credit redeemable across participating Scale insider hubs. Supply brands showcase only \u2014 not medical claims."
+  },
+  {
     "id": "c-001",
     "slug": "jann-arden-tickets-sun-peaks-package-castanet",
     "name": "Jann Arden Tickets / Sun Peaks Package (Castanet)",

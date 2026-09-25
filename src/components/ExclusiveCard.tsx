@@ -60,13 +60,19 @@ export function ExclusiveCard({
         ))}
       </ul>
       <div className="flex flex-wrap gap-2 items-center">
-        <button type="button" onClick={notify} className="btn-primary px-4 py-2 text-sm">
-          {exclusive.cta_label}
-        </button>
         {exclusive.contest_slug ? (
-          <Link to={`/contests/${exclusive.contest_slug}`} className="btn-ghost px-4 py-2 text-sm text-navy-950">
-            Board card
+          <Link to={`/contests/${exclusive.contest_slug}`} className="btn-primary px-4 py-2 text-sm">
+            {exclusive.cta_label || 'Open exclusive'}
           </Link>
+        ) : (
+          <button type="button" onClick={notify} className="btn-primary px-4 py-2 text-sm">
+            {exclusive.cta_label}
+          </button>
+        )}
+        {exclusive.contest_slug ? (
+          <button type="button" onClick={notify} className="btn-ghost px-4 py-2 text-sm text-navy-950">
+            Notify me
+          </button>
         ) : null}
         <a
           href={exclusive.sponsor_url}

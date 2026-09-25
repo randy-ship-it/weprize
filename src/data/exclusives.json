@@ -1,33 +1,52 @@
 [
   {
     "id": "ex-001",
+    "slug": "scale-store-credit-insider-hubs",
+    "title": "Scale store credit \u00b7 any industry insider hub",
+    "sponsor": "Scale Health",
+    "sponsor_url": "https://scalehealth.ca",
+    "summary": "WePrize \u00d7 Scale exclusive. Browse cool Scale supply brands on insider hubs. Example store: DR-HO. If you win, you get store credit you can use on any participating industry insider hub \u2014 not locked to one brand.",
+    "prize_text": "Store credit usable on any Scale industry insider hub (example hub: DR-HO\u2019s store)",
+    "arv_cad_estimate": 500,
+    "status": "live",
+    "first_party": true,
+    "lane": "store_credit",
+    "highlights": [
+      "Supply brands on Scale insider hubs",
+      "Example hub: DR-HO\u2019s store",
+      "Win \u2192 store credit across participating hubs",
+      "Free-entry path",
+      "EXAMPLE ARV only \u00b7 not a medical claim \u00b7 not a win guarantee"
+    ],
+    "cta_label": "View exclusive",
+    "contest_slug": "scale-store-credit-insider-hubs"
+  },
+  {
+    "id": "ex-002",
     "slug": "home-humanoid-12mo",
     "title": "12-month home humanoid instruct/use (pre-order)",
     "sponsor": "Scale Health",
     "sponsor_url": "https://scalehealth.ca",
-    "summary": "Flagship WePrize exclusive on our rails. Winner gets 12 months instructing and using a home humanoid (pre-order), quietly previewing future in-home physio / PT with Scale / Align.",
-    "prize_text": "12-month home humanoid instruct/use (pre-order)",
+    "summary": "Future exclusive on our rails \u2014 demoted while store-credit hub exclusive is live.",
+    "prize_text": "12-month home humanoid instruct/use (pre-order) \u2014 COMING",
     "arv_cad_estimate": 24000,
-    "status": "preview",
+    "status": "coming",
     "first_party": true,
     "lane": "humanoid",
     "highlights": [
-      "First-party exclusive on WePrize rails",
+      "Coming later",
       "Free-entry path when live",
-      "Soft promo for future in-home physio / PT",
-      "Household rules we write because first-party",
-      "EXAMPLE ARV only · not a medical claim"
+      "EXAMPLE ARV only"
     ],
-    "cta_label": "Notify me",
-    "contest_slug": "scale-health-home-humanoid"
+    "cta_label": "Notify me"
   },
   {
-    "id": "ex-002",
+    "id": "ex-003",
     "slug": "align-home-pt-kit",
     "title": "Scale / Align home-PT starter kit",
     "sponsor": "Scale Health",
     "sponsor_url": "https://scalehealth.ca",
-    "summary": "EXAMPLE future exclusive: Align recovery starter kit for home mobility practice. Wellness accessories only.",
+    "summary": "EXAMPLE future exclusive: Align recovery starter kit. Wellness accessories only.",
     "prize_text": "Align home-PT starter kit (EXAMPLE)",
     "arv_cad_estimate": 450,
     "status": "coming",
@@ -38,26 +57,6 @@
       "No disease-cure claims",
       "Free entry when live"
     ],
-    "cta_label": "Notify me",
-    "contest_slug": "scale-health-align-home-pt-kit"
-  },
-  {
-    "id": "ex-003",
-    "slug": "align-recovery-pack",
-    "title": "Align recovery accessories pack",
-    "sponsor": "Scale Health",
-    "sponsor_url": "https://scalehealth.ca",
-    "summary": "EXAMPLE coming exclusive: recovery accessories pack for home practice days.",
-    "prize_text": "Align recovery accessories pack (EXAMPLE)",
-    "arv_cad_estimate": 180,
-    "status": "coming",
-    "first_party": true,
-    "lane": "align",
-    "highlights": [
-      "First-party rails",
-      "EXAMPLE only",
-      "Canada-first"
-    ],
     "cta_label": "Notify me"
   },
   {
@@ -66,18 +65,16 @@
     "title": "Scale Health community challenge badge",
     "sponsor": "Scale Health",
     "sponsor_url": "https://scalehealth.ca",
-    "summary": "EXAMPLE community challenge badge + merch pack for WePrize members who stay on the board.",
+    "summary": "EXAMPLE community challenge badge + merch pack.",
     "prize_text": "Community challenge badge pack (EXAMPLE)",
     "arv_cad_estimate": 75,
     "status": "coming",
     "first_party": true,
     "lane": "other",
     "highlights": [
-      "Soft engagement exclusive",
       "Not live yet",
       "EXAMPLE"
     ],
-    "cta_label": "Notify me",
-    "contest_slug": "scale-health-community-challenge"
+    "cta_label": "Notify me"
   }
 ]
