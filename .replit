@@ -1,0 +1,16 @@
+# WePrize Autoscale — static Vite SPA
+# Build with vite; run with production `serve` on 0.0.0.0:5000
+run = "npm run start"
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["npm", "run", "build"]
+run = ["npm", "run", "start"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
