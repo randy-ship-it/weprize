@@ -11,7 +11,7 @@ const steps = [
   },
   {
     title: 'Contest Bot queues AUTO_OK',
-    body: 'Statuses: queued → applied → confirm_sent → customer_otp → confirmed | failed.',
+    body: 'Statuses: queued → applying → applied → confirm_sent → needs_you → confirmed | failed. Dashboard nudges when you must tap a code.',
   },
   {
     title: 'Stop before CAPTCHA / OTP',
@@ -46,9 +46,12 @@ export function HowItWorks() {
       <div className="rounded-xl border border-dashed border-navy-950/15 bg-white/70 p-4 text-sm text-slate-600">
         Screenshot / receipt vault placeholder (coming). No CAPTCHA autofill in this draft.
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Link to="/pricing" className="btn-primary px-4 py-2 text-sm">
           See pricing
+        </Link>
+        <Link to="/dashboard" className="btn-ghost px-4 py-2 text-sm text-navy-950">
+          Assist dashboard
         </Link>
         <Link to="/waitlist" className="btn-ghost px-4 py-2 text-sm text-navy-950">
           Join waitlist

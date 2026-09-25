@@ -11,6 +11,7 @@ const nav = [
   { to: '/exclusives', label: 'Exclusives' },
   { to: '/how-it-works', label: 'How it works' },
   { to: '/pricing', label: 'Pricing' },
+  { to: '/dashboard', label: 'Dashboard' },
   { to: '/advertise', label: 'Advertise' },
 ]
 
@@ -64,6 +65,8 @@ export function Layout() {
             <Link to="/for-agents" className="block hover:text-teal-500">For agents</Link>
             <Link to="/prizes" className="block hover:text-teal-500">What you could win</Link>
             <Link to="/exclusives" className="block hover:text-teal-500">Scale exclusives</Link>
+            <Link to="/dashboard" className="block hover:text-teal-500">Assist dashboard</Link>
+            <Link to="/onboarding" className="block hover:text-teal-500">Identity intake</Link>
             <Link to="/disclaimer" className="block hover:text-teal-500">Disclaimer</Link>
             <Link to="/terms" className="block hover:text-teal-500">Terms</Link>
             <Link to="/privacy" className="block hover:text-teal-500">Privacy</Link>
@@ -86,7 +89,7 @@ export function Layout() {
             >
               Scale Health · scalehealth.ca
             </a>
-            <p className="text-slate-500">Domains later (not attached): weprize.ca · weprize.com · getweprize.ca</p>
+            <p className="text-slate-500">Live: weprize.net · Stripe Payment Links live</p>
             <DisclaimerStrip />
           </div>
         </div>
