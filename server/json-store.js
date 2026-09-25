@@ -75,6 +75,20 @@ export function createJsonStore() {
       return load().orders.find((o) => o.stripe_session_id === sessionId) || null
     },
 
+    /**
+     * Soft purchase cap helper: count paid orders for a buyer email.
+     * Product rule: max 10 purchases per person/email (anti business/ROI farming).
+     * TODO: harden to soft-block or support nudge when count >= 10 (do not invent payment infra).
+     */
+    async countPaidOrdersByEmail(email) {
+      const e = String(email || '').trim().toLowerCase()
+      if (!e || !e.includes('@')) return 0
+      const db = load()
+      const customer = db.customers.find((c) => String(c.email || '').toLowerCase() === e)
+      if (!customer) return 0
+      return db.orders.filter((o) => o.customer_id === customer.id && o.status === 'paid').length
+    },
+
     async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       return withLock(() => {
         const db = load()

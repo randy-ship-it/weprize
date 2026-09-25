@@ -1,0 +1,124 @@
+# WePrize — Grok Heavy daily brief (living)
+
+> **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
+> **Updated:** 2026-09-25 ~16:19 ET · branch `feat/founder-brief-and-caps`  
+> **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
+
+---
+
+## 1. One-liner + live URLs
+
+**WePrize** mass-applies **free** Canada-first health & wellness contests for you (optional paid time-assist). You bring one real identity; you tap codes when brands ask. Estimates are not a guarantee.
+
+| Surface | URL |
+|---|---|
+| Apex | https://weprize.net |
+| Exclusives | https://weprize.net/exclusives |
+| Pricing | https://weprize.net/pricing |
+| Health API | https://weprize.net/api/health |
+| This brief | https://weprize.net/GROK-DAILY.md |
+| GitHub `main` | https://github.com/randy-ship-it/weprize |
+| Agents sheet | https://weprize.net/llms.txt · founder pointer: `/llms-weprize-founder.txt` |
+
+Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not** brand “Stripe” in customer UI copy.
+
+---
+
+## 2. HARD OKR
+
+**≥100 paid Stripe transactions / America/Toronto calendar day by Sep 30, 2026** on SBG APIs.
+
+- Count: Once + Triple + Year-round (incl. subscription invoice payments that succeed that day).
+- Do **not** count: free tier, abandoned Checkout, failed/blocked, sandbox.
+- Scoreboard ritual: `/workspace/weprize-100day/SCOREBOARD.md` · plan: `100DAY-PLAN.md`.
+- Window from 2026-09-25: **6 calendar days** (25→30).
+
+Ask Grok Heavy daily: *What ships today that moves paid tx toward 100?*
+
+---
+
+## 3. Product truth (Competition Act–safe)
+
+1. Contests on brand sites stay **free**. WePrize fee (if any) = **research + time assist** on eligible AUTO_OK forms — not better odds, not influence over winners.
+2. **Estimates** (EV, pot, “you could make $”) = estimates / examples only — **never** a prize or ROI guarantee.
+3. Bot stops before CAPTCHA / OTP. Customer verifies. BYO legal identity — we never invent emails/phones as tickets.
+4. Never “3 emails = 3× odds,” never fixed “we enter 400,” never ROI-positive gambling framing, never treatment/cure claims for health prizes.
+5. Official contest rules always govern. Household / one-per-person rules: refuse a second apply when rules say so.
+
+---
+
+## 4. Guardrails (personal use · anti farming)
+
+| Rule | Meaning |
+|---|---|
+| **1 personal profile** | One WePrize account / primary identity for **you**. |
+| **Friends OK** | You may **apply on behalf of friends** with their **consent** and **their** legal identity details — not fake / provisioned emails. |
+| **Max 10 purchases / person** | Soft cap: **≤10 paid purchases per buyer email**. WePrize is **not** a bulk business / ROI-farming tool. |
+| No multi-account farming | No spinning identities to game packs or contests. |
+
+UI must say this on Pricing, Onboarding, Legal, Success, Profiles. Server: soft check / TODO on `orders` by email (do not invent new payment infra).
+
+---
+
+## 5. Share growth (peer links · no cash rewards)
+
+- Peer URLs: `https://weprize.net/?ref={code}` (6–8 `[a-z0-9]`).
+- Capture inbound `?ref=` first-touch → Payment Link `client_reference_id` when known.
+- **No** referral cash, free packs, or contest-breaking rewards for sharing.
+- Share copy stays Competition Act–safe (free contests + optional assist; estimates not guarantees).
+
+Code: `src/lib/shareRef.ts`, `src/components/ShareButton.tsx`.
+
+---
+
+## 6. Live gaps / next ship list (updateable)
+
+*Edit this section every day. Strike done items; add blockers.*
+
+- [ ] **Replit Publish** from current `main` so apex JS matches GH (Year-round Payment Link **sLd**, not stale **sHd**; new assets after this brief).
+- [ ] Confirm `/api/health` on apex (Express + webhook) — today may still SPA-fallback.
+- [ ] Soft enforce **≤10 purchases / email** (stub logged; harden when ready).
+- [ ] Fulfillment worker + NEEDS_YOU nudges live for paid orders.
+- [ ] Morning SCOREBOARD: paid tx yesterday / today-so-far vs 100.
+- [ ] Partner / community sends from `SEND-QUEUE.md` / `COMMUNITY-QUEUE.md`.
+- [ ] Ads only with Competition Act–safe creative (`ADS-BRIEF.md`).
+
+CoS mirror of this file: `/workspace/weprize-100day/GROK-DAILY.md`.
+
+---
+
+## 7. Partner / market / sell checklist
+
+Daily / weekly:
+
+- [ ] One partner or community post (contest-ops, H&W, NFP) — **no** guaranteed-win claims.
+- [ ] One exclusive / Scale story push (`/exclusives`) when inventory is live.
+- [ ] Birch Reserve soft inventory only where appropriate (`/advertise`) — display, not PII resale.
+- [ ] Peer share CTA on Home + Success (alluring, no cash referral).
+- [ ] Verify Payment Links: Once / Triple / Year-round (**sLd**) + success URLs `weprize.net/success?pack=…`.
+- [ ] Cap messaging visible before checkout (1 profile · friends w/ consent · max 10 purchases).
+
+---
+
+## 8. Code pointers (key paths)
+
+| Area | Path |
+|---|---|
+| SPA entry | `src/App.tsx`, `src/pages/Home.tsx` |
+| Pricing / packs | `src/pages/Pricing.tsx`, `src/components/PricingCards.tsx`, `src/data/stripe.ts` |
+| Identity / success | `src/pages/Onboarding.tsx`, `src/pages/Success.tsx`, `src/pages/Profiles.tsx` |
+| Legal | `src/pages/Legal.tsx` |
+| Share | `src/lib/shareRef.ts`, `src/components/ShareButton.tsx` |
+| Express + orders | `server/index.js`, `server/pg-store.js`, `server/json-store.js` |
+| Agent / LLM | `public/llms.txt`, `public/llms-full.txt`, `public/llms-weprize-founder.txt`, **this file** |
+| Deploy | Replit Autoscale Publish → https://weprize.net |
+
+---
+
+## How Randy uses this with Grok Heavy
+
+1. Open https://weprize.net/GROK-DAILY.md (or this repo file / CoS mirror).
+2. Paste into Grok Heavy with: *Act as WePrize CoS. Competition Act HARD. Optimize for 100 paid tx/day by Sep 30.*
+3. Ask for today’s ship list, copy diffs, partner pitches, or gap triage — not for inventing odds/guarantees.
+4. Edit section 6 after each ship; commit when useful.
+

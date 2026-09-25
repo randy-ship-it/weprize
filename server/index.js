@@ -208,6 +208,9 @@ app.post('/api/dev/demo-order', async (req, res) => {
   }
 })
 
+/** Soft product cap: max paid purchases per buyer email (anti ROI/farm). Soft warn only — do not invent payment infra. */
+const MAX_PURCHASES_PER_EMAIL = 10
+
 async function fulfillCheckoutSession(store, session) {
   const email =
     session.customer_details?.email ||
@@ -225,11 +228,27 @@ async function fulfillCheckoutSession(store, session) {
       ? session.client_reference_id.trim().slice(0, 64)
       : null
 
+  const emailNorm = String(email).toLowerCase()
+  // Soft check stub: log when buyer is at/over personal-use cap. TODO: optional soft-block / support flag.
+  try {
+    if (typeof store.countPaidOrdersByEmail === 'function') {
+      const prior = await store.countPaidOrdersByEmail(emailNorm)
+      if (prior >= MAX_PURCHASES_PER_EMAIL) {
+        console.warn(
+          `[caps] buyer email at/over max ${MAX_PURCHASES_PER_EMAIL} paid purchases (prior=${prior}) — personal use only, not a business entry factory`,
+          { email: emailNorm, pack, sessionId: session.id },
+        )
+      }
+    }
+  } catch (err) {
+    console.warn('[caps] countPaidOrdersByEmail failed (non-fatal)', err?.message || err)
+  }
+
   const order = await store.upsertPaidOrderFromStripe({
     sessionId: session.id,
     paymentLink,
     pack,
-    email: String(email).toLowerCase(),
+    email: emailNorm,
     amountCents: session.amount_total ?? null,
     currency: session.currency || 'cad',
     clientReferenceId,

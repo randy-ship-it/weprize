@@ -147,6 +147,24 @@ export async function createPgStore(connectionString) {
       return mapOrder(rows[0])
     },
 
+    /**
+     * Soft purchase cap helper: count paid orders for a buyer email.
+     * Product rule: max 10 purchases per person/email (anti business/ROI farming).
+     * TODO: harden to soft-block or support nudge when count >= 10 (do not invent payment infra).
+     */
+    async countPaidOrdersByEmail(email) {
+      const e = String(email || '').trim().toLowerCase()
+      if (!e || !e.includes('@')) return 0
+      const { rows } = await pool.query(
+        `SELECT COUNT(*)::int AS n
+         FROM orders o
+         JOIN customers c ON c.id = o.customer_id
+         WHERE lower(c.email) = $1 AND o.status = 'paid'`,
+        [e],
+      )
+      return rows[0]?.n ?? 0
+    },
+
     async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       const client = await pool.connect()
       try {

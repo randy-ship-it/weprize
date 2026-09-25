@@ -4,9 +4,9 @@
 
 Product: WePrize
 Engine: Contest Bot
-Status: Draft preview (custom domain later; placeholder host weprize.ca)
+Status: Live apex weprize.net · Publish from GitHub main
 Geo: Canada-first; US only when CA-eligible
-Site: https://weprize.ca (draft / not attached yet)
+Site: https://weprize.net (live) · draft host weprize.ca retired for apex
 Agent page: /for-agents
 Full sheet: /llms-full.txt
 Methodology: /methodology
@@ -55,3 +55,9 @@ Do not invent a live custom domain if unpublished. Do not promise winnings. Do n
 
 ## Related
 Scale exclusives: /exclusives · Advertise (Birch Reserve): https://birchreserve.net
+
+## Founder daily brief (Grok Heavy)
+Living OKR + guardrails brief Randy feeds to Grok Heavy:
+- https://weprize.net/GROK-DAILY.md
+- Short pointer: /llms-weprize-founder.txt
+Hard OKR: 100+ paid tx/day by 2026-09-30 (SBG APIs). Caps: 1 profile; friends = apply-on-behalf w/ consent; max 10 purchases/buyer. No referral cash.

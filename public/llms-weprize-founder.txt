@@ -1,0 +1,14 @@
+# WePrize — founder / Grok Heavy pointer
+
+Living daily brief for Randy → Grok Heavy:
+
+  https://weprize.net/GROK-DAILY.md
+  (repo: public/GROK-DAILY.md · CoS mirror: weprize-100day/GROK-DAILY.md)
+
+HARD OKR: 100+ paid Stripe tx/day by 2026-09-30 (SBG APIs, CAD).
+Product: free contests + optional time-assist; estimates not guarantees.
+Caps: 1 personal profile; apply-on-behalf of friends with consent; max 10 purchases per buyer email.
+Share: ?ref= peer links only — no referral cash that breaks contests.
+Competition Act HARD throughout.
+
+Also: /llms.txt · /llms-full.txt · /for-agents · https://github.com/randy-ship-it/weprize
