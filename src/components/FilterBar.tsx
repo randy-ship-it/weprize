@@ -45,6 +45,7 @@ export function FilterBar({ filters, setFilters, resultCount }: Props) {
         <Chip label="Canada-eligible" checked={filters.canadaEligible} onChange={(v) => setFilters({ ...filters, canadaEligible: v })} />
         <Chip label="Free / no-purchase" checked={filters.freeNoPurchase} onChange={(v) => setFilters({ ...filters, freeNoPurchase: v })} />
         <Chip label="Hide high-friction" checked={filters.hideHighFriction} onChange={(v) => setFilters({ ...filters, hideHighFriction: v })} />
+        <Chip label="Hide dead" checked={filters.hideDead} onChange={(v) => setFilters({ ...filters, hideDead: v })} />
         <Chip label="Closing-soon" checked={filters.closingSoon} onChange={(v) => setFilters({ ...filters, closingSoon: v })} />
         <Chip label="New-live" checked={filters.newLive} onChange={(v) => setFilters({ ...filters, newLive: v })} />
         <Chip label="AUTO_OK only" checked={filters.autoOkOnly} onChange={(v) => setFilters({ ...filters, autoOkOnly: v })} />
@@ -89,7 +90,7 @@ export function FilterBar({ filters, setFilters, resultCount }: Props) {
         </button>
       </div>
       <p className="text-[11px] text-slate-500">
-        Default sort: EV mid / minutes · AUTO_OK first · closing-soon · soft-field
+        Default: live preferred · hide dead · EV mid / minutes · AUTO_OK first
       </p>
     </div>
   )

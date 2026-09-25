@@ -5,6 +5,7 @@ export const DEFAULT_FILTERS: FilterState = {
   canadaEligible: true,
   freeNoPurchase: true,
   hideHighFriction: false,
+  hideDead: true,
   closingSoon: false,
   newLive: false,
   autoOkOnly: false,
@@ -29,8 +30,9 @@ export function sortContests(list: Contest[], mode: FilterState['sort'] = 'ev_pe
   const autoRank = (a: AutoClass) =>
     a === 'AUTO_OK' ? 0 : a === 'ASSIST_QUEUE' ? 1 : a === 'NEEDS_YOU' ? 2 : 3
   return [...list].sort((a, b) => {
-    if (a.health === 'dead' && b.health !== 'dead') return 1
-    if (b.health === 'dead' && a.health !== 'dead') return -1
+    const rank = (h: Contest['health']) => (h === 'live' ? 0 : h === 'unknown' ? 1 : 2)
+    const hr = rank(a.health) - rank(b.health)
+    if (hr !== 0) return hr
     if (mode === 'new') {
       const na = Number(!!a.new_live)
       const nb = Number(!!b.new_live)
@@ -65,6 +67,9 @@ export function applyFilters(contests: Contest[], filters: FilterState): Contest
   }
   if (filters.hideHighFriction) {
     list = list.filter((c) => !c.friction_badges.some((b) => HIGH_FRICTION.includes(b)))
+  }
+  if (filters.hideDead) {
+    list = list.filter((c) => c.health !== 'dead')
   }
   if (filters.closingSoon) {
     list = list.filter((c) => {

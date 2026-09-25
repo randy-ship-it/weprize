@@ -114,6 +114,7 @@ export type FilterState = {
   canadaEligible: boolean
   freeNoPurchase: boolean
   hideHighFriction: boolean
+  hideDead: boolean
   closingSoon: boolean
   newLive: boolean
   autoOkOnly: boolean

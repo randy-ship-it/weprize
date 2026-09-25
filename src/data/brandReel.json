@@ -4,7 +4,7 @@
     "logo": "/brand/reel/jamieson.png",
     "logoAlt": "Jamieson",
     "eyebrow": "Nutrition opportunity",
-    "prize": "1 of 100 \u00d7 $100 Jamieson gift cards",
+    "prize": "1 of 100 × $100 Jamieson gift cards",
     "contest": "Jamieson Win $100 Gift Cards",
     "slug": "jamieson-win-100-gift-cards"
   },
@@ -22,36 +22,9 @@
     "logo": "/brand/reel/mary-browns.svg",
     "logoAlt": "Mary Brown's Chicken",
     "eyebrow": "Everyday fuel",
-    "prize": "$100\u2013$250 Mary Brown gift cards (multi)",
+    "prize": "$100–$250 Mary Brown gift cards (multi)",
     "contest": "Mary Brown's Tell Mary Survey Gift Card",
     "slug": "mary-brown-s-tell-mary-survey-gift-cards"
-  },
-  {
-    "name": "Coca-Cola",
-    "logo": "/brand/reel/coca-cola.png",
-    "logoAlt": "Coca-Cola",
-    "eyebrow": "Tuition opportunity",
-    "prize": "$10,000 tuition cheque + 70\u00d7 $500 prepaid gift cards ($45k total)",
-    "contest": "Coca-Cola 2026 Back to School Tuition Contest",
-    "slug": "coca-cola-2026-back-to-school-tuition-contest"
-  },
-  {
-    "name": "The Home Depot",
-    "logo": "/brand/reel/home-depot.png",
-    "logoAlt": "The Home Depot",
-    "eyebrow": "Home & recovery setup",
-    "prize": "$3,000 Home Depot gift card",
-    "contest": "Home Depot Canada \u2014 Customer Survey $3,000 Gift Card",
-    "slug": "home-depot-canada-customer-survey-3-000-gift-card"
-  },
-  {
-    "name": "Honda",
-    "logo": "/brand/reel/honda.svg",
-    "logoAlt": "Honda",
-    "eyebrow": "Store credit opportunity",
-    "prize": "$10,000 CAD Honda dealer store credit",
-    "contest": "Honda $10K Your Way Store Credit",
-    "slug": "honda-10k-your-way-store-credit"
   },
   {
     "name": "GMC",

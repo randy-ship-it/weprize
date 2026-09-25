@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import brands from '../data/brandReel.json'
+import contests from '../data/contests.json'
+import type { Contest } from '../types/contest'
 
 type Brand = {
   name: string
@@ -12,10 +14,14 @@ type Brand = {
   slug: string
 }
 
-const items = brands as Brand[]
 const LOOP_MS = 3200
 
 export function BrandReel() {
+  const items = useMemo(() => {
+    const valid = new Set((contests as Contest[]).map((c) => c.slug))
+    return (brands as Brand[]).filter((b) => valid.has(b.slug))
+  }, [])
+
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const active = items[index] ?? items[0]
@@ -26,7 +32,7 @@ export function BrandReel() {
       setIndex((i) => (i + 1) % items.length)
     }, LOOP_MS)
     return () => window.clearInterval(id)
-  }, [paused])
+  }, [paused, items.length])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -36,7 +42,13 @@ export function BrandReel() {
     return () => mq.removeEventListener('change', sync)
   }, [])
 
+  useEffect(() => {
+    if (index >= items.length) setIndex(0)
+  }, [index, items.length])
+
   if (!active) return null
+
+  const slideHref = `/contests/${active.slug}`
 
   return (
     <section className="brand-reel" aria-label="Featured brands in contest listings">
@@ -59,7 +71,7 @@ export function BrandReel() {
         </div>
 
         <div className="brand-reel-stage bg-white">
-          <div className="reel-content">
+          <Link to={slideHref} className="reel-content block no-underline text-inherit hover:opacity-95 transition">
             <div className="reel-logo-frame">
               <img
                 key={active.logo}
@@ -74,11 +86,11 @@ export function BrandReel() {
               <p className="reel-eyebrow">{active.eyebrow}</p>
               <h2>{active.prize}</h2>
               <p>{active.contest}</p>
-              <Link to={`/contests/${active.slug}`} className="reel-detail-link">
+              <span className="reel-detail-link">
                 See contest <span aria-hidden>→</span>
-              </Link>
+              </span>
             </div>
-          </div>
+          </Link>
           <div className="reel-progress" aria-hidden>
             <span className={paused ? 'is-paused' : undefined} key={`${active.slug}-${paused}`} />
           </div>
