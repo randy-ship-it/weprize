@@ -165,6 +165,25 @@ export async function createPgStore(connectionString) {
       return rows[0]?.n ?? 0
     },
 
+    /**
+     * Recover latest paid order for exact buyer email (checkout email).
+     * Exact match only — never fuzzy / never leak other emails.
+     */
+    async getLatestPaidOrderByEmail(email) {
+      const e = String(email || '').trim().toLowerCase()
+      if (!e || !e.includes('@')) return null
+      const { rows } = await pool.query(
+        `SELECT o.*
+         FROM orders o
+         JOIN customers c ON c.id = o.customer_id
+         WHERE lower(c.email) = $1 AND o.status = 'paid'
+         ORDER BY o.created_at DESC
+         LIMIT 1`,
+        [e],
+      )
+      return mapOrder(rows[0])
+    },
+
     async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       const client = await pool.connect()
       try {

@@ -9,9 +9,9 @@ import { fileURLToPath } from 'node:url'
 import Stripe from 'stripe'
 import { getStore } from './db.js'
 import { normalizeIdentity, publicIdentity } from './identity.js'
-import { inferPack } from './packs.js'
+import { inferPack, PACKS } from './packs.js'
 import { publicJob, publicOrder, humanNeedsYou } from './public.js'
-import { maybeNudgeNeedsYou, resendConfigured } from './nudge.js'
+import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -105,6 +105,61 @@ app.get('/api/orders/by-session/:sessionId', async (req, res) => {
     res.status(500).json({ error: 'server_error' })
   }
 })
+
+
+/** Simple in-memory rate limit for recover-by-email (per IP). */
+const recoverHits = new Map()
+function recoverRateLimited(ip) {
+  const key = String(ip || 'unknown')
+  const now = Date.now()
+  let bucket = recoverHits.get(key)
+  if (!bucket || now - bucket.start > 60_000) {
+    bucket = { start: now, count: 0 }
+  }
+  bucket.count += 1
+  recoverHits.set(key, bucket)
+  // prune occasionally
+  if (recoverHits.size > 5000) {
+    for (const [k, v] of recoverHits) {
+      if (now - v.start > 120_000) recoverHits.delete(k)
+    }
+  }
+  return bucket.count > 10 // max 10 / minute / IP
+}
+
+/**
+ * Recover latest paid order token by exact checkout email.
+ * GET ?email= or POST {email}. Exact match only; 404 if none (no email enumeration hints beyond that).
+ */
+async function handleRecoverByEmail(req, res) {
+  try {
+    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket?.remoteAddress
+    if (recoverRateLimited(ip)) {
+      return res.status(429).json({ error: 'rate_limited', message: 'Too many recovery attempts. Try again in a minute.' })
+    }
+    const raw =
+      (req.method === 'GET' ? req.query?.email : req.body?.email) || ''
+    const email = String(raw).trim().toLowerCase()
+    if (!email.includes('@') || email.length < 5) {
+      return res.status(400).json({ error: 'email_required' })
+    }
+    const store = await getStore()
+    if (typeof store.getLatestPaidOrderByEmail !== 'function') {
+      return res.status(501).json({ error: 'recover_not_supported' })
+    }
+    const order = await store.getLatestPaidOrderByEmail(email)
+    if (!order) return res.status(404).json({ error: 'order_not_found' })
+    const identities = await store.listIdentities(order.id)
+    const jobs = await store.listJobs(order.id)
+    res.json({ order: publicOrder(order, identities, jobs) })
+  } catch (err) {
+    console.error('[recover-by-email]', err)
+    res.status(500).json({ error: 'server_error' })
+  }
+}
+
+app.get('/api/orders/recover-by-email', handleRecoverByEmail)
+app.post('/api/orders/recover-by-email', handleRecoverByEmail)
 
 app.get('/api/orders/:token', async (req, res) => {
   try {
@@ -244,6 +299,7 @@ async function fulfillCheckoutSession(store, session) {
     console.warn('[caps] countPaidOrdersByEmail failed (non-fatal)', err?.message || err)
   }
 
+  const prior = session.id ? await store.getOrderBySession(session.id) : null
   const order = await store.upsertPaidOrderFromStripe({
     sessionId: session.id,
     paymentLink,
@@ -253,6 +309,24 @@ async function fulfillCheckoutSession(store, session) {
     currency: session.currency || 'cad',
     clientReferenceId,
   })
+
+  // First-time fulfill only: email /order/{token} when Resend is configured
+  if (!prior && order?.token && resendConfigured()) {
+    const packLabel = PACKS[pack]?.label || pack
+    try {
+      const result = await sendOrderReadyEmail({
+        to: emailNorm,
+        orderToken: order.token,
+        packLabel,
+      })
+      if (!result.sent) {
+        console.warn('[fulfill] order-ready email skipped', result.reason)
+      }
+    } catch (err) {
+      console.warn('[fulfill] order-ready email error', err?.message || err)
+    }
+  }
+
   return order
 }
 

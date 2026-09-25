@@ -112,6 +112,15 @@ export async function fetchOrderBySession(sessionId: string): Promise<ServerOrde
   return data.order
 }
 
+/** Exact-match checkout email → latest paid order (404 if none). */
+export async function recoverOrderByEmail(email: string): Promise<ServerOrder> {
+  const data = await api<{ order: ServerOrder }>('/orders/recover-by-email', {
+    method: 'POST',
+    body: JSON.stringify({ email: String(email).trim().toLowerCase() }),
+  })
+  return data.order
+}
+
 export async function fetchOrderByToken(token: string): Promise<ServerOrder> {
   const data = await api<{ order: ServerOrder }>(`/orders/${encodeURIComponent(token)}`)
   return data.order
