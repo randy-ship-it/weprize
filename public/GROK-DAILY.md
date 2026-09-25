@@ -1,14 +1,14 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-09-25 ~16:30 ET · branch `feat/postpay-identity-recovery`  
+> **Updated:** 2026-09-25 ~16:45 ET · branch `feat/mission-messaging-voice`  
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
 
 ## 1. One-liner + live URLs
 
-**WePrize** mass-applies **free** Canada-first health & wellness contests for you (optional paid time-assist). You bring one real identity; you tap codes when brands ask. Estimates are not a guarantee.
+**WePrize** mass-applies **free** Canada-first health & wellness contests for you (optional paid time-assist). Mission color (once, paired with free-contest + estimate-only): turn gambling on its head via free-contest entry leverage. You bring one real identity; you tap codes when brands ask. Estimates are not a guarantee.
 
 | Surface | URL |
 |---|---|
@@ -21,6 +21,33 @@
 | Agents sheet | https://weprize.net/llms.txt · founder pointer: `/llms-weprize-founder.txt` |
 
 Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not** brand “Stripe” in customer UI copy.
+
+
+---
+
+## 1b. Mission + voice (Randy call, Sep 25 2026 ET)
+
+**Mission vibe (use once as color, always with free-contest + estimate-only):** WePrize is on a mission to turn gambling on its head.
+
+**Smart math / time leverage (Home How it works + Pricing one-liner):**
+- You would never fill all these contests yourself. Not worth your time.
+- What if it was worth your time, because you can apply to hundreds in the time it takes to apply to one?
+- Prefer framing: free-contest entry leverage / time back. Not "gambling tips."
+
+**Estimates honesty:**
+- Combined probability math + average payouts averages out somehow over time.
+- We do not know what you will get. Estimates only.
+- NEVER guarantee wins, odds, or ROI. Paying never buys better odds.
+
+**Win stories:** Want real people winning really big things. Placeholder only until receipts exist. Do not invent winners.
+
+**Competition Act HARD (unchanged):**
+- Contests stay free. Fee = time/research assist.
+- No guaranteed wins, no better odds for paying, no treatment claims.
+
+**Voice HARD:** ZERO em dashes in customer-facing copy. Periods, commas, new sentences. Des (Grammar Man) test.
+
+**Site surfaces shipped:** Home mission strip + How it works / Pricing time-leverage one-liners. CoS mirror: `/workspace/weprize-100day/MISSION.md`.
 
 ---
 
@@ -92,6 +119,7 @@ Without `session_id`, Success shows **recover-by-email** (`POST /api/orders/reco
 ### Ship / ops checklist
 
 - [x] Post-pay identity recovery path (Success CTA + recover-by-email + order-ready Resend email).
+- [x] Mission messaging from Randy voice (Home strip + HIW/Pricing leverage; GROK-DAILY §1b; MISSION.md).
 - [ ] **Randy:** paste success URL templates into Stripe Dashboard (above).
 - [ ] **Randy:** `STRIPE_WEBHOOK_SECRET` on Replit + webhook endpoint `checkout.session.completed`.
 - [ ] **Randy:** `RESEND_API_KEY` + `RESEND_FROM` so order-ready + NEEDS_YOU emails send (`resend:true` on `/api/health`).

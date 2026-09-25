@@ -32,9 +32,20 @@ export function Home() {
           <p className="text-lg text-slate-700 mb-2 max-w-xl leading-relaxed">
             Free Canada-first contests in health & wellness. We mass-apply for you.
           </p>
-          <p className="text-sm text-slate-500 mb-6 max-w-xl leading-relaxed">
+          <p className="text-sm text-slate-500 mb-4 max-w-xl leading-relaxed">
             You tap the codes when a contest asks. Estimates update from entries we submitted. Not a guarantee.
           </p>
+          <div className="mb-6 max-w-xl rounded-2xl border border-teal-600/20 bg-teal-50/60 px-4 py-3 space-y-2">
+            <p className="text-sm font-semibold text-navy-950 leading-snug">
+              WePrize is on a mission to turn gambling on its head.
+            </p>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              Free contests stay free. Optional fee buys research and time assist so applying to hundreds takes about as long as applying to one.
+            </p>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Combined probability math and average payouts average out somehow over time. We do not know what you will get. Estimates only. Never a guarantee.
+            </p>
+          </div>
           <div className="flex flex-wrap gap-3">
             <Link to="/contests" className="btn-primary px-5 py-2.5 text-sm">
               Browse contests
@@ -48,7 +59,7 @@ export function Home() {
             <ShareButton hint label="Share with a friend" />
           </div>
           <p className="mt-3 text-xs text-slate-500 max-w-xl leading-relaxed">
-            Got a friend drowning in entry forms? Pass your peer link — free contests stay free; optional assist if they want it. No cash referral rewards.
+            Got a friend drowning in entry forms? Pass your peer link. Free contests stay free; optional assist if they want it. No cash referral rewards.
           </p>
           <p className="mt-2 text-xs text-slate-500">
             Ready to apply this week:{' '}
@@ -63,7 +74,7 @@ export function Home() {
       <BrandReel />
 
       <p className="text-sm text-slate-600">
-        Recovery, fitness, nutrition, sleep, and wellness gear first — illustrative types, not live contests.{' '}
+        Recovery, fitness, nutrition, sleep, and wellness gear first. Illustrative types, not live contests.{' '}
         <Link to="/prizes" className="text-teal-600 hover:underline">
           What you could win →
         </Link>
@@ -72,12 +83,15 @@ export function Home() {
       <BirchAdSlot slotId="home_hero_strip" />
 
       <section>
-        <h2 className="text-xl font-semibold text-navy-950 mb-4">How it works</h2>
+        <h2 className="text-xl font-semibold text-navy-950 mb-2">How it works</h2>
+        <p className="text-sm text-slate-600 mb-4 max-w-2xl leading-relaxed">
+          You would never fill all these contests yourself. Not worth your time. What if it was worth your time, because you can apply to hundreds in the time it takes to apply to one?
+        </p>
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { step: '1', title: 'Browse', body: 'See contests before you click.' },
-            { step: '2', title: 'We apply', body: 'We fill the forms for you.' },
-            { step: '3', title: 'You confirm', body: 'Tap a code if a contest asks.' },
+            { step: '1', title: 'Browse', body: 'See free contests before you click.' },
+            { step: '2', title: 'We apply', body: 'Hundreds of free entries in the time it takes to do one. Fee is research and time assist, not better odds.' },
+            { step: '3', title: 'You confirm', body: 'Tap a code if a contest asks. Estimates only.' },
           ].map((s) => (
             <div key={s.step} className="card-surface rounded-2xl p-5">
               <p className="text-teal-600 font-bold text-sm mb-1">Step {s.step}</p>
@@ -105,12 +119,15 @@ export function Home() {
       </section>
 
       <section>
-        <div className="flex flex-wrap items-end justify-between gap-2 mb-4">
+        <div className="flex flex-wrap items-end justify-between gap-2 mb-2">
           <h2 className="text-xl font-semibold text-navy-950">Pricing</h2>
           <Link to="/pricing" className="text-sm text-teal-600 hover:underline">
             Details
           </Link>
         </div>
+        <p className="text-sm text-slate-600 mb-4 max-w-2xl leading-relaxed">
+          Contests stay free. Pay only if you want time back: research plus apply assist across the board, not a tip sheet and never better odds.
+        </p>
         <PricingCards autoOkLive={autoOkCount} teaser />
       </section>
 
