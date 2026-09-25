@@ -31,6 +31,12 @@ export const PACK_FROM_QUERY = STRIPE_SUCCESS_URLS
  * Append Stripe Payment Link attribution when inbound peer ref is known.
  * client_reference_id is supported as a URL param on Payment Links.
  */
+
+/**
+ * FALLBACK ONLY: Payment Links when POST /api/checkout fails.
+ * Prefer createCheckout() (server Checkout Sessions). Payment Links still
+ * need Dashboard After-payment redirect with {CHECKOUT_SESSION_ID} if used.
+ */
 export function paymentLinkWithRef(pack: PackId, ref?: string | null): string {
   const base = STRIPE_LINKS[pack]
   const code = (ref || '').trim().toLowerCase()

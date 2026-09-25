@@ -121,6 +121,22 @@ export async function recoverOrderByEmail(email: string): Promise<ServerOrder> {
   return data.order
 }
 
+
+/** Server-created Stripe Checkout Session. Prefer over Payment Links. */
+export async function createCheckout(
+  pack: PackId,
+  ref?: string | null,
+): Promise<{ url: string }> {
+  const body: { pack: PackId; ref?: string } = { pack }
+  const code = (ref || '').trim()
+  if (/^[a-zA-Z0-9]{6,8}$/.test(code)) body.ref = code
+  return api<{ url: string }>('/checkout', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+
 export async function fetchOrderByToken(token: string): Promise<ServerOrder> {
   const data = await api<{ order: ServerOrder }>(`/orders/${encodeURIComponent(token)}`)
   return data.order

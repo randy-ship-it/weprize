@@ -4,7 +4,13 @@ Updated: 2026-09-25 (ET)
 Branch: `feat/customer-assist-ui`  
 Site: https://weprize.net (SPA; no `/api` on apex yet)
 
-## Stripe Payment Links (live)
+
+## Checkout Sessions (preferred)
+
+Unlock CTAs call `POST /api/checkout` `{ pack, ref? }` → `{ url }` (server Checkout Session).
+Payment Links below are fallback only if the API fails. No Dashboard Payment Link redirect config required for the Session path (`success_url` / `cancel_url` set in code).
+
+## Stripe Payment Links (fallback) (live)
 
 | Pack | Payment Link |
 |---|---|

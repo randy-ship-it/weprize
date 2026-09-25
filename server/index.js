@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url'
 import Stripe from 'stripe'
 import { getStore } from './db.js'
 import { normalizeIdentity, publicIdentity } from './identity.js'
-import { inferPack, PACKS } from './packs.js'
+import { inferPack, isPack, PACKS } from './packs.js'
 import { publicJob, publicOrder, humanNeedsYou } from './public.js'
 import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
@@ -76,6 +76,71 @@ app.get('/api/health', async (_req, res) => {
     })
   } catch (err) {
     res.status(500).json({ ok: false, error: err?.message || 'health_failed' })
+  }
+})
+
+
+const CHECKOUT_PRICES = {
+  once: process.env.STRIPE_PRICE_ONCE || 'price_1UFPerDxmCwsLJNDYtNw3pI1',
+  triple: process.env.STRIPE_PRICE_TRIPLE || 'price_1UFPf4DxmCwsLJNDQWaEGY8d',
+  year_round: process.env.STRIPE_PRICE_YEAR_ROUND || 'price_1UFPelDxmCwsLJNDGMrERux6',
+}
+
+const REF_RE = /^[a-zA-Z0-9]{6,8}$/
+
+/**
+ * Create a Stripe Checkout Session for Unlock packs.
+ * Prefer this over Dashboard Payment Links (no redirect config / CAPTCHA needed).
+ * Body: { pack: 'once'|'triple'|'year_round', ref?: string }
+ * Returns: { url }
+ */
+app.post('/api/checkout', async (req, res) => {
+  try {
+    if (!stripe) {
+      return res.status(503).json({
+        error: 'checkout_unavailable',
+        message: 'Checkout is temporarily unavailable. Try again shortly.',
+      })
+    }
+    const pack = String(req.body?.pack || '').trim()
+    if (!isPack(pack)) {
+      return res.status(400).json({
+        error: 'invalid_pack',
+        message: 'pack must be once, triple, or year_round',
+      })
+    }
+    const priceId = CHECKOUT_PRICES[pack]
+    if (!priceId) {
+      return res.status(500).json({ error: 'price_not_configured' })
+    }
+    const mode = pack === 'year_round' ? 'subscription' : 'payment'
+    const success_url = `https://weprize.net/success?pack=${encodeURIComponent(pack)}&session_id={CHECKOUT_SESSION_ID}`
+    const cancel_url = 'https://weprize.net/pricing'
+    const sessionParams = {
+      mode,
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url,
+      cancel_url,
+      metadata: { pack },
+    }
+    const rawRef = typeof req.body?.ref === 'string' ? req.body.ref.trim() : ''
+    if (REF_RE.test(rawRef)) {
+      sessionParams.client_reference_id = rawRef.slice(0, 8)
+    }
+    const session = await stripe.checkout.sessions.create(sessionParams)
+    if (!session?.url) {
+      return res.status(502).json({
+        error: 'checkout_no_url',
+        message: 'Checkout session missing URL.',
+      })
+    }
+    res.json({ url: session.url })
+  } catch (err) {
+    console.error('[checkout]', err?.message || err)
+    res.status(500).json({
+      error: 'checkout_failed',
+      message: err?.message || 'Could not start checkout',
+    })
   }
 })
 
