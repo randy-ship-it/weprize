@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
-import { createOrder } from '../lib/api'
+import { createOrder, fetchOrderBySession, type ServerOrder } from '../lib/api'
 import { isPackId, PACK_LABELS, type PackId } from '../types/assist'
 import { useContests } from '../hooks/useContests'
 
@@ -9,13 +9,47 @@ export function Success() {
   const [params] = useSearchParams()
   const { autoOkCount } = useContests()
   const packParam = params.get('pack')
+  const sessionId = params.get('session_id') || params.get('checkout_session_id')
   const pack: PackId | null = isPackId(packParam) ? packParam : null
   const meta = pack ? PACK_LABELS[pack] : null
 
+  const [liveOrder, setLiveOrder] = useState<ServerOrder | null>(null)
+  const [liveError, setLiveError] = useState<string | null>(null)
+  const [resolving, setResolving] = useState(Boolean(sessionId))
+
+  // Local demo seed when Stripe success_url only has ?pack=
   useEffect(() => {
-    if (!pack) return
+    if (!pack || sessionId) return
     void createOrder({ pack, autoOkPrinted: autoOkCount || 42 })
-  }, [pack, autoOkCount])
+  }, [pack, autoOkCount, sessionId])
+
+  // Live path: Stripe Checkout session → order token
+  useEffect(() => {
+    if (!sessionId) return
+    let cancelled = false
+    setResolving(true)
+    void fetchOrderBySession(sessionId)
+      .then((order) => {
+        if (!cancelled) {
+          setLiveOrder(order)
+          setLiveError(null)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLiveOrder(null)
+          setLiveError(
+            'Payment received. We are still confirming your order — refresh in a few seconds, or open the link from your receipt email.',
+          )
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setResolving(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [sessionId])
 
   const steps = useMemo(
     () => [
@@ -26,74 +60,94 @@ export function Success() {
     [],
   )
 
+  const continueTo = liveOrder
+    ? `/order/${liveOrder.token}`
+    : pack
+      ? `/onboarding?pack=${pack}`
+      : '/onboarding'
+
   return (
-    <div className="max-w-xl mx-auto space-y-8">
-      <div className="text-center space-y-3">
+    <div className="mx-auto max-w-xl space-y-8">
+      <div className="space-y-3 text-center">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-600/10 ring-1 ring-teal-600/25">
           <span className="text-2xl text-teal-600" aria-hidden>
             ✓
           </span>
         </div>
         <p className="section-kicker">You’re in</p>
-        <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">
-          Payment received
-        </h1>
-        <p className="text-slate-600 text-sm leading-relaxed max-w-md mx-auto">
+        <h1 className="text-2xl font-bold tracking-tight text-navy-950 sm:text-3xl">Payment received</h1>
+        <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-600">
+          <span className="font-semibold text-navy-950">We apply. You tap codes when asked.</span>
           {meta ? (
             <>
+              {' '}
               <span className="font-semibold text-navy-950">{meta.name}</span>
               {' · '}
-              <span className="tabular">{meta.price}</span>
+              <span className="tabular-nums">{meta.price}</span>
               {' — '}
               {meta.blurb}
             </>
+          ) : liveOrder ? (
+            <>
+              {' '}
+              {liveOrder.pack_label} is ready.
+            </>
           ) : (
-            <>Thanks. Next, tell us who to apply as so we can start your queue.</>
+            <> Thanks. Next, tell us who to apply as so we can start your queue.</>
           )}
         </p>
-        {!pack ? (
-          <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 inline-block">
-            Missing <code className="font-mono">?pack=</code>. You can still continue — pick a pack on Pricing if this was a mistake.
+        {resolving ? (
+          <p className="text-xs text-slate-500">Confirming your Stripe session…</p>
+        ) : null}
+        {liveError ? (
+          <p className="inline-block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            {liveError}
+          </p>
+        ) : null}
+        {!pack && !sessionId ? (
+          <p className="inline-block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            Missing <code className="font-mono">?session_id=</code> or <code className="font-mono">?pack=</code>. You can
+            still continue — pick a pack on Pricing if this was a mistake.
           </p>
         ) : null}
       </div>
 
-      <div className="card-surface rounded-2xl p-5 sm:p-6 space-y-4">
+      <div className="card-surface space-y-4 rounded-2xl p-5 sm:p-6">
         <p className="text-sm font-semibold text-navy-950">What happens next</p>
         <ol className="space-y-3">
           {steps.map((s) => (
             <li key={s.n} className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-600/10 text-teal-700 text-xs font-bold">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-600/10 text-xs font-bold text-teal-700">
                 {s.n}
               </span>
               <div>
                 <p className="text-sm font-medium text-navy-950">{s.title}</p>
-                <p className="text-xs text-slate-500 leading-relaxed mt-0.5">{s.body}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{s.body}</p>
               </div>
             </li>
           ))}
         </ol>
-        <Link
-          to={pack ? `/onboarding?pack=${pack}` : '/onboarding'}
-          className="btn-primary w-full sm:w-auto inline-flex justify-center px-6 py-3 text-sm"
-        >
-          Continue to identity
+        <Link to={continueTo} className="btn-primary inline-flex w-full justify-center px-6 py-3 text-sm sm:w-auto">
+          {liveOrder ? 'Open your order' : 'Continue to identity'}
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-dashed border-navy-950/12 bg-white/60 p-4 space-y-2">
-        <p className="text-xs font-semibold text-navy-950 uppercase tracking-wide">Competition Act · plain talk</p>
-        <p className="text-xs text-slate-600 leading-relaxed">
-          Contests are free. Your fee is for research and time on eligible AUTO_OK entries. Estimates are not a guarantee.
-          We cannot influence who wins. You bring your own legal identity — we never invent emails or phones.
+      <div className="space-y-2 rounded-2xl border border-dashed border-navy-950/12 bg-white/60 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-navy-950">Competition Act · plain talk</p>
+        <p className="text-xs leading-relaxed text-slate-600">
+          Contests are free. Your fee is for research and time on eligible AUTO_OK entries. Estimates are not a
+          guarantee. We cannot influence who wins. You bring your own legal identity — we never invent emails or phones.
         </p>
         <DisclaimerStrip />
       </div>
 
       <p className="text-center text-xs text-slate-500">
         Already set up?{' '}
-        <Link to="/dashboard" className="text-teal-600 hover:underline font-medium">
-          Open your dashboard
+        <Link
+          to={liveOrder ? `/order/${liveOrder.token}` : '/dashboard'}
+          className="font-medium text-teal-600 hover:underline"
+        >
+          Open your {liveOrder ? 'order' : 'dashboard'}
         </Link>
       </p>
     </div>
