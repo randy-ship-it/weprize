@@ -17,6 +17,7 @@ import { Prizes } from './pages/Prizes'
 import { Success } from './pages/Success'
 import { Onboarding } from './pages/Onboarding'
 import { Dashboard } from './pages/Dashboard'
+import { Order } from './pages/Order'
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="success" element={<Success />} />
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="order/:token" element={<Order />} />
           <Route path="waitlist" element={<Waitlist />} />
           <Route path="submit" element={<Submit />} />
           <Route path="methodology" element={<Methodology />} />
