@@ -1,5 +1,5 @@
-# WePrize Autoscale — static Vite SPA
-# Build with vite; run with production `serve` on 0.0.0.0:5000
+# WePrize Autoscale — Node Express serves SPA (dist/) + API
+# Build with vite; run Express on 0.0.0.0:5000 (Stripe webhook, orders, identity, assist queue)
 run = "npm run start"
 modules = ["nodejs-20"]
 
