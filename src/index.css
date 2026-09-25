@@ -389,3 +389,23 @@ a {
     animation-play-state: paused;
   }
 }
+
+/* —— Assist UI (success / onboarding / dashboard) —— */
+.assist-hero-glow {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(13, 148, 136, 0.12), transparent 60%),
+    transparent;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(13, 148, 136, 0.45);
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
