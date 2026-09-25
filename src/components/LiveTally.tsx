@@ -35,7 +35,8 @@ export function LiveTally({ tally, autoOkLive }: { tally: Tally; autoOkLive: num
         Browse what&apos;s live, track closings, then we apply for you.
       </p>
       <p className="text-[11px] text-slate-400 leading-relaxed">
-        {tally.disclaimer} · Expected is a simple ± band around the mid estimate — not a guarantee.{' '}
+        {tally.disclaimer} · Suggested expected $ is an estimate only (listed prize ARVs × rough odds assumptions) —
+        not a guarantee of winnings.{' '}
         <Link to="/methodology" className="text-teal-500 hover:underline">
           How we estimate
         </Link>

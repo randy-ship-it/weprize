@@ -93,7 +93,7 @@ export function Layout() {
             >
               Scale Health · scalehealth.ca
             </a>
-            <p className="text-slate-500">Live: weprize.net · Stripe Payment Links live</p>
+            <p className="text-slate-500">Live: weprize.net</p>
             <DisclaimerStrip />
           </div>
         </div>

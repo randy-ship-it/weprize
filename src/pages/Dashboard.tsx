@@ -63,7 +63,7 @@ export function Dashboard() {
         <p className="section-kicker">Assist dashboard</p>
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">No pack yet</h1>
         <p className="text-sm text-slate-600 leading-relaxed">
-          Buy Once, Triple, or Year-round on Stripe, then we’ll guide you through identity and your apply queue.
+          Unlock Once, Triple, or Year-round assist, then we’ll guide you through identity and your apply queue.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link to="/pricing" className="btn-primary px-5 py-2.5 text-sm">
@@ -219,7 +219,7 @@ export function Dashboard() {
       <section className="card-surface rounded-2xl p-4 space-y-2">
         <DisclaimerStrip />
         <p className="text-[11px] text-slate-400 leading-relaxed">
-          Demo store uses localStorage until Replit <code className="font-mono">/api</code> + Stripe webhooks are wired. No
+          Demo store uses localStorage until Replit <code className="font-mono">/api</code> + payment webhooks are wired. No
           secrets in this SPA.
         </p>
       </section>

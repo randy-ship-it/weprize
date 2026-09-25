@@ -124,7 +124,7 @@ export function platformLabel(platform: PlatformFamily): string {
     first_party: 'WePrize rails',
     unknown: 'Unknown',
   }
-  return map[platform]
+  return map[platform] ?? String(platform)
 }
 
 export function formatCad(n: number): string {
