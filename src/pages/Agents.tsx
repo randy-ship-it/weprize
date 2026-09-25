@@ -117,7 +117,7 @@ export function Agents() {
           <Link to="/contests" className="text-teal-600 underline underline-offset-2">
             /contests
           </Link>
-          . Placeholder host: weprize.ca (domain later). Draft preview only today.
+          . Placeholder host: weprize.ca (domain later). Live.
         </p>
         <p>
           Machine sheet:{' '}
