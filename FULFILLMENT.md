@@ -62,9 +62,12 @@ AUTO_OK + Canada / `ca_us` only, health ≠ dead.
 
 | Path | Role |
 |---|---|
-| `/success` | Post-checkout; resolves session → `/order/:token` |
-| `/order/:token` | Live identity + job dashboard |
+| `/success` | Post-checkout; resolves `session_id` → `/order/:token`; if only `?pack=`, recover-by-email CTA |
+| `/order/:token` | Live identity + job dashboard (source of truth for applies) |
+| `POST/GET /api/orders/recover-by-email` | Exact checkout email → latest paid order token (rate-limited; 404 if none) |
 | `/onboarding`, `/dashboard` | Local mock demo (Emma UI) until token link is shared |
+
+After `fulfillCheckoutSession`, if Resend is configured, buyer gets an email with `/order/{token}` (order-ready). Identity form on the order page remains required before applies (legal_name, email, address, city, province, postal; phone/dob optional).
 
 ## Worker (box-side, not Replit)
 

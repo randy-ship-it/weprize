@@ -6,11 +6,23 @@ export const STRIPE_LINKS = {
   year_round: 'https://buy.stripe.com/5kQ7sLdVP15o7mS8d88AE02',
 } as const
 
-/** Exact success_url values to set on each Stripe Payment Link (Dashboard). */
+/**
+ * Stripe Dashboard → each Payment Link → After payment → redirect.
+ * MUST include `{CHECKOUT_SESSION_ID}` so /success can resolve /order/:token
+ * via GET /api/orders/by-session/:id. Without it, buyers land with only ?pack=
+ * and need recover-by-email or the post-pay Resend order link.
+ *
+ * Templates (hardcoded — copy into Dashboard exactly):
+ *   https://weprize.net/success?pack=once&session_id={CHECKOUT_SESSION_ID}
+ *   https://weprize.net/success?pack=triple&session_id={CHECKOUT_SESSION_ID}
+ *   https://weprize.net/success?pack=year_round&session_id={CHECKOUT_SESSION_ID}
+ *
+ * Cancel URL: https://weprize.net/pricing
+ */
 export const STRIPE_SUCCESS_URLS: Record<PackId, string> = {
-  once: 'https://weprize.net/success?pack=once',
-  triple: 'https://weprize.net/success?pack=triple',
-  year_round: 'https://weprize.net/success?pack=year_round',
+  once: 'https://weprize.net/success?pack=once&session_id={CHECKOUT_SESSION_ID}',
+  triple: 'https://weprize.net/success?pack=triple&session_id={CHECKOUT_SESSION_ID}',
+  year_round: 'https://weprize.net/success?pack=year_round&session_id={CHECKOUT_SESSION_ID}',
 }
 
 export const PACK_FROM_QUERY = STRIPE_SUCCESS_URLS

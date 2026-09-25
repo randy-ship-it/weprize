@@ -1,7 +1,7 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-09-25 ~16:19 ET · branch `feat/founder-brief-and-caps`  
+> **Updated:** 2026-09-25 ~16:30 ET · branch `feat/postpay-identity-recovery`  
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
@@ -75,7 +75,27 @@ Code: `src/lib/shareRef.ts`, `src/components/ShareButton.tsx`.
 
 *Edit this section every day. Strike done items; add blockers.*
 
-- [ ] **Replit Publish** from current `main` so apex JS matches GH (Year-round Payment Link **sLd**, not stale **sHd**; new assets after this brief).
+### Stripe Payment Link success URLs (HARD — Randy Dashboard)
+
+Set **After payment → redirect** on each Payment Link to these **exact** templates (must include `{CHECKOUT_SESSION_ID}`):
+
+| Pack | success_url |
+|---|---|
+| Once | `https://weprize.net/success?pack=once&session_id={CHECKOUT_SESSION_ID}` |
+| Triple | `https://weprize.net/success?pack=triple&session_id={CHECKOUT_SESSION_ID}` |
+| Year-round | `https://weprize.net/success?pack=year_round&session_id={CHECKOUT_SESSION_ID}` |
+
+Cancel: `https://weprize.net/pricing`. Source of truth also in `src/data/stripe.ts` (`STRIPE_SUCCESS_URLS`) and `FULFILLMENT.md`.
+
+Without `session_id`, Success shows **recover-by-email** (`POST /api/orders/recover-by-email`) and buyers need the Resend `/order/{token}` email after webhook fulfill.
+
+### Ship / ops checklist
+
+- [x] Post-pay identity recovery path (Success CTA + recover-by-email + order-ready Resend email).
+- [ ] **Randy:** paste success URL templates into Stripe Dashboard (above).
+- [ ] **Randy:** `STRIPE_WEBHOOK_SECRET` on Replit + webhook endpoint `checkout.session.completed`.
+- [ ] **Randy:** `RESEND_API_KEY` + `RESEND_FROM` so order-ready + NEEDS_YOU emails send (`resend:true` on `/api/health`).
+- [ ] **Replit Publish** from current `main` so apex JS matches GH (Year-round Payment Link **sLd**, not stale **sHd**).
 - [ ] Confirm `/api/health` on apex (Express + webhook) — today may still SPA-fallback.
 - [ ] Soft enforce **≤10 purchases / email** (stub logged; harden when ready).
 - [ ] Fulfillment worker + NEEDS_YOU nudges live for paid orders.
@@ -95,7 +115,7 @@ Daily / weekly:
 - [ ] One exclusive / Scale story push (`/exclusives`) when inventory is live.
 - [ ] Birch Reserve soft inventory only where appropriate (`/advertise`) — display, not PII resale.
 - [ ] Peer share CTA on Home + Success (alluring, no cash referral).
-- [ ] Verify Payment Links: Once / Triple / Year-round (**sLd**) + success URLs `weprize.net/success?pack=…`.
+- [ ] Verify Payment Links: Once / Triple / Year-round (**sLd**) + success URLs with `session_id={CHECKOUT_SESSION_ID}` (see §6).
 - [ ] Cap messaging visible before checkout (1 profile · friends w/ consent · max 10 purchases).
 
 ---

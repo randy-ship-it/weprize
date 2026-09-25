@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
 import { ShareButton } from '../components/ShareButton'
-import { createOrder, fetchOrderBySession, type ServerOrder } from '../lib/api'
+import { fetchOrderBySession, recoverOrderByEmail, type ServerOrder } from '../lib/api'
 import { isPackId, PACK_LABELS, type PackId } from '../types/assist'
-import { useContests } from '../hooks/useContests'
 
 export function Success() {
   const [params] = useSearchParams()
-  const { autoOkCount } = useContests()
+  const navigate = useNavigate()
   const packParam = params.get('pack')
   const sessionId = params.get('session_id') || params.get('checkout_session_id')
   const pack: PackId | null = isPackId(packParam) ? packParam : null
@@ -18,11 +17,11 @@ export function Success() {
   const [liveError, setLiveError] = useState<string | null>(null)
   const [resolving, setResolving] = useState(Boolean(sessionId))
 
-  // Local demo seed when success_url only has ?pack=
-  useEffect(() => {
-    if (!pack || sessionId) return
-    void createOrder({ pack, autoOkPrinted: autoOkCount || 42 })
-  }, [pack, autoOkCount, sessionId])
+  const [recoverEmail, setRecoverEmail] = useState('')
+  const [recoverBusy, setRecoverBusy] = useState(false)
+  const [recoverError, setRecoverError] = useState<string | null>(null)
+
+  const missingSession = Boolean(pack && !sessionId)
 
   // Live path: Checkout session → order token
   useEffect(() => {
@@ -40,7 +39,7 @@ export function Success() {
         if (!cancelled) {
           setLiveOrder(null)
           setLiveError(
-            'Payment received. We are still confirming your order — refresh in a few seconds, or open the link from your receipt email.',
+            'Payment received. We are still confirming your order — refresh in a few seconds, or recover with the email you used at checkout.',
           )
         }
       })
@@ -55,17 +54,48 @@ export function Success() {
   const steps = useMemo(
     () => [
       { n: '1', title: 'Payment received', body: 'Your assist pack is unlocked.' },
-      { n: '2', title: 'Share your identity', body: 'Legal name, email, and mailing address you own.' },
+      {
+        n: '2',
+        title: 'Share your identity',
+        body: 'Legal name, email, and mailing address you own — required before we apply.',
+      },
       { n: '3', title: 'We apply · you tap codes', body: 'AUTO_OK forms only. OTP stays with you.' },
     ],
     [],
   )
 
+  async function onRecover(e: FormEvent) {
+    e.preventDefault()
+    setRecoverError(null)
+    const email = recoverEmail.trim().toLowerCase()
+    if (!email.includes('@')) {
+      setRecoverError('Enter the exact email you used at checkout.')
+      return
+    }
+    setRecoverBusy(true)
+    try {
+      const order = await recoverOrderByEmail(email)
+      setLiveOrder(order)
+      navigate(`/order/${order.token}`, { replace: false })
+    } catch (err) {
+      const status = (err as Error & { status?: number }).status
+      if (status === 404) {
+        setRecoverError(
+          'No paid order found for that email yet. Check spam for a WePrize order link, or wait a minute and try again after payment confirms.',
+        )
+      } else if (status === 429) {
+        setRecoverError('Too many attempts. Wait a minute, then try again.')
+      } else {
+        setRecoverError('Could not look up that order. Try again in a moment.')
+      }
+    } finally {
+      setRecoverBusy(false)
+    }
+  }
+
   const continueTo = liveOrder
     ? `/order/${liveOrder.token}`
-    : pack
-      ? `/onboarding?pack=${pack}`
-      : '/onboarding'
+    : null
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
@@ -97,9 +127,7 @@ export function Success() {
             <> Thanks. Next, tell us who to apply as so we can start your queue.</>
           )}
         </p>
-        {resolving ? (
-          <p className="text-xs text-slate-500">Confirming your payment…</p>
-        ) : null}
+        {resolving ? <p className="text-xs text-slate-500">Confirming your payment…</p> : null}
         {liveError ? (
           <p className="inline-block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
             {liveError}
@@ -107,11 +135,28 @@ export function Success() {
         ) : null}
         {!pack && !sessionId ? (
           <p className="inline-block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-            Missing <code className="font-mono">?session_id=</code> or <code className="font-mono">?pack=</code>. You can
-            still continue — pick a pack on Pricing if this was a mistake.
+            Missing <code className="font-mono">?session_id=</code> or <code className="font-mono">?pack=</code>. Recover
+            your order below with the checkout email, or open the link from your WePrize email.
           </p>
         ) : null}
       </div>
+
+      {missingSession && !liveOrder ? (
+        <div className="card-surface space-y-4 rounded-2xl border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6">
+          <p className="text-sm font-semibold text-navy-950">Link your payment → identity form</p>
+          <p className="text-xs leading-relaxed text-slate-600">
+            Your success page is missing <code className="font-mono text-[11px]">session_id</code> (Stripe Dashboard
+            redirect not set yet). Payment can still be live — recover with the <strong>exact email</strong> from
+            checkout, or open the order link we email when Resend is configured. Then share legal identity on your order
+            page so we can apply.
+          </p>
+          <ol className="list-decimal space-y-1 pl-4 text-xs text-slate-600">
+            <li>Recover order (email below) or use the emailed /order link</li>
+            <li>Submit legal name, email, address, city, province, postal (phone/DOB optional)</li>
+            <li>We queue AUTO_OK applies — you tap codes when brands ask</li>
+          </ol>
+        </div>
+      ) : null}
 
       <div className="card-surface space-y-4 rounded-2xl p-5 sm:p-6">
         <p className="text-sm font-semibold text-navy-950">What happens next</p>
@@ -128,9 +173,43 @@ export function Success() {
             </li>
           ))}
         </ol>
-        <Link to={continueTo} className="btn-primary inline-flex w-full justify-center px-6 py-3 text-sm sm:w-auto">
-          {liveOrder ? 'Open your order' : 'Continue to identity'}
-        </Link>
+
+        {continueTo ? (
+          <Link to={continueTo} className="btn-primary inline-flex w-full justify-center px-6 py-3 text-sm sm:w-auto">
+            Open your order — share identity
+          </Link>
+        ) : (
+          <div className="space-y-3 rounded-xl bg-slate-50 ring-1 ring-slate-200/80 px-3.5 py-3">
+            <p className="text-xs font-semibold text-navy-950">Recover my order</p>
+            <p className="text-[11px] leading-relaxed text-slate-500">
+              Use the exact email from Stripe checkout. We return your latest paid order only — no other accounts.
+            </p>
+            <form onSubmit={onRecover} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <label className="sr-only" htmlFor="recover-email">
+                Checkout email
+              </label>
+              <input
+                id="recover-email"
+                type="email"
+                autoComplete="email"
+                required
+                value={recoverEmail}
+                onChange={(e) => setRecoverEmail(e.target.value)}
+                placeholder="you@email.com"
+                className="w-full flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-navy-950 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+              />
+              <button
+                type="submit"
+                disabled={recoverBusy}
+                className="btn-primary inline-flex shrink-0 justify-center px-4 py-2.5 text-sm disabled:opacity-60"
+              >
+                {recoverBusy ? 'Looking up…' : 'Find my order'}
+              </button>
+            </form>
+            {recoverError ? <p className="text-xs text-amber-900">{recoverError}</p> : null}
+          </div>
+        )}
+
         <div className="space-y-1.5 rounded-xl bg-teal-50/70 ring-1 ring-teal-200/60 px-3.5 py-3">
           <p className="text-xs font-semibold text-teal-900">Know someone who wastes hours on contest forms?</p>
           <p className="text-[11px] leading-relaxed text-teal-800/90">

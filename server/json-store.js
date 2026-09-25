@@ -89,6 +89,22 @@ export function createJsonStore() {
       return db.orders.filter((o) => o.customer_id === customer.id && o.status === 'paid').length
     },
 
+    /**
+     * Recover latest paid order for exact buyer email (checkout email).
+     * Exact match only — never fuzzy / never leak other emails.
+     */
+    async getLatestPaidOrderByEmail(email) {
+      const e = String(email || '').trim().toLowerCase()
+      if (!e || !e.includes('@')) return null
+      const db = load()
+      const customer = db.customers.find((c) => String(c.email || '').toLowerCase() === e)
+      if (!customer) return null
+      const paid = db.orders
+        .filter((o) => o.customer_id === customer.id && o.status === 'paid')
+        .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))
+      return paid[0] || null
+    },
+
     async upsertPaidOrderFromStripe({ sessionId, paymentLink, pack, email, amountCents, currency, clientReferenceId }) {
       return withLock(() => {
         const db = load()
