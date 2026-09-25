@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { Contest } from '../types/contest'
 import { daysLeft, platformLabel, regionLabel, formatCad } from '../lib/filters'
 import { FrictionBadgeRow } from './FrictionBadge'
@@ -7,6 +7,8 @@ import { HealthPill } from './HealthPill'
 import { EvBand } from './EvBand'
 
 export function ContestCard({ contest }: { contest: Contest }) {
+  const navigate = useNavigate()
+  const href = `/contests/${contest.slug}`
   const left = contest.days_left ?? daysLeft(contest.close_at_et)
   const exclusive = contest.exclusive || contest.source === 'scale_health'
   const epm =
@@ -14,15 +16,31 @@ export function ContestCard({ contest }: { contest: Contest }) {
       ? contest.ev_mid / contest.minutes_to_enter
       : null
 
+  const go = () => navigate(href)
+
   return (
     <article
-      className={`rounded-2xl p-4 sm:p-5 transition-all duration-200 hover:-translate-y-0.5 ${
+      className={`rounded-2xl p-4 sm:p-5 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer ${
         exclusive ? 'exclusive-accent card-surface' : 'card-surface'
       }`}
+      onClick={go}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          go()
+        }
+      }}
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${contest.name}`}
     >
       <div className="flex flex-wrap items-start justify-between gap-2 mb-2.5">
         <h2 className="text-[15px] font-semibold text-navy-950 leading-snug pr-2">
-          <Link to={`/contests/${contest.slug}`} className="hover:text-teal-600 transition">
+          <Link
+            to={href}
+            className="hover:text-teal-600 transition"
+            onClick={(e) => e.stopPropagation()}
+          >
             {contest.name}
           </Link>
         </h2>
@@ -84,8 +102,9 @@ export function ContestCard({ contest }: { contest: Contest }) {
           {contest.minutes_to_enter != null ? ` · ~${contest.minutes_to_enter} min` : ''}
         </span>
         <Link
-          to={`/contests/${contest.slug}`}
+          to={href}
           className="btn-primary inline-flex items-center px-3.5 py-1.5 text-sm"
+          onClick={(e) => e.stopPropagation()}
         >
           View
         </Link>

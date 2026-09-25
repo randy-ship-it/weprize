@@ -29,7 +29,7 @@ export function Contests() {
           <div className="sticky top-28 space-y-4">
             <BirchAdSlot slotId="feed_right_rail" />
             <div className="card-surface rounded-2xl p-4 text-xs text-slate-600 leading-relaxed">
-              Sort favors EV mid / minutes, then AUTO_OK, then closing-soon and soft-field. Dead links drop from EV math.
+              Live preferred · dead hidden by default · sort favors EV mid / minutes, then AUTO_OK, then closing-soon and soft-field. Suggested EV is estimate only — not a guarantee.
             </div>
           </div>
         </aside>

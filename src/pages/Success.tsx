@@ -18,13 +18,13 @@ export function Success() {
   const [liveError, setLiveError] = useState<string | null>(null)
   const [resolving, setResolving] = useState(Boolean(sessionId))
 
-  // Local demo seed when Stripe success_url only has ?pack=
+  // Local demo seed when success_url only has ?pack=
   useEffect(() => {
     if (!pack || sessionId) return
     void createOrder({ pack, autoOkPrinted: autoOkCount || 42 })
   }, [pack, autoOkCount, sessionId])
 
-  // Live path: Stripe Checkout session → order token
+  // Live path: Checkout session → order token
   useEffect(() => {
     if (!sessionId) return
     let cancelled = false
@@ -98,7 +98,7 @@ export function Success() {
           )}
         </p>
         {resolving ? (
-          <p className="text-xs text-slate-500">Confirming your Stripe session…</p>
+          <p className="text-xs text-slate-500">Confirming your payment…</p>
         ) : null}
         {liveError ? (
           <p className="inline-block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">

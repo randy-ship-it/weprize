@@ -17,9 +17,11 @@ export function ContestDetail() {
     return (
       <div className="rounded-2xl border border-dashed border-navy-950/20 bg-white p-10 text-center">
         <p className="text-navy-950 font-semibold mb-2">Contest not found</p>
-        <p className="text-sm text-slate-600 mb-4">That contest is not on the board. Try Exclusives or Contests.</p>
-        <Link to="/contests" className="text-teal-600 hover:underline text-sm">
-          Back to feed
+        <p className="text-sm text-slate-600 mb-4">
+          This listing is not on the live board. It may have closed or the link is outdated.
+        </p>
+        <Link to="/contests" className="btn-primary inline-flex px-5 py-2.5 text-sm">
+          Back to contests
         </Link>
       </div>
     )
@@ -153,8 +155,11 @@ export function ContestDetail() {
           rel="noopener noreferrer"
           className="btn-primary px-5 py-2.5 text-sm"
         >
-          {exclusive ? 'Visit Scale Health' : 'Enter on brand site'}
+          Open official listing
         </a>
+        <Link to="/contests" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+          Back to contests
+        </Link>
         {contest.rules_url ? (
           <a
             href={contest.rules_url}
