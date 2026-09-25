@@ -131,14 +131,21 @@ export function Success() {
         <Link to={continueTo} className="btn-primary inline-flex w-full justify-center px-6 py-3 text-sm sm:w-auto">
           {liveOrder ? 'Open your order' : 'Continue to identity'}
         </Link>
-        <ShareButton label="Share with a friend" variant="next" />
+        <div className="space-y-1.5 rounded-xl bg-teal-50/70 ring-1 ring-teal-200/60 px-3.5 py-3">
+          <p className="text-xs font-semibold text-teal-900">Know someone who wastes hours on contest forms?</p>
+          <p className="text-[11px] leading-relaxed text-teal-800/90">
+            Send your peer link. Free contests stay free — optional assist if they want it. No cash referral rewards.
+          </p>
+          <ShareButton label="Pass your link — help a friend skip the busywork" variant="next" />
+        </div>
       </div>
 
       <div className="space-y-2 rounded-2xl border border-dashed border-navy-950/12 bg-white/60 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-navy-950">Competition Act · plain talk</p>
         <p className="text-xs leading-relaxed text-slate-600">
           Contests are free. Your fee is for research and time on eligible AUTO_OK entries. Estimates are not a
-          guarantee. We cannot influence who wins. You bring your own legal identity — we never invent emails or phones.
+          guarantee. We cannot influence who wins. One personal profile for you; friends = apply-on-behalf with their
+          consent and identity. Max 10 purchases per buyer — not a bulk business tool. We never invent emails or phones.
         </p>
         <DisclaimerStrip />
       </div>

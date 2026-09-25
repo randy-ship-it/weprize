@@ -6,12 +6,15 @@ type Props = {
   className?: string
   /** Longer label for Success post-pay CTA */
   variant?: 'ghost' | 'next'
+  /** Show a short alluring hint under the button (Home) */
+  hint?: boolean
 }
 
 export function ShareButton({
-  label = 'Share WePrize',
+  label = 'Share your WePrize link',
   className = '',
   variant = 'ghost',
+  hint = false,
 }: Props) {
   const [status, setStatus] = useState<ShareResult | null>(null)
   const [busy, setBusy] = useState(false)
@@ -44,10 +47,15 @@ export function ShareButton({
       >
         {busy ? 'Sharing…' : label}
       </button>
+      {hint && !status ? (
+        <span className="max-w-xs text-[11px] leading-snug text-slate-500">
+          Free contests · optional assist · peer link only — no cash rewards that break the rules.
+        </span>
+      ) : null}
       {status === 'copied' ? (
-        <span className="text-xs text-teal-700">Link copied</span>
+        <span className="text-xs text-teal-700">Link copied — send it to a friend</span>
       ) : status === 'shared' ? (
-        <span className="text-xs text-teal-700">Thanks for sharing</span>
+        <span className="text-xs text-teal-700">Thanks — you just shortened someone else’s form queue</span>
       ) : status === 'failed' ? (
         <span className="text-xs text-slate-500">Couldn’t share — copy from the address bar</span>
       ) : null}

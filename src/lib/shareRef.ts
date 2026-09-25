@@ -64,7 +64,7 @@ export function buildShareUrl(code?: string): string {
 /** Competition Act–safe: free contests + optional time-assist; no win/odds promises. */
 export function SHARE_TEXT(url?: string): string {
   const link = url || buildShareUrl()
-  return `WePrize — free Canada-first health & wellness contests. Optional time-assist packs if you want us to apply for you. Estimates aren’t a guarantee. ${link}`
+  return `Skip the busywork: WePrize browses free Canada-first health & wellness contests and can apply for you (optional assist). Estimates aren’t a guarantee — contests stay free. ${link}`
 }
 
 export type ShareResult = 'shared' | 'copied' | 'failed'

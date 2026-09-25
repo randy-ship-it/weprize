@@ -45,11 +45,16 @@ export function Home() {
             <Link to="/submit" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
               Suggest a contest
             </Link>
-            <ShareButton />
+            <ShareButton hint label="Share with a friend" />
           </div>
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-slate-500 max-w-xl leading-relaxed">
+            Got a friend drowning in entry forms? Pass your peer link — free contests stay free; optional assist if they want it. No cash referral rewards.
+          </p>
+          <p className="mt-2 text-xs text-slate-500">
             Ready to apply this week:{' '}
             <span className="tabular font-semibold text-navy-950">{autoOkCount}</span>
+            {' · '}
+            <span className="text-slate-400">1 profile · friends w/ consent · max 10 purchases / buyer</span>
           </p>
         </div>
         <LiveTally tally={tally as Tally} autoOkLive={autoOkCount} />

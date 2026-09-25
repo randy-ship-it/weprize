@@ -32,7 +32,7 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Free',
     price: '$0',
-    print: 'Browse and track. We apply to 10 contests for you. Refer a friend.',
+    print: 'Browse and track. We apply to 10 contests for you. Share a peer link — no cash rewards.',
     cta: 'Browse contests',
     to: '/contests',
     featured: true,
@@ -40,21 +40,21 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Once',
     price: '$9',
-    print: `One round of applies for one person. About ${n} contests ready this week.`,
+    print: `One round of applies for one person — your profile. About ${n} contests ready this week. Desire the queue, not bulk farm accounts.`,
     cta: 'Unlock Once pack',
     pack: 'once',
   },
   {
     name: 'Triple',
     price: '$15',
-    print: 'Three people you know, or three apply rounds. Real identities only.',
+    print: 'Three people you know (with their consent + identity), or three apply rounds. Real adults only — not a business entry desk.',
     cta: 'Get Triple pack',
     pack: 'triple',
   },
   {
     name: 'Year-round',
     price: '$19.99/mo',
-    print: 'We keep applying for one person as new contests open.',
+    print: 'We keep applying for one person as new contests open. Personal use; max 10 purchases per buyer email.',
     cta: 'Unlock year-round assist',
     pack: 'year_round',
   },

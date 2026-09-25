@@ -154,8 +154,9 @@ export function Onboarding() {
           Who should we apply as?
         </h1>
         <p className="text-sm text-slate-600 leading-relaxed">
-          One real legal adult. We fill AUTO_OK contest forms with these details. You tap email/SMS codes when a brand asks —
-          we stop before CAPTCHA and OTP.
+          One personal profile for you — a real legal adult. Applying for a friend? Use <em>their</em> consent and identity, not a fake email.
+          We fill AUTO_OK forms with these details. You tap email/SMS codes when a brand asks — we stop before CAPTCHA and OTP.
+          Max 10 purchases per buyer (not a bulk business tool).
         </p>
         {meta ? (
           <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-teal-50 text-teal-800 text-xs font-semibold px-3 py-1 ring-1 ring-teal-200">
@@ -310,7 +311,8 @@ export function Onboarding() {
 
         <div className="rounded-xl bg-ice-50 border border-navy-950/8 px-3.5 py-3 text-xs text-slate-600 leading-relaxed">
           <strong className="text-navy-950">No ROI promises.</strong> Fee = research + time on free eligible entries.
-          Book value is an estimate from entries we submit — not a guarantee. Household rules: one identity per person;
+          Book value is an estimate from entries we submit — not a guarantee. Guardrails: 1 personal profile; friends =
+          apply-on-behalf with consent; max 10 purchases per buyer email. Household rules: one identity per person;
           we refuse a second apply when rules say one-per-household.
         </div>
 
