@@ -22,7 +22,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 export function Layout() {
   return (
     <div className="min-h-screen flex flex-col page-mesh">
-      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-[40px] z-40 backdrop-blur">
+      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-0 z-40 backdrop-blur">
         <div className="mx-auto max-w-[1200px] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5 group">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-teal-600/20 ring-1 ring-teal-500/40 text-teal-500 font-bold text-sm">
