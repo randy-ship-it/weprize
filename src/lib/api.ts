@@ -81,8 +81,21 @@ export type IdentityBody = {
   addressLine1?: string
 }
 
+/** Checkout Session route. Literal so the production bundle contains `/api/checkout`. */
+const CHECKOUT_SESSION_PATH = '/api/checkout'
+
+function resolveApiUrl(path: string): string {
+  if (path === CHECKOUT_SESSION_PATH) {
+    if (API_BASE === '/api') return CHECKOUT_SESSION_PATH
+    const base = String(API_BASE).replace(/\/$/, '')
+    if (base.endsWith('/api')) return `${base}/checkout`
+    return `${base}${CHECKOUT_SESSION_PATH}`
+  }
+  return `${API_BASE}${path}`
+}
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await fetch(resolveApiUrl(path), {
     ...init,
     headers: {
       Accept: 'application/json',
@@ -131,7 +144,7 @@ export async function createCheckout(
   const body: { pack: PackId; ref?: string } = { pack }
   const code = (ref || '').trim()
   if (/^[a-zA-Z0-9]{6,8}$/.test(code)) body.ref = code
-  return api<{ url: string }>('/checkout', {
+  return api<{ url: string }>(CHECKOUT_SESSION_PATH, {
     method: 'POST',
     body: JSON.stringify(body),
     signal,
