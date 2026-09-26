@@ -33,9 +33,9 @@ export const PACK_FROM_QUERY = STRIPE_SUCCESS_URLS
  */
 
 /**
- * FALLBACK ONLY: Payment Links when POST /api/checkout fails.
- * Prefer createCheckout() (server Checkout Sessions). Payment Links still
- * need Dashboard After-payment redirect with {CHECKOUT_SESSION_ID} if used.
+ * Primary paid CTA while Checkout Sessions are not usable
+ * (STRIPE_SECRET_KEY must be a live secret before POST /api/checkout is the default).
+ * Payment Links still need the Dashboard After-payment redirect with {CHECKOUT_SESSION_ID}.
  */
 export function paymentLinkWithRef(pack: PackId, ref?: string | null): string {
   const base = STRIPE_LINKS[pack]
