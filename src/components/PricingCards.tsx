@@ -15,7 +15,10 @@ type Plan = {
   cta: string
   to?: string
   pack?: PackId
-  featured?: boolean
+  /** Visual emphasis for money CTAs */
+  money?: boolean
+  /** Soft secondary (Free) */
+  soft?: boolean
 }
 
 /** Rough pack EV band from operator mid EV / contests applied - estimates only. */
@@ -38,28 +41,31 @@ const plans = (n: number): Plan[] => [
     print: 'Browse and track. We apply to 10 contests for you. Share a peer link. No cash rewards.',
     cta: 'Browse contests',
     to: '/contests',
-    featured: true,
+    soft: true,
   },
   {
     name: 'Once',
     price: '$9',
     print: `One round of applies for one person (your profile). About ${n} contests ready this week. Hundreds vs one on time. Desire the queue, not bulk farm accounts.`,
-    cta: 'Unlock Once pack',
+    cta: 'Unlock Once',
     pack: 'once',
+    money: true,
   },
   {
     name: 'Triple',
     price: '$15',
     print: 'Three people you know (with their consent + identity), or three apply rounds. Real adults only. Not a business entry desk.',
-    cta: 'Get Triple pack',
+    cta: 'Get Triple',
     pack: 'triple',
+    money: true,
   },
   {
     name: 'Year-round',
     price: '$19.99/mo',
     print: 'We keep applying for one person as new contests open. Personal use; max 10 purchases per buyer email.',
-    cta: 'Unlock year-round assist',
+    cta: 'Unlock year-round',
     pack: 'year_round',
+    money: true,
   },
 ]
 
@@ -121,31 +127,36 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
 
   return (
     <>
-      <div className={`grid gap-4 ${teaser ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2'}`}>
+      <div className={`grid gap-3 ${teaser ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2'}`}>
         {list.map((p) => {
           const evLine = packEvLine(p.pack, autoOkLive, estEvMidCad)
           return (
             <div
               key={p.name}
-              className={`rounded-2xl p-5 flex flex-col transition hover:-translate-y-0.5 ${
-                p.featured
-                  ? 'card-surface border-teal-600 ring-1 ring-teal-600/25'
+              className={`rounded-2xl p-4 sm:p-5 flex flex-col transition hover:-translate-y-0.5 ${
+                p.money
+                  ? 'card-surface border-teal-600 ring-2 ring-teal-600/30 shadow-md shadow-teal-600/10'
                   : 'card-surface'
               }`}
             >
+              {p.money ? (
+                <p className="text-[10px] font-bold uppercase tracking-wider text-teal-700 mb-0.5">
+                  Paid assist
+                </p>
+              ) : null}
               <p className="section-kicker">{p.name}</p>
-              <p className="tabular text-2xl font-bold text-navy-950 mt-1.5">{p.price}</p>
-              <p className="text-sm text-slate-600 mt-2.5 flex-1 leading-relaxed">{p.print}</p>
+              <p className="tabular text-3xl sm:text-4xl font-extrabold text-navy-950 mt-1">{p.price}</p>
+              <p className="text-sm text-slate-600 mt-2 flex-1 leading-snug">{p.print}</p>
               {evLine ? (
-                <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">{evLine}</p>
+                <p className="text-[11px] text-slate-500 mt-2 leading-snug">{evLine}</p>
               ) : null}
               {p.pack ? (
                 <button
                   type="button"
                   disabled={checkoutBusy}
                   onClick={(e) => onUnlockClick(e, p.pack!)}
-                  className={`mt-4 inline-flex justify-center px-4 py-2.5 text-sm disabled:opacity-60 ${
-                    p.featured ? 'btn-primary' : 'btn-ghost text-navy-950'
+                  className={`mt-3 inline-flex w-full justify-center items-center px-5 py-4 text-base sm:text-lg font-bold disabled:opacity-60 ${
+                    p.money ? 'btn-primary' : 'btn-ghost text-navy-950'
                   }`}
                 >
                   {busyPack === p.pack ? 'Starting checkout…' : p.cta}
@@ -153,8 +164,8 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
               ) : (
                 <Link
                   to={p.to!}
-                  className={`mt-4 inline-flex justify-center px-4 py-2.5 text-sm ${
-                    p.featured ? 'btn-primary' : 'btn-ghost text-navy-950'
+                  className={`mt-3 inline-flex w-full justify-center items-center px-5 py-3 text-sm font-semibold ${
+                    p.soft ? 'btn-ghost text-navy-950' : 'btn-primary'
                   }`}
                 >
                   {p.cta}
