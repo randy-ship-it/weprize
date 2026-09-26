@@ -1,9 +1,6 @@
-import { useState, type FormEvent, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { paymentLinkWithRef } from '../data/stripe'
-import { createCheckout } from '../lib/api'
 import { getInboundRef } from '../lib/shareRef'
-import { loadPrepayIdentity, savePrepayIdentity } from '../lib/prepayIdentity'
 import type { PackId } from '../types/assist'
 
 type Props = { autoOkLive: number; teaser?: boolean }
@@ -54,64 +51,13 @@ const plans = (n: number): Plan[] => [
   },
 ]
 
+/**
+ * Paid buttons href Stripe Payment Links. POST /api/checkout stays on the server
+ * for when STRIPE_SECRET_KEY is a live secret; it is not the only way to pay.
+ */
 export function PricingCards({ autoOkLive, teaser = false }: Props) {
   const list = plans(autoOkLive)
   const inbound = getInboundRef()
-  const [pendingPack, setPendingPack] = useState<PackId | null>(null)
-  const [busyPack, setBusyPack] = useState<PackId | null>(null)
-  const checkoutBusy = busyPack !== null
-  const [preEmail, setPreEmail] = useState('')
-  const [preName, setPreName] = useState('')
-
-  async function startCheckout(pack: PackId) {
-    setBusyPack(pack)
-    const ctrl = new AbortController()
-    const timer = window.setTimeout(() => ctrl.abort(), 12000)
-    try {
-      const { url } = await createCheckout(pack, inbound, ctrl.signal)
-      if (url) {
-        window.location.assign(url)
-        return
-      }
-      throw new Error('missing_url')
-    } catch {
-      // Payment Link href is also on the anchor if script never runs.
-      window.location.assign(paymentLinkWithRef(pack, inbound))
-    } finally {
-      window.clearTimeout(timer)
-      setBusyPack(null)
-      setPendingPack(null)
-    }
-  }
-
-  function onUnlockClick(e: MouseEvent<HTMLAnchorElement>, pack: PackId) {
-    e.preventDefault()
-    if (checkoutBusy) return
-    if (loadPrepayIdentity()) {
-      void startCheckout(pack)
-      return
-    }
-    setPendingPack(pack)
-    setPreEmail('')
-    setPreName('')
-  }
-
-  function onSavePrepay(e: FormEvent) {
-    e.preventDefault()
-    if (!pendingPack) return
-    const email = preEmail.trim()
-    const name = preName.trim()
-    if (email.includes('@') && name) {
-      savePrepayIdentity(email, name)
-    }
-    void startCheckout(pendingPack)
-  }
-
-  function onSkipPrepay() {
-    if (!pendingPack) return
-    void startCheckout(pendingPack)
-  }
-
   const featured = list.find((p) => p.featured)
   const paidRest = list.filter((p) => p.pack && !p.featured)
   const free = list.find((p) => !p.pack)
@@ -132,9 +78,6 @@ export function PricingCards({ autoOkLive, teaser = false }: Props) {
             plan={p}
             teaser={teaser}
             href={p.pack ? paymentLinkWithRef(p.pack, inbound) : undefined}
-            busy={p.pack != null && busyPack === p.pack}
-            checkoutBusy={checkoutBusy}
-            onUnlock={onUnlockClick}
           />
         ))}
       </div>
@@ -142,72 +85,6 @@ export function PricingCards({ autoOkLive, teaser = false }: Props) {
         Max 10 purchases per person. The fee is research and time for free contest entries — not a win, and not better
         odds.
       </p>
-
-      {pendingPack ? (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-navy-950/50 p-4 sm:items-center"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="prepay-title"
-        >
-          <div className="card-surface w-full max-w-md space-y-4 rounded-2xl p-5 shadow-xl sm:p-6">
-            <p id="prepay-title" className="text-sm font-semibold text-navy-950">
-              Optional: save name and email before checkout
-            </p>
-            <p className="text-xs leading-relaxed text-slate-600">
-              You can skip. Full mailing address is collected after payment on your order page. One personal profile;
-              friends need consent and their identity. Max 10 purchases per person.
-            </p>
-            <form onSubmit={onSavePrepay} className="space-y-3">
-              <div>
-                <label htmlFor="prepay-name" className="text-xs font-medium text-navy-950">
-                  Legal name
-                </label>
-                <input
-                  id="prepay-name"
-                  type="text"
-                  autoComplete="name"
-                  value={preName}
-                  onChange={(e) => setPreName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  placeholder="As on ID / contest forms"
-                />
-              </div>
-              <div>
-                <label htmlFor="prepay-email" className="text-xs font-medium text-navy-950">
-                  Email
-                </label>
-                <input
-                  id="prepay-email"
-                  type="email"
-                  autoComplete="email"
-                  value={preEmail}
-                  onChange={(e) => setPreEmail(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  placeholder="Same email you will use at checkout"
-                />
-              </div>
-              <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-                <button
-                  type="button"
-                  disabled={checkoutBusy}
-                  onClick={onSkipPrepay}
-                  className="btn-ghost inline-flex justify-center px-4 py-2.5 text-sm text-navy-950 disabled:opacity-60"
-                >
-                  Skip. Continue to pay
-                </button>
-                <button
-                  type="submit"
-                  disabled={checkoutBusy}
-                  className="btn-primary inline-flex justify-center px-4 py-2.5 text-sm disabled:opacity-60"
-                >
-                  {checkoutBusy ? 'Starting checkout…' : 'Save & continue'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      ) : null}
     </div>
   )
 }
@@ -216,16 +93,10 @@ function PlanCard({
   plan,
   teaser,
   href,
-  busy,
-  checkoutBusy,
-  onUnlock,
 }: {
   plan: Plan
   teaser: boolean
   href?: string
-  busy: boolean
-  checkoutBusy: boolean
-  onUnlock: (e: MouseEvent<HTMLAnchorElement>, pack: PackId) => void
 }) {
   const paid = Boolean(plan.pack)
   const span =
@@ -266,16 +137,14 @@ function PlanCard({
       >
         {plan.print}
       </p>
-      {paid && href && plan.pack ? (
+      {paid && href ? (
         <a
           href={href}
-          aria-disabled={checkoutBusy}
-          onClick={(e) => onUnlock(e, plan.pack!)}
-          className={`btn-primary mt-4 inline-flex w-full items-center justify-center px-4 text-center ${
+          className={`btn-primary mt-4 inline-flex w-full items-center justify-center px-4 text-center leading-tight ${
             plan.featured ? 'min-h-14 py-4 text-base sm:text-lg' : 'min-h-12 py-3.5 text-base'
-          } ${checkoutBusy ? 'pointer-events-none opacity-60' : ''}`}
+          }`}
         >
-          {busy ? 'Starting checkout…' : plan.cta}
+          {plan.cta}
         </a>
       ) : (
         <Link
