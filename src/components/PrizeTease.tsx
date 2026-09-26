@@ -10,15 +10,20 @@ export function PrizeTease({ examples }: { examples: PrizeExample[] }) {
 
   return (
     <section aria-labelledby="prize-tease-title" className="space-y-3">
-      <div className="max-w-3xl">
-        <p className="section-kicker mb-1">Examples in the book</p>
-        <h2 id="prize-tease-title" className="text-lg sm:text-xl font-semibold text-navy-950 tracking-tight">
-          Grand prizes on the board right now
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-          Dollar amounts are estimated ARV from public listings — examples of prizes in the book, not prizes you are
-          guaranteed, and not odds. Paying does not change who wins.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-2 max-w-none">
+        <div className="max-w-3xl">
+          <p className="section-kicker mb-1">Examples in the book</p>
+          <h2 id="prize-tease-title" className="text-lg sm:text-xl font-semibold text-navy-950 tracking-tight">
+            Grand prizes on the board right now
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+            Dollar amounts are estimated ARV from public listings — examples of prizes in the book, not prizes you are
+            guaranteed, and not odds. Paying does not change who wins.
+          </p>
+        </div>
+        <Link to="/prizes" className="text-sm font-semibold text-teal-700 hover:underline shrink-0">
+          See all prizes
+        </Link>
       </div>
       <div className="prize-tease-row">
         {examples.map((ex) => {
