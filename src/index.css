@@ -399,9 +399,77 @@ a {
 
 input:focus-visible,
 select:focus-visible,
-button:focus-visible {
+button:focus-visible,
+a:focus-visible {
   outline: 2px solid rgba(13, 148, 136, 0.45);
   outline-offset: 2px;
+}
+
+/* Pricing prize tease — horizontal snap on small screens, row on desktop */
+.prize-tease-row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.35rem;
+  margin-inline: -0.25rem;
+  padding-inline: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+.prize-tease-row::-webkit-scrollbar {
+  height: 6px;
+}
+.prize-tease-row::-webkit-scrollbar-thumb {
+  background: rgba(11, 31, 51, 0.18);
+  border-radius: 999px;
+}
+.prize-tease-card {
+  flex: 0 0 min(78%, 220px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  min-height: 168px;
+  border-radius: 1rem;
+  padding: 0.9rem 0.95rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(11, 31, 51, 0.08);
+  box-shadow:
+    0 1px 2px rgba(11, 31, 51, 0.04),
+    0 8px 24px rgba(11, 31, 51, 0.04);
+}
+.prize-tease-card-wellness {
+  border-color: rgba(13, 148, 136, 0.45);
+  background:
+    linear-gradient(180deg, rgba(13, 148, 136, 0.1), rgba(255, 255, 255, 0.96) 42%),
+    #fff;
+}
+.prize-tease-kind {
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #123352;
+  background: rgba(11, 31, 51, 0.06);
+}
+.prize-tease-kind-wellness {
+  color: #0f766e;
+  background: rgba(13, 148, 136, 0.14);
+}
+@media (min-width: 1024px) {
+  .prize-tease-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+  .prize-tease-card {
+    flex: none;
+    min-height: 196px;
+  }
 }
 
 .btn-primary:disabled {
