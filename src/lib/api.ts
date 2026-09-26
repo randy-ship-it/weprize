@@ -126,6 +126,7 @@ export async function recoverOrderByEmail(email: string): Promise<ServerOrder> {
 export async function createCheckout(
   pack: PackId,
   ref?: string | null,
+  signal?: AbortSignal,
 ): Promise<{ url: string }> {
   const body: { pack: PackId; ref?: string } = { pack }
   const code = (ref || '').trim()
@@ -133,6 +134,7 @@ export async function createCheckout(
   return api<{ url: string }>('/checkout', {
     method: 'POST',
     body: JSON.stringify(body),
+    signal,
   })
 }
 
