@@ -1,19 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ApplyRow } from '../components/ApplyRow'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
 import { NeedsYouCard } from '../components/NeedsYouCard'
 import { StatusChip } from '../components/StatusChip'
-import { ackApplyNeedsYou, fetchApplies, fetchIdentity, fetchOrder } from '../lib/api'
+import {
+  ackApplyNeedsYou,
+  fetchApplies,
+  fetchIdentity,
+  fetchOrder,
+  recoverOrderByEmail,
+} from '../lib/api'
 import { progressSummary } from '../lib/assistStore'
 import { PACK_LABELS, type Apply, type Identity, type Order } from '../types/assist'
 
 export function Dashboard() {
+  const navigate = useNavigate()
   const [order, setOrder] = useState<Order | null>(null)
   const [identity, setIdentity] = useState<Identity | null>(null)
   const [applies, setApplies] = useState<Apply[]>([])
   const [loading, setLoading] = useState(true)
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [recoverEmail, setRecoverEmail] = useState('')
+  const [recoverBusy, setRecoverBusy] = useState(false)
+  const [recoverError, setRecoverError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     setLoading(true)
@@ -45,6 +55,34 @@ export function Dashboard() {
     setBusyId(null)
   }
 
+  async function onRecover(e: FormEvent) {
+    e.preventDefault()
+    setRecoverError(null)
+    const email = recoverEmail.trim().toLowerCase()
+    if (!email.includes('@')) {
+      setRecoverError('Enter the exact email you used at checkout.')
+      return
+    }
+    setRecoverBusy(true)
+    try {
+      const live = await recoverOrderByEmail(email)
+      navigate(`/order/${live.token}`, { replace: false })
+    } catch (err) {
+      const status = (err as Error & { status?: number }).status
+      if (status === 404) {
+        setRecoverError(
+          'No paid order found for that email yet. Check spam for your WePrize order link, or open the link from your confirmation email.',
+        )
+      } else if (status === 429) {
+        setRecoverError('Too many attempts. Wait a minute, then try again.')
+      } else {
+        setRecoverError('Could not look up that order. Try again in a moment.')
+      }
+    } finally {
+      setRecoverBusy(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto space-y-4 animate-pulse">
@@ -64,21 +102,45 @@ export function Dashboard() {
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">No pack yet</h1>
         <p className="text-sm text-slate-600 leading-relaxed">
           Unlock Once, Triple, or Year-round assist, then we’ll guide you through identity and your apply queue.
+          Live queues live on your order link — recover with the exact checkout email below.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link to="/pricing" className="btn-primary px-5 py-2.5 text-sm">
             See pricing
           </Link>
-          <Link to="/onboarding" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
-            I already paid · set identity
+          <Link to="/success" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+            I already paid · recover order
           </Link>
         </div>
-        <div className="card-surface rounded-2xl p-4 text-left text-xs text-slate-500 leading-relaxed">
-          Demo tip: open{' '}
-          <Link to="/success?pack=once" className="text-teal-600 hover:underline">
-            /success?pack=once
-          </Link>
-          , continue to onboarding, then return here — local mock data seeds a realistic queue.
+        <div className="card-surface space-y-3 rounded-2xl p-4 text-left">
+          <p className="text-xs font-semibold text-navy-950">Recover my paid order</p>
+          <p className="text-[11px] leading-relaxed text-slate-500">
+            Use the exact email from Stripe checkout. We return your latest paid order only — then open
+            /order/… for identity and applies.
+          </p>
+          <form onSubmit={onRecover} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="sr-only" htmlFor="dash-recover-email">
+              Checkout email
+            </label>
+            <input
+              id="dash-recover-email"
+              type="email"
+              autoComplete="email"
+              required
+              value={recoverEmail}
+              onChange={(e) => setRecoverEmail(e.target.value)}
+              placeholder="you@email.com"
+              className="w-full flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-navy-950 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+            />
+            <button
+              type="submit"
+              disabled={recoverBusy}
+              className="btn-primary inline-flex shrink-0 justify-center px-4 py-2.5 text-sm disabled:opacity-60"
+            >
+              {recoverBusy ? 'Looking up…' : 'Find my order'}
+            </button>
+          </form>
+          {recoverError ? <p className="text-xs text-amber-900">{recoverError}</p> : null}
         </div>
       </div>
     )
