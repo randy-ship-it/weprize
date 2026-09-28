@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { captureInboundRef } from '../lib/shareRef'
+import { DraftBanner } from './DraftBanner'
 import { CanadaChip } from './CanadaChip'
 import { DisclaimerStrip } from './DisclaimerStrip'
 
@@ -12,6 +13,8 @@ const nav = [
   { to: '/exclusives', label: 'Exclusives' },
   { to: '/how-it-works', label: 'How it works' },
   { to: '/pricing', label: 'Pricing' },
+  { to: '/qr', label: 'QR Stickers' },
+  { to: '/partners', label: 'Partners' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/advertise', label: 'Advertise' },
 ]
@@ -25,10 +28,10 @@ export function Layout() {
   useEffect(() => {
     captureInboundRef()
   }, [])
-
   return (
     <div className="min-h-screen flex flex-col page-mesh">
-      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-0 z-40 backdrop-blur">
+      <DraftBanner />
+      <header className="bg-navy-950 text-white border-b border-white/5 sticky top-[40px] z-40 backdrop-blur">
         <div className="mx-auto max-w-[1200px] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5 group">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-teal-600/20 ring-1 ring-teal-500/40 text-teal-500 font-bold text-sm">
@@ -61,7 +64,7 @@ export function Layout() {
           <div>
             <p className="font-semibold text-white mb-1.5 text-lg">WePrize</p>
             <p className="text-xs leading-relaxed text-slate-400">
-              Don't gamble with your time. We apply to free contests for you.
+              Don't gamble with your time. We apply to free contests for you. Contests stay free on brand sites.
             </p>
           </div>
           <div className="text-xs space-y-1.5">
