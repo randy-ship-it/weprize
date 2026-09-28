@@ -1,97 +1,65 @@
 import { Link } from 'react-router-dom'
 import tally from '../data/tally.json'
-import exclusives from '../data/exclusives.json'
 import { useContests } from '../hooks/useContests'
 import { LiveTally } from '../components/LiveTally'
 import { BirchAdSlot } from '../components/BirchAdSlot'
 import { PricingCards } from '../components/PricingCards'
-import { ContestCard } from '../components/ContestCard'
-import { ExclusiveCard } from '../components/ExclusiveCard'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
 import { ShareButton } from '../components/ShareButton'
 import { BrandReel } from '../components/BrandReel'
-import { sortContests } from '../lib/filters'
-import type { Exclusive, Tally } from '../types/contest'
+import { PrizeSpinner } from '../components/PrizeSpinner'
+import type { Tally } from '../types/contest'
 
+/** Public home — energy + counts + spinner. No contest URLs / scrapeable book. */
 export function Home() {
-  const { contests, autoOkCount, exclusives: scaleContests } = useContests()
-  const hwRe = /jamieson|sleep.?country|wellness|nutrition|vitamin|fitness|yoga|recovery|physio|massage|hydration|electrolyt|beauty|skincare|natracare|biosteel|bodyarmor|celsius|omega|ergonomic|mattress|sleep|guardian|remedy|clinic|therap|pill|supplement|protein/i
-  const live = contests.filter((c) => c.health !== 'dead' && !c.exclusive)
-  const hw = live.filter((c) => hwRe.test(`${c.name} ${c.prize_text || ''}`))
-  const preview = sortContests(hw.length >= 4 ? hw : live).slice(0, 6)
-  const flagship = (exclusives as Exclusive[]).find((e) => e.lane !== 'humanoid') ?? (exclusives as Exclusive[])[0]
+  const { autoOkCount } = useContests()
+  const liveEnergy = Math.max(autoOkCount, (tally as Tally).unique_contests || 0)
 
   return (
     <div className="space-y-10">
-      <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-start">
+      <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] items-start">
         <div>
           <p className="section-kicker mb-3">WePrize · Health & wellness</p>
           <h1 className="text-3xl sm:text-[2.6rem] font-bold text-navy-950 leading-[1.12] tracking-tight mb-3">
             Win recovery, sleep, nutrition, and fitness gear.
           </h1>
           <p className="text-lg text-slate-700 mb-2 max-w-xl leading-relaxed">
-            Free Canada-first contests in health & wellness. We mass-apply for you.
+            Free Canada-first contests. We mass-apply for you. You keep the wins.
           </p>
-          <p className="text-sm text-slate-500 mb-4 max-w-xl leading-relaxed">
-            You tap the codes when a contest asks. Estimates update from entries we submitted. Not a guarantee.
+          <p className="text-sm text-slate-500 mb-6 max-w-xl leading-relaxed">
+            <span className="tabular font-semibold text-navy-950">{liveEnergy}+</span> ready in the pool this week.
+            We don&apos;t publish the full book — spin the vibe, then start free or grab an assist pack.
           </p>
-          <div className="mb-6 max-w-xl rounded-2xl border border-teal-600/20 bg-teal-50/60 px-4 py-3 space-y-2">
-            <p className="text-sm font-semibold text-navy-950 leading-snug">
-              WePrize is on a mission to turn gambling on its head.
-            </p>
-            <p className="text-sm text-slate-700 leading-relaxed">
-              Free contests stay free. Optional fee buys research and time assist so applying to hundreds takes about as long as applying to one.
-            </p>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Combined probability math and average payouts average out somehow over time. We do not know what you will get. Estimates only. Never a guarantee.
-            </p>
-          </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/contests" className="btn-primary px-5 py-2.5 text-sm">
-              Browse contests
-            </Link>
-            <Link to="/waitlist" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+            <Link to="/waitlist" className="btn-primary px-5 py-2.5 text-sm">
               Start free
             </Link>
-            <Link to="/submit" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
-              Suggest a contest
+            <Link to="/pricing" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+              Assist packs
+            </Link>
+            <Link to="/qr" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+              DIY QR stickers
+            </Link>
+            <Link to="/jackpot" className="btn-ghost px-5 py-2.5 text-sm text-teal-800">
+              Survey → +10 applies
             </Link>
             <ShareButton hint label="Share with a friend" />
           </div>
-          <p className="mt-3 text-xs text-slate-500 max-w-xl leading-relaxed">
-            Got a friend drowning in entry forms? Pass your peer link. Free contests stay free; optional assist if they want it. No cash referral rewards.
-          </p>
-          <p className="mt-2 text-xs text-slate-500">
-            Ready to apply this week:{' '}
-            <span className="tabular font-semibold text-navy-950">{autoOkCount}</span>
-            {' · '}
-            <span className="text-slate-400">1 profile · friends w/ consent · max 10 purchases / buyer</span>
-          </p>
         </div>
-        <LiveTally tally={tally as Tally} autoOkLive={autoOkCount} />
+        <PrizeSpinner liveCount={liveEnergy} />
       </section>
 
+      <LiveTally tally={tally as Tally} autoOkLive={autoOkCount} />
       <BrandReel />
-
-      <p className="text-sm text-slate-600">
-        Recovery, fitness, nutrition, sleep, and wellness gear first. Illustrative types, not live contests.{' '}
-        <Link to="/prizes" className="text-teal-600 hover:underline">
-          What you could win →
-        </Link>
-      </p>
-
       <BirchAdSlot slotId="home_hero_strip" />
 
       <section>
-        <h2 className="text-xl font-semibold text-navy-950 mb-2">How it works</h2>
-        <p className="text-sm text-slate-600 mb-4 max-w-2xl leading-relaxed">
-          You would never fill all these contests yourself. Not worth your time. What if it was worth your time, because you can apply to hundreds in the time it takes to apply to one?
-        </p>
+        <h2 className="text-xl font-semibold text-navy-950 mb-4">How it works</h2>
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { step: '1', title: 'Browse', body: 'See free contests before you click.' },
-            { step: '2', title: 'We apply', body: 'Hundreds of free entries in the time it takes to do one. Fee is research and time assist, not better odds.' },
-            { step: '3', title: 'You confirm', body: 'Tap a code if a contest asks. Estimates only.' },
+            { step: '1', title: 'Start free', body: 'Tell us who you are. We handle the forms.' },
+            { step: '2', title: 'We apply', body: 'Queue runs as contests open — you confirm only when needed.' },
+            { step: '3', title: 'Spin for bonus', body: 'Solid survey unlocks a jackpot crank for +10 free applies.' },
           ].map((s) => (
             <div key={s.step} className="card-surface rounded-2xl p-5">
               <p className="text-teal-600 font-bold text-sm mb-1">Step {s.step}</p>
@@ -103,51 +71,26 @@ export function Home() {
       </section>
 
       <section>
-        <div className="flex flex-wrap items-end justify-between gap-2 mb-4">
-          <div>
-            <p className="section-kicker mb-1">Only here</p>
-            <h2 className="text-xl font-semibold text-navy-950">Prizes on WePrize</h2>
-          </div>
-          <Link to="/exclusives" className="text-sm text-teal-600 hover:underline">
-            See all
-          </Link>
-        </div>
-        {flagship ? <ExclusiveCard exclusive={flagship} featured /> : null}
-        {scaleContests.length > 0 ? (
-          <p className="mt-3 text-xs text-slate-500">{scaleContests.length} Scale Health prizes on the board</p>
-        ) : null}
-      </section>
-
-      <section>
-        <div className="flex flex-wrap items-end justify-between gap-2 mb-2">
-          <h2 className="text-xl font-semibold text-navy-950">Pricing</h2>
+        <div className="flex items-end justify-between gap-3 mb-4">
+          <h2 className="text-xl font-semibold text-navy-950">Assist packs</h2>
           <Link to="/pricing" className="text-sm text-teal-600 hover:underline">
-            Details
+            Full pricing →
           </Link>
         </div>
-        <p className="text-sm text-slate-600 mb-4 max-w-2xl leading-relaxed">
-          Contests stay free. Pay only if you want time back: research plus apply assist across the board, not a tip sheet and never better odds.
-        </p>
         <PricingCards autoOkLive={autoOkCount} teaser />
       </section>
 
-      <section>
-        <div className="flex flex-wrap items-end justify-between gap-2 mb-4">
-          <h2 className="text-xl font-semibold text-navy-950">Live contests</h2>
-          <Link to="/contests" className="text-sm text-teal-600 hover:underline">
-            All contests
-          </Link>
+      <section className="card-surface rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="font-semibold text-navy-950">Partners & featured contests</p>
+          <p className="text-sm text-slate-600">Host with us or submit a partnership brief — no public inventory dump.</p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {preview.map((c) => (
-            <ContestCard key={c.id} contest={c} />
-          ))}
-        </div>
+        <Link to="/partners" className="btn-ghost text-sm px-4 py-2">
+          Partner with WePrize
+        </Link>
       </section>
 
-      <section className="card-surface rounded-2xl p-4">
-        <DisclaimerStrip />
-      </section>
+      <DisclaimerStrip />
     </div>
   )
 }

@@ -13,6 +13,9 @@ import { inferPack, isPack, PACKS } from './packs.js'
 import { publicJob, publicOrder, humanNeedsYou } from './public.js'
 import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
+import { createQrRouter } from './qr/routes.js'
+import { creditAttributionFromSession } from './qr/ledger.js'
+import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -59,6 +62,9 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 })
 
 app.use(express.json({ limit: '1mb' }))
+
+app.use('/api/qr', createQrRouter({ getStore, stripe }))
+app.use('/api', createConsumersPartnersRouter({ getStore }))
 
 app.get('/api/health', async (_req, res) => {
   try {
@@ -332,12 +338,19 @@ app.post('/api/dev/demo-order', async (req, res) => {
 const MAX_PURCHASES_PER_EMAIL = 10
 
 async function fulfillCheckoutSession(store, session) {
+  // Trailer SKU — no assist order; mark trailer on placement
+  if (session.metadata?.weprize_product === 'b2b_trailer') {
+    await creditAttributionFromSession(store, session, null)
+    return null
+  }
+
   const email =
     session.customer_details?.email ||
     session.customer_email ||
     session.metadata?.email ||
     'unknown@weprize.local'
-  const pack = inferPack(session)
+  const pack =
+    session.metadata?.pack === 'sticker_50' ? 'sticker_50' : inferPack(session)
   const paymentLink =
     typeof session.payment_link === 'string'
       ? session.payment_link
@@ -346,16 +359,28 @@ async function fulfillCheckoutSession(store, session) {
   const clientReferenceId =
     typeof session.client_reference_id === 'string' && session.client_reference_id.trim()
       ? session.client_reference_id.trim().slice(0, 64)
-      : null
+      : session.metadata?.weprize_ref || session.metadata?.ref || null
 
   const emailNorm = String(email).toLowerCase()
+
+  // sticker_50: capture sticker order + attribution only (skip assist order seed)
+  if (pack === 'sticker_50') {
+    await creditAttributionFromSession(store, session, {
+      id: null,
+      pack,
+      amount_cents: session.amount_total ?? null,
+      currency: session.currency || 'cad',
+    })
+    return null
+  }
+
   // Soft check stub: log when buyer is at/over personal-use cap. TODO: optional soft-block / support flag.
   try {
     if (typeof store.countPaidOrdersByEmail === 'function') {
-      const prior = await store.countPaidOrdersByEmail(emailNorm)
-      if (prior >= MAX_PURCHASES_PER_EMAIL) {
+      const priorCount = await store.countPaidOrdersByEmail(emailNorm)
+      if (priorCount >= MAX_PURCHASES_PER_EMAIL) {
         console.warn(
-          `[caps] buyer email at/over max ${MAX_PURCHASES_PER_EMAIL} paid purchases (prior=${prior}) — personal use only, not a business entry factory`,
+          `[caps] buyer email at/over max ${MAX_PURCHASES_PER_EMAIL} paid purchases (prior=${priorCount}) — personal use only, not a business entry factory`,
           { email: emailNorm, pack, sessionId: session.id },
         )
       }
@@ -372,8 +397,15 @@ async function fulfillCheckoutSession(store, session) {
     email: emailNorm,
     amountCents: session.amount_total ?? null,
     currency: session.currency || 'cad',
-    clientReferenceId,
+    clientReferenceId: clientReferenceId ? String(clientReferenceId) : null,
   })
+
+  // Credit host (+ B2B split) on ANY attributed purchase — rate from DB
+  try {
+    await creditAttributionFromSession(store, session, order)
+  } catch (err) {
+    console.error('[fulfill] qr credit', err?.message || err)
+  }
 
   // First-time fulfill only: email /order/{token} when Resend is configured
   if (!prior && order?.token && resendConfigured()) {

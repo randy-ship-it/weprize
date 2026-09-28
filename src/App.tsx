@@ -18,6 +18,12 @@ import { Success } from './pages/Success'
 import { Onboarding } from './pages/Onboarding'
 import { Dashboard } from './pages/Dashboard'
 import { Order } from './pages/Order'
+import { QrStickers } from './pages/QrStickers'
+import { QrB2b } from './pages/QrB2b'
+import { RefLanding } from './pages/RefLanding'
+import { Jackpot } from './pages/Jackpot'
+import { Partners } from './pages/Partners'
+import { Featured } from './pages/Featured'
 
 export default function App() {
   return (
@@ -47,6 +53,13 @@ export default function App() {
           <Route path="for-agents" element={<Agents />} />
           <Route path="c/:slug" element={<LegacyContestRedirect />} />
           <Route path="filters" element={<Navigate to="/contests" replace />} />
+          <Route path="qr" element={<QrStickers />} />
+          <Route path="stickers" element={<QrStickers />} />
+          <Route path="qr/b2b" element={<QrB2b />} />
+          <Route path="r/:code" element={<RefLanding />} />
+          <Route path="jackpot" element={<Jackpot />} />
+          <Route path="partners" element={<Partners />} />
+          <Route path="featured/:slug" element={<Featured />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

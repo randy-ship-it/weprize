@@ -17,11 +17,9 @@ export function ContestDetail() {
     return (
       <div className="rounded-2xl border border-dashed border-navy-950/20 bg-white p-10 text-center">
         <p className="text-navy-950 font-semibold mb-2">Contest not found</p>
-        <p className="text-sm text-slate-600 mb-4">
-          This listing is not on the live board. It may have closed or the link is outdated.
-        </p>
-        <Link to="/contests" className="btn-primary inline-flex px-5 py-2.5 text-sm">
-          Back to contests
+        <p className="text-sm text-slate-600 mb-4">That slug is not in the draft seed.</p>
+        <Link to="/contests" className="text-teal-600 hover:underline text-sm">
+          Back to feed
         </Link>
       </div>
     )
@@ -60,30 +58,6 @@ export function ContestDetail() {
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">{contest.name}</h1>
         <p className="text-slate-600 leading-relaxed">{contest.prize_text}</p>
       </header>
-
-      {exclusive && contest.source === 'scale_health' ? (
-        <section className="card-surface rounded-2xl p-5 space-y-3 border border-soft-gold/30">
-          <h2 className="text-sm font-semibold text-navy-950">Industry insider hubs</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
-            Scale connects wellness supply brands to industry insider hubs. Example store on the network:{' '}
-            <span className="font-medium text-navy-950">DR-HO</span>. If you win, your store credit works on any participating insider hub — pick the brand store you actually want.
-          </p>
-          <ul className="text-sm text-slate-600 list-disc pl-5 space-y-1">
-            <li>Browse cool Scale supply brands on hub storefronts</li>
-            <li>Example hub: DR-HO&apos;s store</li>
-            <li>Prize = store credit across participating hubs (not locked to one SKU)</li>
-            <li>Free entry · official rules when entry fully opens · estimates only</li>
-          </ul>
-          <a
-            href="https://scalehealth.ca"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex text-sm text-teal-600 hover:underline"
-          >
-            Scale Health →
-          </a>
-        </section>
-      ) : null}
 
       <section className="card-surface rounded-2xl p-5 space-y-3">
         <h2 className="text-sm font-semibold text-navy-950">Prize</h2>
@@ -149,32 +123,16 @@ export function ContestDetail() {
       </section>
 
       <div className="flex flex-wrap gap-3">
-        <a
-          href={contest.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-primary px-5 py-2.5 text-sm"
-        >
-          Open official listing
-        </a>
-        <Link to="/contests" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
-          Back to contests
+        {/* Public URLs stripped — inventory stays server-side for assist fulfill */}
+        <Link to="/pricing" className="btn-primary px-5 py-2.5 text-sm">
+          Let WePrize apply
         </Link>
-        {contest.rules_url ? (
-          <a
-            href={contest.rules_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost px-5 py-2.5 text-sm text-navy-950"
-          >
-            Official rules
-          </a>
-        ) : null}
-        {contest.auto_class === 'AUTO_OK' ? (
-          <Link to="/waitlist" className="rounded-xl border border-teal-600/40 bg-teal-50 px-5 py-2.5 text-sm font-semibold text-teal-700">
-            Assist waitlist (AUTO_OK)
-          </Link>
-        ) : null}
+        <Link to="/jackpot" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
+          Survey → +10 free applies
+        </Link>
+        <Link to="/waitlist" className="rounded-xl border border-teal-600/40 bg-teal-50 px-5 py-2.5 text-sm font-semibold text-teal-700">
+          Start free
+        </Link>
         {exclusive ? (
           <Link to="/exclusives" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
             All exclusives
