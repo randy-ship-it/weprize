@@ -73,8 +73,6 @@ CREATE TABLE IF NOT EXISTS qr_codes (
 ALTER TABLE qr_codes ADD COLUMN IF NOT EXISTS logo_url TEXT;
 ALTER TABLE qr_codes ADD COLUMN IF NOT EXISTS brand_name TEXT;
 ALTER TABLE qr_codes ADD COLUMN IF NOT EXISTS stripe_connect_account_id TEXT;
-ALTER TABLE qr_earnings ADD COLUMN IF NOT EXISTS transfer_id TEXT;
-ALTER TABLE qr_earnings ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
 CREATE INDEX IF NOT EXISTS qr_codes_email_idx ON qr_codes(email);
 CREATE TABLE IF NOT EXISTS qr_earnings (
   id TEXT PRIMARY KEY,
@@ -86,8 +84,12 @@ CREATE TABLE IF NOT EXISTS qr_earnings (
   rate_bps INTEGER NOT NULL,
   currency TEXT,
   status TEXT NOT NULL DEFAULT 'owed',
+  transfer_id TEXT,
+  paid_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL
 );
+ALTER TABLE qr_earnings ADD COLUMN IF NOT EXISTS transfer_id TEXT;
+ALTER TABLE qr_earnings ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
 CREATE INDEX IF NOT EXISTS qr_earnings_code_idx ON qr_earnings(code);
 CREATE TABLE IF NOT EXISTS sticker_orders (
   id TEXT PRIMARY KEY,
