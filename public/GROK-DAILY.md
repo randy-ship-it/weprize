@@ -1,10 +1,30 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-09-25 ~16:45 ET · branch `feat/mission-messaging-voice`  
+> **Updated:** 2026-09-28 ~08:36 ET · morning routine · Daily Alert inventory + cash-rail + paid_tx=0 · CoS mirror
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
+
+## 0. Daily ops snapshot — Mon Sep 28 2026 ET
+
+**Cash rail health (live `/api/health`):** `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). No SBG email send in this alert.
+
+**Seed / inventory:** Canonical book `/workspace/weprize-sot/src/data/contests.json` (n≈341). `auto_class=AUTO_OK` drives seed via `server/contests.js` → `loadAutoOkSlice()`. No Neon `contests` table — flags live in JSON only. DATABASE_URL from `/workspace/weprize-secrets/DATABASE_URL` (not printed).
+
+**Inventory mutations today (Randy-only):**
+- **ADDED** Lucas x DUSK + YETI (`https://ridetilldusk.com/pages/giveaway`) as **NEEDS_YOU** (Instagram follows required; captcha scripts on page). Ends Nov 15 2026; Canada 18+ all provinces. **Not AUTO_OK.**
+- **CONFIRMED** Jamieson Win $100 (`https://win100withjamieson.ca/`) still live through **Sep 30 2026**; simple name/email official form; reCAPTCHA present (bot stops before CAPTCHA) → remains **AUTO_OK**.
+- **DROPPED/CLOSED** Shoppers Drug Mart × iHeart $1500 SeekYourSounds — ended Sep 27; official URL 404 → `BLOCKED`/`dead`.
+- **NOT AUTO_OK** Tell Rexall Q3 (`tellrexall.ca`) demoted **AUTO_OK → HUMAN_ONLY** (receipt PIN + mail-in NPN).
+- **NOT AUTO_OK** Rexall × CeraVe recorded `HUMAN_ONLY`/`dead` (official page 404; historical purchase/Be Well or mail-in).
+- **NUXE / Marcelle / Redken:** remain **not AUTO_OK** (IG / purchase+Moi paths). Not seeded.
+
+**QR:** Neon `qr_codes` has 2 live codes (`dorfzlw`, `a3z2kts`) created ~2026-09-28 00:55–00:56 UTC (≈ Sun Sep 27 20:55–20:56 ET). Earnings ledger empty.
+
+**Paid tx / fulfill:** Neon `paid_orders` = **0**. `orders` = 5 rows all `demo_once_*` / demo@localhost — **demo only, do not count**. No `cs_live_*` checkout sessions in Stripe sync tables. `assist_jobs`: 50 queued + 25 needs_you (demo stub). **Real paid stranger fulfill queue: empty.** No invented buyers.
+
+**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. Estimates ≠ guarantees. No win/odds promises.
 
 ## 1. One-liner + live URLs
 
@@ -58,7 +78,7 @@ Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not
 - Count: Once + Triple + Year-round (incl. subscription invoice payments that succeed that day).
 - Do **not** count: free tier, abandoned Checkout, failed/blocked, sandbox.
 - Scoreboard ritual: `/workspace/weprize-100day/SCOREBOARD.md` · plan: `100DAY-PLAN.md`.
-- Window from 2026-09-25: **6 calendar days** (25→30).
+- Window from 2026-09-25: **3 calendar days** left (Mon 28 → Tue 30 inclusive of today).
 
 Ask Grok Heavy daily: *What ships today that moves paid tx toward 100?*
 
