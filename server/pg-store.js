@@ -1128,13 +1128,14 @@ async createDemoOrder(pack = 'once') {
       return (await pool.query('SELECT * FROM consumers WHERE email=$1', [profile.email])).rows[0]
     },
 
-    async spinJackpot(email) {
+    async spinJackpot(email, count = 10) {
+      const add = Math.min(15, Math.max(1, Number(count) || 10))
       const row = (await pool.query('SELECT * FROM consumers WHERE email=$1', [email])).rows[0]
       if (!row) throw new Error('consumer_not_found')
       if (row.jackpot_spun_at) return row
       await pool.query(
-        `UPDATE consumers SET jackpot_spun_at=NOW(), bonus_applies=bonus_applies+10, updated_at=NOW() WHERE email=$1`,
-        [email],
+        `UPDATE consumers SET jackpot_spun_at=NOW(), bonus_applies=bonus_applies+$2, updated_at=NOW() WHERE email=$1`,
+        [email, add],
       )
       return (await pool.query('SELECT * FROM consumers WHERE email=$1', [email])).rows[0]
     },
