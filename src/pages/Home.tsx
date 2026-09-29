@@ -10,7 +10,7 @@ import { BrandReel } from '../components/BrandReel'
 import { PrizeSpinner } from '../components/PrizeSpinner'
 import type { Tally } from '../types/contest'
 
-/** Public home — energy + counts + spinner. No contest URLs / scrapeable book. */
+/** Public home: energy + counts + spinner. No contest URLs / scrapeable book. */
 export function Home() {
   const { autoOkCount } = useContests()
   const liveEnergy = Math.max(autoOkCount, (tally as Tally).unique_contests || 0)
@@ -28,11 +28,11 @@ export function Home() {
           </p>
           <p className="text-sm text-slate-500 mb-6 max-w-xl leading-relaxed">
             <span className="tabular font-semibold text-navy-950">{liveEnergy}+</span> ready in the pool this week.
-            We don&apos;t publish the full book — spin the vibe, then start free or grab an assist pack.
+            We don&apos;t publish the full book. Spin the vibe, then join the free waitlist or grab an assist pack.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link to="/waitlist" className="btn-primary px-5 py-2.5 text-sm">
-              Start free
+              Join free waitlist
             </Link>
             <Link to="/pricing" className="btn-ghost px-5 py-2.5 text-sm text-navy-950">
               Assist packs
@@ -58,7 +58,7 @@ export function Home() {
         <div className="grid gap-4 md:grid-cols-3">
           {[
             { step: '1', title: 'Start free', body: 'Tell us who you are. We handle the forms.' },
-            { step: '2', title: 'We apply', body: 'Queue runs as contests open — you confirm only when needed.' },
+            { step: '2', title: 'We apply', body: 'Queue runs as contests open. You confirm only when needed.' },
             { step: '3', title: 'Spin for bonus', body: 'Solid survey unlocks a jackpot crank for +10 free applies.' },
           ].map((s) => (
             <div key={s.step} className="card-surface rounded-2xl p-5">
@@ -83,7 +83,7 @@ export function Home() {
       <section className="card-surface rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="font-semibold text-navy-950">Partners & featured contests</p>
-          <p className="text-sm text-slate-600">Host with us or submit a partnership brief — no public inventory dump.</p>
+          <p className="text-sm text-slate-600">Host with us or submit a partnership brief. No public inventory dump.</p>
         </div>
         <Link to="/partners" className="btn-ghost text-sm px-4 py-2">
           Partner with WePrize

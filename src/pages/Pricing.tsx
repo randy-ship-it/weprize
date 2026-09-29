@@ -5,6 +5,7 @@ import { PrizeTease } from '../components/PrizeTease'
 import { BirchAdSlot } from '../components/BirchAdSlot'
 import { DisclaimerStrip } from '../components/DisclaimerStrip'
 import { selectPrizeExamples } from '../lib/prizeTease'
+import { WaitlistForm } from '../components/WaitlistForm'
 
 export function Pricing() {
   const { autoOkCount, contests } = useContests()
@@ -30,6 +31,19 @@ export function Pricing() {
       <PrizeTease examples={examples} />
 
       <PricingCards autoOkLive={autoOkCount} />
+
+      <section className="rounded-2xl border border-teal-600/25 bg-teal-50/60 p-5 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-teal-800 mb-1">Not ready to buy?</p>
+          <h2 className="text-lg font-semibold text-navy-950">Join the free waitlist</h2>
+          <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+            Get free Canada contest alerts first. Assist packs stay available whenever you want the research and time
+            help. Estimates only. We cannot influence who wins.
+          </p>
+        </div>
+        <WaitlistForm source="pricing" compact />
+      </section>
+
 
       <div className="rounded-2xl border border-navy-950/10 bg-white p-4 space-y-2 text-sm text-slate-600 leading-relaxed">
         <p className="font-semibold text-navy-950 text-xs uppercase tracking-wide">Personal use</p>
