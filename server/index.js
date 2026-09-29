@@ -1,6 +1,7 @@
 /**
  * WePrize Express — SPA (dist/) + Stripe webhook + orders + identity + assist queue.
- * Bind 0.0.0.0:PORT (default 5000) for Replit Autoscale.
+ * Bind 0.0.0.0:PORT (default 5000) for local/Node hosts.
+ * On Vercel: exported as default for serverless /api (see api/index.js).
  */
 import express from 'express'
 import { existsSync } from 'node:fs'
@@ -492,16 +493,18 @@ async function fulfillCheckoutSession(store, session) {
   return order
 }
 
-// —— Static SPA ——
-if (existsSync(dist)) {
-  app.use(express.static(dist, { index: false, maxAge: '1h' }))
-  app.get(/^\/(?!api\/).*/, (_req, res) => {
-    res.sendFile(join(dist, 'index.html'))
-  })
-} else {
-  app.get('/', (_req, res) => {
-    res.status(503).send('dist/ missing — run npm run build')
-  })
+// —— Static SPA (long-running Node only; Vercel serves Vite dist + /api separately) ——
+if (!process.env.VERCEL) {
+  if (existsSync(dist)) {
+    app.use(express.static(dist, { index: false, maxAge: '1h' }))
+    app.get(/^\/(?!api\/).*/, (_req, res) => {
+      res.sendFile(join(dist, 'index.html'))
+    })
+  } else {
+    app.get('/', (_req, res) => {
+      res.status(503).send('dist/ missing — run npm run build')
+    })
+  }
 }
 
 app.use((err, _req, res, _next) => {
@@ -509,6 +512,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'server_error' })
 })
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[weprize] listening on 0.0.0.0:${PORT} (SPA+API)`)
-})
+export default app
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[weprize] listening on 0.0.0.0:${PORT} (SPA+API)`)
+  })
+}
