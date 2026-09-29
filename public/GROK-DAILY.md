@@ -1,30 +1,37 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-09-28 ~08:36 ET · morning routine · Daily Alert inventory + cash-rail + paid_tx=0 · CoS mirror
+> **Updated:** 2026-09-29 ~08:31 ET · morning routine · cash-rail healthy · paid_tx=0 · 2 days left to Sep 30 OKR · CoS mirror
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
 
-## 0. Daily ops snapshot — Mon Sep 28 2026 ET
+## 0. Daily ops snapshot — Tue Sep 29 2026 ET
 
-**Cash rail health (live `/api/health`):** `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). No SBG email send in this alert.
+**Cash rail health (live `/api/health` @ ~08:30 ET):** `ok:true` · `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). Apex serves Express health JSON (not SPA fallback). No SBG email send in this routine.
 
-**Seed / inventory:** Canonical book `/workspace/weprize-sot/src/data/contests.json` (n≈341). `auto_class=AUTO_OK` drives seed via `server/contests.js` → `loadAutoOkSlice()`. No Neon `contests` table — flags live in JSON only. DATABASE_URL from `/workspace/weprize-secrets/DATABASE_URL` (not printed).
+**Checkout smoke (no charge):** `POST /api/checkout` `{"pack":"once"}` → **200** `cs_live_…` Checkout URL (SBG APIs livemode). Session created; **not paid**. Payment Links on pricing remain the primary pack path.
 
-**Inventory mutations today (Randy-only):**
-- **ADDED** Lucas x DUSK + YETI (`https://ridetilldusk.com/pages/giveaway`) as **NEEDS_YOU** (Instagram follows required; captcha scripts on page). Ends Nov 15 2026; Canada 18+ all provinces. **Not AUTO_OK.**
-- **CONFIRMED** Jamieson Win $100 (`https://win100withjamieson.ca/`) still live through **Sep 30 2026**; simple name/email official form; reCAPTCHA present (bot stops before CAPTCHA) → remains **AUTO_OK**.
-- **DROPPED/CLOSED** Shoppers Drug Mart × iHeart $1500 SeekYourSounds — ended Sep 27; official URL 404 → `BLOCKED`/`dead`.
-- **NOT AUTO_OK** Tell Rexall Q3 (`tellrexall.ca`) demoted **AUTO_OK → HUMAN_ONLY** (receipt PIN + mail-in NPN).
-- **NOT AUTO_OK** Rexall × CeraVe recorded `HUMAN_ONLY`/`dead` (official page 404; historical purchase/Be Well or mail-in).
-- **NUXE / Marcelle / Redken:** remain **not AUTO_OK** (IG / purchase+Moi paths). Not seeded.
+**Seed / inventory:** Canonical book `/workspace/weprize-sot/src/data/contests.json` (n≈338; AUTO_OK≈181). `auto_class=AUTO_OK` drives seed via `server/contests.js` → `loadAutoOkSlice()`. No Neon `contests` table — flags live in JSON only. DATABASE_URL from `/workspace/weprize-secrets/DATABASE_URL` (not printed).
 
-**QR:** Neon `qr_codes` has 2 live codes (`dorfzlw`, `a3z2kts`) created ~2026-09-28 00:55–00:56 UTC (≈ Sun Sep 27 20:55–20:56 ET). Earnings ledger empty.
+**Inventory / contest notes (no new Randy mutations overnight):**
+- **CONFIRMED LIVE** Jamieson Win $100 (`https://win100withjamieson.ca/` → `/contest/jamieson`): official page still shows contest period **July 1 → September 30, 2026**. Book `c-050` `AUTO_OK`, `close_at_et=2026-09-30T23:59:00-04:00`. Bot stops before CAPTCHA.
+- Prior Mon inventory (unchanged): Lucas x DUSK + YETI = **NEEDS_YOU** (not AUTO_OK); Shoppers×iHeart SeekYourSounds dead; Tell Rexall Q3 HUMAN_ONLY; Rexall×CeraVe dead; NUXE/Marcelle/Redken not AUTO_OK.
 
-**Paid tx / fulfill:** Neon `paid_orders` = **0**. `orders` = 5 rows all `demo_once_*` / demo@localhost — **demo only, do not count**. No `cs_live_*` checkout sessions in Stripe sync tables. `assist_jobs`: 50 queued + 25 needs_you (demo stub). **Real paid stranger fulfill queue: empty.** No invented buyers.
+**QR:** Neon `qr_codes` = **2** live (`dorfzlw`, `a3z2kts`) created ~2026-09-28 00:55–00:56 UTC (≈ Sun Sep 27 20:55–20:56 ET). `qr_earnings` empty.
 
-**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. Estimates ≠ guarantees. No win/odds promises.
+**Audience:** `audience_consents` consent=true = **2** (was 1). Newest ~2026-09-29 00:53 UTC (≈ Mon Sep 28 8:53pm ET). `customers`=1 (demo). `consumers`=0. Still thin for Instantly Day3 (do not invent leads).
+
+**Paid tx / fulfill (Neon, America/Toronto day window Tue = 2026-09-29 04:00 UTC → 2026-09-30 04:00 UTC):**
+- `paid_orders` = **0** (today + all-time). `paid_refunds` = 0.
+- `orders` = **5** rows, all `demo_once_*` / Sep 26 evening — **demo only, do not count**. `cs_live_*` in `orders.stripe_session_id` = **0**. Toronto-today new orders = **0**.
+- Yesterday (Mon Sep 28) closed **paid_tx=0** (evening pulse + buyers crank).
+- `assist_jobs`: 50 queued + 25 needs_you, all joined to demo orders. **Real paid stranger fulfill queue: empty.** No invented buyers.
+- Stripe MCP still lacks SBG APIs live `acct_1TUZ7lDxmCwsLJND` — counts from Neon app tables only.
+
+**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. **Window left: today + tomorrow (2 calendar days including today).** Estimates ≠ guarantees. No win/odds promises.
+
+**Overnight material (facts only):** Stripe secret + webhook secret were loaded onto Vercel apex late Mon (~11:33pm ET note); live health now stripe/webhook/resend true and checkout returns `cs_live_`. Buyers crank Mon ~8:36pm: Instantly Day2 finished 0 opens; Day3 Draft empty; Meta ads HOLD; consented list still famine.
 
 ## 1. One-liner + live URLs
 
@@ -78,7 +85,7 @@ Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not
 - Count: Once + Triple + Year-round (incl. subscription invoice payments that succeed that day).
 - Do **not** count: free tier, abandoned Checkout, failed/blocked, sandbox.
 - Scoreboard ritual: `/workspace/weprize-100day/SCOREBOARD.md` · plan: `100DAY-PLAN.md`.
-- Window from 2026-09-25: **3 calendar days** left (Mon 28 → Tue 30 inclusive of today).
+- Window from this morning: **2 calendar days** left (Tue 29 → Wed 30 inclusive of today).
 
 Ask Grok Heavy daily: *What ships today that moves paid tx toward 100?*
 
@@ -140,16 +147,16 @@ Without `session_id`, Success shows **recover-by-email** (`POST /api/orders/reco
 
 - [x] Post-pay identity recovery path (Success CTA + recover-by-email + order-ready Resend email).
 - [x] Mission messaging from Randy voice (Home strip + HIW/Pricing leverage; GROK-DAILY §1b; MISSION.md).
+- [x] Apex `/api/health` Express path live (stripe/webhook/resend true; postgres; seed n=25) — verified 2026-09-29 morning.
+- [x] Vercel apex has Stripe + Resend env loaded (late Mon); `POST /api/checkout` returns `cs_live_` (no charge).
 - [ ] **Randy:** paste success URL templates into Stripe Dashboard (above).
-- [ ] **Randy:** `STRIPE_WEBHOOK_SECRET` on Replit + webhook endpoint `checkout.session.completed`.
-- [ ] **Randy:** `RESEND_API_KEY` + `RESEND_FROM` so order-ready + NEEDS_YOU emails send (`resend:true` on `/api/health`).
-- [ ] **Replit Publish** from current `main` so apex JS matches GH (Year-round Payment Link **sLd**, not stale **sHd**).
-- [ ] Confirm `/api/health` on apex (Express + webhook) — today may still SPA-fallback.
+- [ ] Confirm webhook endpoint `checkout.session.completed` delivers into Neon `orders` / `paid_orders` on a real paid smoke (health `webhook:true` alone ≠ fulfilled row).
 - [ ] Soft enforce **≤10 purchases / email** (stub logged; harden when ready).
-- [ ] Fulfillment worker + NEEDS_YOU nudges live for paid orders.
-- [ ] Morning SCOREBOARD: paid tx yesterday / today-so-far vs 100.
-- [ ] Partner / community sends from `SEND-QUEUE.md` / `COMMUNITY-QUEUE.md`.
-- [ ] Ads only with Competition Act–safe creative (`ADS-BRIEF.md`).
+- [ ] Fulfillment worker + NEEDS_YOU nudges live for **paid** orders (demo assist_jobs do not count).
+- [ ] Morning SCOREBOARD: paid tx yesterday / today-so-far vs 100 (Mon closed 0; Tue so-far 0).
+- [ ] Partner / community sends from `SEND-QUEUE.md` / `COMMUNITY-QUEUE.md` (authorized only).
+- [ ] Ads only with Competition Act–safe creative (`ADS-BRIEF.md`) — Meta still HOLD pending Randy greenlight.
+- [ ] Acquisition: Instantly Day3 Draft needs real new consents (do not invent); Day2 finished 0 opens.
 
 CoS mirror of this file: `/workspace/weprize-100day/GROK-DAILY.md`.
 
