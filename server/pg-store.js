@@ -315,6 +315,10 @@ export async function createPgStore(connectionString) {
   const pool = new pg.Pool({
     connectionString,
     ssl: process.env.PGSSL === '0' ? false : { rejectUnauthorized: false },
+    // Vercel serverless: keep pool tiny; prefer Neon -pooler URL in DATABASE_URL.
+    max: process.env.VERCEL ? 1 : 10,
+    idleTimeoutMillis: process.env.VERCEL ? 5000 : 30000,
+    connectionTimeoutMillis: 10000,
   })
   await pool.query(SCHEMA)
   const seedSettings = [
