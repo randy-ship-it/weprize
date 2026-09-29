@@ -477,3 +477,16 @@ a:focus-visible {
   transform: none;
   box-shadow: none;
 }
+
+/* Jackpot crank */
+@keyframes crank-blur-kf { 0% { transform: translateY(-18%); filter: blur(1.5px); } 100% { transform: translateY(18%); filter: blur(1.5px); } }
+.crank-blur > * , .crank-blur { animation: crank-blur-kf 90ms linear infinite alternate; }
+@keyframes crank-land-kf { 0% { transform: translateY(-12%); } 60% { transform: translateY(6%); } 100% { transform: translateY(0); } }
+.crank-land { animation: crank-land-kf 260ms ease-out; }
+@keyframes crank-bulb-kf { 0%,100% { background: #F59E0B; box-shadow: 0 0 8px #F59E0B; } 50% { background: #7c5a12; box-shadow: none; } }
+.crank-bulb { animation: crank-bulb-kf 360ms ease-in-out infinite; }
+@keyframes crank-pop-kf { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+.crank-pop { opacity: 0; animation: crank-pop-kf 320ms ease-out forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .crank-blur, .crank-land, .crank-bulb, .crank-pop { animation: none; opacity: 1; }
+}

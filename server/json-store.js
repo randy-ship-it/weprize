@@ -699,14 +699,15 @@ async createDemoOrder(pack = 'once') {
       })
     },
 
-    async spinJackpot(email) {
+    async spinJackpot(email, count = 10) {
+      const add = Math.min(15, Math.max(1, Number(count) || 10))
       return withLock(() => {
         const db = load()
         const row = (db.consumers || []).find((c) => c.email === email)
         if (!row) throw new Error('consumer_not_found')
         if (row.jackpot_spun_at) return row
         row.jackpot_spun_at = nowIso()
-        row.bonus_applies = (Number(row.bonus_applies) || 0) + 10
+        row.bonus_applies = (Number(row.bonus_applies) || 0) + add
         row.updated_at = nowIso()
         save(db)
         return row

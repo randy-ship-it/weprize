@@ -36,7 +36,7 @@ export function createConsumersPartnersRouter({ getStore }) {
         age_band: String(req.body?.age_band || '').slice(0, 20),
         city: String(req.body?.city || '').slice(0, 80),
         province: String(req.body?.province || '').slice(0, 40),
-        interests: String(req.body?.interests || '').slice(0, 240),
+        interests: String(req.body?.interests || '').slice(0, 2000),
         household: String(req.body?.household || '').slice(0, 40),
         birch_license_ok: req.body?.birch_license_ok === true,
         consent_product: true,
@@ -51,7 +51,8 @@ export function createConsumersPartnersRouter({ getStore }) {
           birch_license_ok: saved.birch_license_ok,
         })
       }
-      const spun = await store.spinJackpot(email)
+      const freeCount = Math.min(15, Math.max(10, Number(req.body?.free_count) || 10))
+      const spun = await store.spinJackpot(email, freeCount)
       res.status(201).json({
         ok: true,
         jackpot_already: false,
