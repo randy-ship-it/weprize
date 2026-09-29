@@ -771,6 +771,12 @@ async createDemoOrder(pack = 'once') {
       })
     },
 
+    async recordAudienceConsent() {
+      const err = new Error('consent_store_unavailable')
+      err.code = 'consent_store_unavailable'
+      throw err
+    },
+
     async claimQueuedJobs(limit = 5) {
       return withLock(() => {
         const db = load()

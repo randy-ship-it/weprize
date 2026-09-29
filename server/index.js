@@ -16,6 +16,13 @@ import { seedMeta } from './contests.js'
 import { createQrRouter } from './qr/routes.js'
 import { creditAttributionFromSession } from './qr/ledger.js'
 import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
+import {
+  ALLOWED_SOURCES,
+  WAITLIST_CONSENT_TEXT,
+  newSessionHash,
+  normalizeConsentEmail,
+  waitlistConsentVersion,
+} from './audience-consent.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -83,6 +90,64 @@ app.get('/api/health', async (_req, res) => {
   } catch (err) {
     res.status(500).json({ ok: false, error: err?.message || 'health_failed' })
   }
+})
+
+
+
+/** CASL waitlist / pricing email consent → Neon audience_consents (no invented sends). */
+app.post('/api/audience/consent', async (req, res) => {
+  try {
+    const email = normalizeConsentEmail(req.body?.email)
+    if (!email) {
+      return res.status(400).json({ error: 'invalid_email', message: 'Enter a valid email.' })
+    }
+    if (req.body?.consent !== true) {
+      return res.status(400).json({
+        error: 'consent_required',
+        message: 'You must agree to receive WePrize emails.',
+        consent_text: WAITLIST_CONSENT_TEXT,
+      })
+    }
+    const rawSource = String(req.body?.source || 'waitlist').toLowerCase()
+    const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : 'waitlist'
+    const planInterest = req.body?.plan_interest
+      ? String(req.body.plan_interest).slice(0, 64)
+      : null
+    const store = await getStore()
+    if (typeof store.recordAudienceConsent !== 'function') {
+      return res.status(503).json({ error: 'consent_store_unavailable' })
+    }
+    const result = await store.recordAudienceConsent({
+      email,
+      source,
+      planInterest,
+      consentVersion: waitlistConsentVersion(),
+      sessionHash: newSessionHash(email),
+    })
+    res.json({
+      ok: true,
+      existing: Boolean(result.existing),
+      email: result.email,
+      source: result.source,
+      consent_version: waitlistConsentVersion(),
+    })
+  } catch (err) {
+    if (err?.code === 'consent_store_unavailable' || err?.message === 'consent_store_unavailable') {
+      return res.status(503).json({
+        error: 'consent_store_unavailable',
+        message: 'Email list is temporarily unavailable. Try again soon.',
+      })
+    }
+    console.error('[audience/consent]', err?.message || err)
+    res.status(500).json({ error: 'consent_failed', message: err?.message || 'failed' })
+  }
+})
+
+app.get('/api/audience/consent-text', (_req, res) => {
+  res.json({
+    consent_text: WAITLIST_CONSENT_TEXT,
+    consent_version: waitlistConsentVersion(),
+  })
 })
 
 

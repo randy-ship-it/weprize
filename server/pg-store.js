@@ -1172,6 +1172,40 @@ async createDemoOrder(pack = 'once') {
       return this.getFeaturedContest(slug)
     },
 
+    async recordAudienceConsent({ email, source, planInterest, consentVersion, sessionHash }) {
+      const clean = String(email || '').trim().toLowerCase()
+      if (!clean) throw new Error('email_required')
+      const src = String(source || 'waitlist').slice(0, 64)
+      const version = String(consentVersion || 'waitlist_v1')
+      const hash = String(sessionHash || '')
+      if (!hash || hash.length < 32) throw new Error('session_hash_required')
+
+      const existing = await pool.query(
+        `SELECT session_hash, email, consent, consent_at, source, consent_version, plan_interest
+         FROM audience_consents
+         WHERE lower(email) = $1 AND consent = TRUE
+         ORDER BY consent_at DESC LIMIT 1`,
+        [clean],
+      )
+      if (existing.rows[0]) {
+        return { ok: true, existing: true, email: existing.rows[0].email, source: existing.rows[0].source }
+      }
+
+      await pool.query(
+        `INSERT INTO audience_sessions (session_hash, created_at, updated_at)
+         VALUES ($1, NOW(), NOW())
+         ON CONFLICT (session_hash) DO NOTHING`,
+        [hash],
+      )
+      await pool.query(
+        `INSERT INTO audience_consents
+           (session_hash, email, consent, consent_at, consent_version, source, plan_interest, created_at, updated_at)
+         VALUES ($1, $2, TRUE, NOW(), $3, $4, $5, NOW(), NOW())`,
+        [hash, clean, version, src, planInterest || null],
+      )
+      return { ok: true, existing: false, email: clean, source: src }
+    },
+
     async claimQueuedJobs(limit = 5) {
       const client = await pool.connect()
       try {
