@@ -1,37 +1,37 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-09-30 ~08:23 ET · morning routine · cash-rail healthy · paid_tx=0 · OKR deadline day Sep 30 · CoS mirror
+> **Updated:** 2026-10-01 ~08:31 ET · morning routine · cash-rail healthy · paid_tx=0 · post-OKR Sep 30 closed 0 · CoS mirror
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
 
-## 0. Daily ops snapshot — Wed Sep 30 2026 ET
+## 0. Daily ops snapshot — Thu Oct 1 2026 ET
 
-**Cash rail health (live `/api/health` @ ~08:22 ET):** `ok:true` · `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). Apex serves Express health JSON (not SPA fallback). No SBG email send in this routine.
+**Cash rail health (live `/api/health` @ ~08:29 ET):** `ok:true` · `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). Apex serves Express health JSON (not SPA fallback). No SBG email send in this routine.
 
 **Checkout smoke (no charge):** `POST /api/checkout` `{"pack":"once"}` → **200** `cs_live_…` Checkout URL (SBG APIs livemode). Session created; **not paid**. Payment Links on pricing remain the primary pack path. SPA smoke: home/pricing **200**; year_round Payment Link still **sLd** (`5kQ7sLdVP15o7mS8d88AE02`).
 
 **Seed / inventory:** Canonical book `/workspace/weprize-sot/src/data/contests.json` (n≈338; AUTO_OK≈181). `auto_class=AUTO_OK` drives seed via `server/contests.js` → `loadAutoOkSlice()`. No Neon `contests` table — flags live in JSON only. DATABASE_URL from `/workspace/weprize-secrets/DATABASE_URL` (not printed).
 
 **Inventory / contest notes (no new Randy mutations overnight):**
-- **CONFIRMED LIVE** Jamieson Win $100 (`https://win100withjamieson.ca/` → `/contest/jamieson`): official page still shows contest period **July 1 → September 30, 2026**. Book `c-050` `AUTO_OK`, `close_at_et=2026-09-30T23:59:00-04:00`. Bot stops before CAPTCHA. **Closes end of today (OKR deadline day).**
+- **CLOSED** Jamieson Win $100 (`https://win100withjamieson.ca/` → `/contest/jamieson`): official page still shows contest period **July 1 → September 30, 2026** and "Come back soon!" Book `c-050` `AUTO_OK`, `close_at_et=2026-09-30T23:59:00-04:00` **passed**. Period ended Sep 30; not open today.
 - Prior inventory (unchanged): Lucas x DUSK + YETI = **NEEDS_YOU** (not AUTO_OK); Shoppers×iHeart SeekYourSounds dead; Tell Rexall Q3 HUMAN_ONLY; Rexall×CeraVe dead; NUXE/Marcelle/Redken not AUTO_OK.
 
 **QR:** Neon `qr_codes` = **2** live (`dorfzlw`, `a3z2kts`) created ~2026-09-28 00:55–00:56 UTC (≈ Sun Sep 27 20:55–20:56 ET). `qr_earnings` empty.
 
 **Audience:** `audience_consents` consent=true = **2** all-time (Toronto-today = **0**). Newest ~2026-09-29 00:53 UTC (≈ Mon Sep 28 8:53pm ET). `customers`=1 (demo). `consumers`=0. Still thin for Instantly Day3 (do not invent leads).
 
-**Paid tx / fulfill (Neon + Stripe API live `acct_1TUZ7lDxmCwsLJND`, America/Toronto day window Wed = 2026-09-30 04:00 UTC → 2026-10-01 04:00 UTC):**
-- Stripe charges succeeded+paid+not refunded today = **0**; yesterday Tue = **0**. PaymentIntents succeeded today/Tue = **0**. Checkout Sessions today: 1 open unpaid (smoke); paid/complete = **0**. Tue: paid/complete = **0**.
+**Paid tx / fulfill (Neon + Stripe API live `acct_1TUZ7lDxmCwsLJND`, America/Toronto day window Thu = 2026-10-01 04:00 UTC → 2026-10-02 04:00 UTC):**
+- Stripe charges succeeded+paid+not refunded today = **0**; yesterday Wed = **0**. PaymentIntents succeeded today/Wed = **0**. Checkout Sessions today: 1 open unpaid (smoke); paid/complete = **0**. Wed: paid/complete = **0** (2 sessions raw, neither paid — abandoned/expired).
 - Neon `paid_orders` = **0** (today + all-time). `paid_refunds` = 0.
-- `orders` = **5** rows, all `demo_once_*` / Sep 26 evening — **demo only, do not count**. `cs_live_*` in `orders.stripe_session_id` = **0**. Toronto-today new orders = **0**.
-- Yesterday (Tue Sep 29) closed **paid_tx=0** (evening pulse).
+- `orders` = **5** rows, all `demo_once_*` stripe_session_id / Sep 26 evening — **demo only, do not count**. `cs_live_*` in `orders.stripe_session_id` = **0**. Toronto-today new orders = **0**.
+- Yesterday (Wed Sep 30) closed **paid_tx=0** (evening pulse; OKR deadline day closed at 0).
 - `assist_jobs`: 50 queued + 25 needs_you, all joined to demo orders. **Real paid stranger fulfill queue: empty.** No invented buyers.
 
-**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. **OKR day = today (deadline). 0 calendar days after today.** Estimates ≠ guarantees. No win/odds promises.
+**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. **Deadline was Sep 30; closed at 0.** Today is day-after. Still track daily paid_tx toward restarting 100/day. Estimates ≠ guarantees. No win/odds promises.
 
-**Overnight / prior pulse (facts only):** Tue Sep 29 evening closed paid_tx=0; Instantly Day2 finished 0 opens; Meta ads HOLD; consents all-time 2; cash rail remained healthy (stripe/webhook/resend true). No new consented leads overnight.
+**Overnight / prior pulse (facts only):** Wed Sep 30 evening closed paid_tx=0; Instantly Day2 finished 0 opens; Meta ads HOLD; consents all-time 2; cash rail remained healthy (stripe/webhook/resend true). No new consented leads overnight. OKR deadline day closed at 0.
 
 ## 1. One-liner + live URLs
 
@@ -85,9 +85,9 @@ Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not
 - Count: Once + Triple + Year-round (incl. subscription invoice payments that succeed that day).
 - Do **not** count: free tier, abandoned Checkout, failed/blocked, sandbox.
 - Scoreboard ritual: `/workspace/weprize-100day/SCOREBOARD.md` · plan: `100DAY-PLAN.md`.
-- Window from this morning: **OKR deadline day = today (Wed Sep 30). 0 calendar days after today.**
+- Window from this morning: **OKR deadline was Sep 30; closed at 0 paid tx that day.** Today (Thu Oct 1) is day-after. Track daily paid_tx toward **restarting** 100/day.
 
-Ask Grok Heavy daily: *What ships today that moves paid tx toward 100?*
+Ask Grok Heavy daily: *What ships today that moves paid tx toward restarting 100/day?*
 
 ---
 
@@ -147,13 +147,13 @@ Without `session_id`, Success shows **recover-by-email** (`POST /api/orders/reco
 
 - [x] Post-pay identity recovery path (Success CTA + recover-by-email + order-ready Resend email).
 - [x] Mission messaging from Randy voice (Home strip + HIW/Pricing leverage; GROK-DAILY §1b; MISSION.md).
-- [x] Apex `/api/health` Express path live (stripe/webhook/resend true; postgres; seed n=25) — verified 2026-09-30 morning.
+- [x] Apex `/api/health` Express path live (stripe/webhook/resend true; postgres; seed n=25) — verified 2026-10-01 morning.
 - [x] Vercel apex has Stripe + Resend env loaded (late Mon); `POST /api/checkout` returns `cs_live_` (no charge).
 - [ ] **Randy:** paste success URL templates into Stripe Dashboard (above).
 - [ ] Confirm webhook endpoint `checkout.session.completed` delivers into Neon `orders` / `paid_orders` on a real paid smoke (health `webhook:true` alone ≠ fulfilled row).
 - [ ] Soft enforce **≤10 purchases / email** (stub logged; harden when ready).
 - [ ] Fulfillment worker + NEEDS_YOU nudges live for **paid** orders (demo assist_jobs do not count).
-- [ ] Morning SCOREBOARD: paid tx today-so-far vs 100 (Tue closed 0; Wed so-far 0). **OKR deadline = today.**
+- [ ] Morning SCOREBOARD: paid tx today-so-far **0** vs 100 (Wed closed **0**; OKR deadline day Sep 30 closed at 0). Restart 100/day.
 - [ ] Partner / community sends from `SEND-QUEUE.md` / `COMMUNITY-QUEUE.md` (authorized only).
 - [ ] Ads only with Competition Act–safe creative (`ADS-BRIEF.md`) — Meta still HOLD pending Randy greenlight.
 - [ ] Acquisition: Instantly Day3 Draft needs real new consents (do not invent); Day2 finished 0 opens.
@@ -193,7 +193,7 @@ Daily / weekly:
 ## How Randy uses this with Grok Heavy
 
 1. Open https://weprize.net/GROK-DAILY.md (or this repo file / CoS mirror).
-2. Paste into Grok Heavy with: *Act as WePrize CoS. Competition Act HARD. Optimize for 100 paid tx/day by Sep 30.*
+2. Paste into Grok Heavy with: *Act as WePrize CoS. Competition Act HARD. Optimize for restarting 100 paid tx/day (Sep 30 OKR closed at 0).*
 3. Ask for today’s ship list, copy diffs, partner pitches, or gap triage — not for inventing odds/guarantees.
 4. Edit section 6 after each ship; commit when useful.
 
