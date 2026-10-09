@@ -1,27 +1,27 @@
 # WePrize — Grok Heavy daily brief (living)
 
 > **Audience:** Randy → paste into Grok Heavy each morning. Edit this file freely; it ships at `https://weprize.net/GROK-DAILY.md` after Publish.  
-> **Updated:** 2026-10-08 ~08:28 ET · morning routine · cash-rail healthy · paid_tx=0 · post-OKR Sep 30 closed 0 · WePrize on hold (Randy Oct 2; Stripe nudge fired Oct 7 ~10:43 ET) · global outbound HOLD (Oct 7) · CoS mirror
+> **Updated:** 2026-10-09 ~08:40 ET · morning routine · cash-rail healthy · paid_tx=0 · post-OKR Sep 30 closed 0 · WePrize on hold (Randy Oct 2; Stripe nudge fired Oct 7 ~10:43 ET) · global outbound HOLD (Oct 7) · CoS mirror
 > **Competition Act HARD:** free contests + optional time/research assist only. Estimates ≠ guarantees. No win/odds promises, no ROI-farming framing, no treatment/cure claims.
 
 ---
 
-## 0. Daily ops snapshot — Thu Oct 8 2026 ET
+## 0. Daily ops snapshot — Fri Oct 9 2026 ET
 
-**Cash rail health (live `/api/health` @ ~08:26 ET):** `ok:true` · `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). No SBG email send in this routine.
+**Cash rail health (live `/api/health` @ ~08:35 ET):** `ok:true` · `stripe:true` · `webhook:true` · `resend:true` · `seed.n=25` (rule `min(25, AUTO_OK Canada / CA_ELIGIBLE_US live count)`). Store: postgres (Neon). No SBG email send in this routine.
 
 **SPA:** live bundle still `index-Bjvcc0Vu.js` (unchanged since Oct 3). Payment Links on pricing remain the primary pack path: Once `eVqcN52d75lE0Yu9hc8AE03`, Triple `14AfZh8Bv29sePkalg8AE04`, Year-round `5kQ7sLdVP15o7mS8d88AE02`. No new checkout smoke this morning.
 
-**Paid tx / fulfill (Stripe API live `acct_1TUZ7lDxmCwsLJND`, CAD, charges_enabled true; America/Toronto windows Thu = 2026-10-08 04:00 UTC → 2026-10-09 04:00 UTC, Wed = 2026-10-07 04:00 → 2026-10-08 04:00 UTC):**
-- Charges: today Thu **0** so far; Wed EOD **0**. PaymentIntents: Thu **0** / Wed **0**. Refunds: **0** / **0**.
-- Checkout Sessions: Thu none yet; Wed none.
+**Paid tx / fulfill (Stripe API live `acct_1TUZ7lDxmCwsLJND`, CAD, charges_enabled true; America/Toronto windows Fri = 2026-10-09 04:00 UTC → now, Thu = 2026-10-08 04:00 → 2026-10-09 04:00 UTC):**
+- Charges: today Fri **0** so far; Thu EOD **0**. PaymentIntents: Fri **0** / Thu **0**. Refunds: **0** / **0**.
+- Checkout Sessions: Fri none yet; Thu none.
 - Neon not re-pulled (no DB client on the box); Stripe is the source of truth and shows nothing to reconcile. Last Neon read (Oct 5): `paid_orders`=0, `orders`=5 demo-only (`demo_once_*`), `qr_codes`=2, `qr_earnings`=0, consents all-time=2. **Real paid stranger fulfill queue: empty.** No invented buyers.
 
 **Inventory / contest notes (no new Randy mutations since Oct 3):** Jamieson Win $100 (`c-050`) **CLOSED** after Sep 30. Lucas x DUSK + YETI = **NEEDS_YOU**; Shoppers×iHeart SeekYourSounds dead; Tell Rexall Q3 HUMAN_ONLY; Rexall×CeraVe dead; NUXE/Marcelle/Redken not AUTO_OK. Canonical book `/workspace/weprize-sot/src/data/contests.json` (n≈338; AUTO_OK≈181).
 
-**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. **Deadline was Sep 30; closed at 0.** Today is Thu Oct 8 (Wed was the 7th straight day at 0). Still track daily paid_tx toward restarting 100/day. Estimates ≠ guarantees. No win/odds promises.
+**HARD OKR reminder:** ≥100 paid Stripe tx / America/Toronto day by Sep 30 on SBG APIs. **Deadline was Sep 30; closed at 0.** Today is Fri Oct 9 (Thu was the 8th straight day at 0; Fri still 0 so far = **9th straight day at 0**). Still track daily paid_tx toward restarting 100/day. Estimates ≠ guarantees. No win/odds promises.
 
-**Overnight / prior pulse (facts only):** WePrize is **on hold per Randy (Oct 2)**; the Stripe nudge fired Oct 7 ~10:43 ET and no restart call has been logged since, so 0 paid is expected and not new breakage. Global outbound HOLD since Oct 7 ~1:45 PM ET. Wed closed paid_tx=0 (AM/PM/evening pulses all QUIET, rail healthy, zero checkout starts). Meta ads HOLD; Instantly Day2 finished on 3 leads with 0 opens/replies; consents all-time still 2. No new consented leads, orders, or QR earnings.
+**Overnight / prior pulse (facts only):** WePrize is **on hold per Randy (Oct 2)**; the Stripe nudge fired Oct 7 ~10:43 ET and no restart call has been logged since (memory + CoS files), so 0 paid is expected and not new breakage. Global outbound HOLD since Oct 7 ~1:45 PM ET. Thu closed paid_tx=0 (morning pull ~9:43 ET also 0). **No Oct 8 afternoon or evening pulse files exist in weprize-100day** (last evening pulse is Oct 7). Meta ads HOLD; Instantly Day2 finished on 3 leads with 0 opens/replies; consents all-time still 2. No new consented leads, orders, or QR earnings.
 
 ## 1. One-liner + live URLs
 
@@ -75,7 +75,7 @@ Cash rail: Stripe **SBG APIs** livemode (`acct_1TUZ7lDxmCwsLJND`, CAD). Do **not
 - Count: Once + Triple + Year-round (incl. subscription invoice payments that succeed that day).
 - Do **not** count: free tier, abandoned Checkout, failed/blocked, sandbox.
 - Scoreboard ritual: `/workspace/weprize-100day/SCOREBOARD.md` · plan: `100DAY-PLAN.md`.
-- Window from this morning: **OKR deadline was Sep 30; closed at 0 paid tx that day.** Today (Thu Oct 8) is 8 days after. Track daily paid_tx toward **restarting** 100/day.
+- Window from this morning: **OKR deadline was Sep 30; closed at 0 paid tx that day.** Today (Fri Oct 9) is 9 days after. Track daily paid_tx toward **restarting** 100/day.
 
 Ask Grok Heavy daily: *What ships today that moves paid tx toward restarting 100/day?*
 
@@ -143,7 +143,7 @@ Without `session_id`, Success shows **recover-by-email** (`POST /api/orders/reco
 - [ ] Confirm webhook endpoint `checkout.session.completed` delivers into Neon `orders` / `paid_orders` on a real paid smoke (health `webhook:true` alone ≠ fulfilled row).
 - [ ] Soft enforce **≤10 purchases / email** (stub logged; harden when ready).
 - [ ] Fulfillment worker + NEEDS_YOU nudges live for **paid** orders (demo assist_jobs do not count).
-- [ ] Morning SCOREBOARD: Thu Oct 8 paid tx today-so-far **0** vs 100 (Wed Oct 7 EOD closed **0**; Tue **0**; OKR deadline day Sep 30 closed at 0). WePrize on hold; Stripe nudge fired Oct 7, awaiting Randy restart call. Restart 100/day.
+- [ ] Morning SCOREBOARD: Fri Oct 9 paid tx today-so-far **0** vs 100 (Thu Oct 8 EOD closed **0**; Wed **0**; OKR deadline day Sep 30 closed at 0). 9th straight day at 0 so far. WePrize on hold; Stripe nudge fired Oct 7, awaiting Randy restart call. Restart 100/day.
 - [ ] Partner / community sends from `SEND-QUEUE.md` / `COMMUNITY-QUEUE.md` (authorized only).
 - [ ] Ads only with Competition Act–safe creative (`ADS-BRIEF.md`) — Meta still HOLD pending Randy greenlight.
 - [ ] Acquisition: Instantly Day3 Draft needs real new consents (do not invent); Day2 finished 0 opens.
