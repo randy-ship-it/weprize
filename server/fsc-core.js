@@ -9,15 +9,31 @@ export const RATES = {
 
 // Worst-case cost of ONE screened call: the voice agent hard-stops at 60s, but the Twilio leg runs ~70s
 // (notice + setup) and we bill AI on the full Twilio duration, so budget 2 Twilio min + 1.2 AI min.
-export const MAX_SCREENED_CALL_USD = 2 * RATES.twilioPerMin + 1.2 * RATES.aiPerMin; // 0.125
+export const MAX_SCREENED_CALL_USD = 2 * RATES.twilioPerMin + (70 / 60) * RATES.aiPerMin; // 0.122 = worstCostUsd(60)
 // Cost of a short "say a line and hang up" call (no AI): 1 Twilio minute.
 export const SHORT_CALL_USD = RATES.twilioPerMin;
 
+// Randy's rule: every tier keeps >= 50% gross margin: (price - Stripe fee - max COGS) / price >= 0.5.
+// So capUsd = (price * 0.5 - Stripe fee) / FX. Stripe CA: 2.9% + C$0.30.
+export const FX_CAD_PER_USD = 1.4
+export const TARGET_GM = 0.5
+const capFrom = (priceCad) => Math.floor(((priceCad * (1 - TARGET_GM) - stripeFeeCad(priceCad)) / FX_CAD_PER_USD) * 1000) / 1000
 export const PLANS = {
-  basic: { name: "Basic", priceCad: 0.99, capUsd: 0.25 },
-  premium: { name: "Premium", priceCad: 3.99, capUsd: 1.5 },
-  super: { name: "Super", priceCad: 6.99, capUsd: 3.0 },
+  basic: { name: "Basic", priceCad: 0.99, capUsd: capFrom(0.99) }, // ~0.117
+  premium: { name: "Premium", priceCad: 3.99, capUsd: capFrom(3.99) }, // ~1.125
+  super: { name: "Super", priceCad: 6.99, capUsd: capFrom(6.99) }, // ~2.139
 };
+
+// Seconds of AI talk we can afford with `budgetUsd` left (Twilio leg ~= talk + 10s, AI billed on the whole leg).
+export const OVERHEAD_SEC = 10, MIN_TALK_SEC = 20, MAX_TALK_SEC = 60
+export function worstCostUsd(talkSec) {
+  const leg = talkSec + OVERHEAD_SEC
+  return Math.ceil(leg / 60) * RATES.twilioPerMin + (leg / 60) * RATES.aiPerMin
+}
+export function affordableTalkSec(budgetUsd) {
+  for (let t = MAX_TALK_SEC; t >= MIN_TALK_SEC; t -= 5) if (worstCostUsd(t) <= budgetUsd) return t
+  return 0
+}
 
 export const LIMITS = {
   userCallsPerDay: 30, // > this => auto-suspend + flag
@@ -28,14 +44,15 @@ export const LIMITS = {
 };
 
 export function stripeFeeCad(priceCad) {
-  return Math.round((priceCad * 0.029 + 0.3) * 100) / 100;
+  return Math.ceil((priceCad * 0.029 + 0.3) * 100) / 100;
 }
 
 // Worst-case monthly margin per plan in CAD (cap fully used).
-export function worstMarginCad(plan, fx = 1.4) {
+export function worstMarginCad(plan, fx = FX_CAD_PER_USD) {
   const p = PLANS[plan];
   return Math.round((p.priceCad - stripeFeeCad(p.priceCad) - p.capUsd * fx) * 100) / 100;
 }
+export const grossMarginPct = (plan) => Math.round((worstMarginCad(plan) / PLANS[plan].priceCad) * 1000) / 10
 
 export function callCostUsd(durationSec, usedAi) {
   const d = Math.max(0, Number(durationSec) || 0);
@@ -89,10 +106,11 @@ export function decide(s) {
     if ((u.today ?? 0) >= LIMITS.userCallsPerDay || (u.burst ?? 0) >= LIMITS.userBurst)
       return say("user_abuse", MSG.suspended, { suspendUser: true });
     const plan = PLANS[u.plan] ?? PLANS.basic;
-    if ((u.monthUsd ?? 0) + MAX_SCREENED_CALL_USD > plan.capUsd)
+    const talk = affordableTalkSec(plan.capUsd - (u.monthUsd ?? 0));
+    if (!talk)
       return say("user_cap", MSG.capped, { upgradePrompt: u.plan === "super" ? "super_cap" : u.plan === "premium" ? "to_super" : "to_premium" });
-    return { action: "screen", reason: "user", voice: u.voice || "male", reserveUsd: MAX_SCREENED_CALL_USD };
+    return { action: "screen", reason: "user", voice: u.voice || "male", maxSec: talk, reserveUsd: worstCostUsd(talk) };
   }
   if ((s.poolTodayUsd ?? 0) + MAX_SCREENED_CALL_USD > s.poolCapUsd) return say("pool_cap", MSG.pool);
-  return { action: "screen", reason: "pool", voice: "default", reserveUsd: MAX_SCREENED_CALL_USD };
+  return { action: "screen", reason: "pool", voice: "default", maxSec: MAX_TALK_SEC, reserveUsd: MAX_SCREENED_CALL_USD };
 }
