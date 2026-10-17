@@ -16,6 +16,7 @@ import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
 import { createQrRouter } from './qr/routes.js'
 import { createFscRouter } from './fsc.js'
+import { createPrankRouter } from './prank.js'
 import { creditAttributionFromSession } from './qr/ledger.js'
 import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
 import {
@@ -78,6 +79,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 })
 
 app.use(express.json({ limit: '1mb' }))
+app.use('/api/fsc/prank', createPrankRouter({ recordCost: (sid, dur, usd) => fscRouter.recordExternalCost(sid, dur, usd) }))
 app.use('/api/fsc', fscRouter)
 
 app.use('/api/qr', createQrRouter({ getStore, stripe }))

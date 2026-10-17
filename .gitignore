@@ -33,3 +33,5 @@ data/*.tmp
 .env.*
 !.env.example
 public/spamfun/og-free.png
+.vercel
+.env*

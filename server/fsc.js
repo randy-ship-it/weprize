@@ -432,6 +432,14 @@ export function createFscRouter({ stripe }) {
     res.json({ ok: true, number: '+12893675302' })
   }))
 
+  /** Prank-a-friend calls (server/prank.js) count toward the same global daily cap when the database is up. */
+  router.recordExternalCost = async (callSid, dur, usd) => {
+    if (!(await dbOk())) return false
+    const day = torontoDay()
+    await sql(`insert into fsc.calls(call_sid, caller_h, pool, month, day, cost_usd, outcome, used_ai, duration_s, final)
+               values ($1,'prank',true,$2,$3,$4,'prank',false,$5,true) on conflict (call_sid) do update set cost_usd=excluded.cost_usd, duration_s=excluded.duration_s, final=true`, [callSid, monthOf(day), day, usd, dur])
+    return true
+  }
   /** Called from the shared Stripe webhook for events whose object carries metadata.app === "fsc". */
   router.handleStripeEvent = async (evt) => {
     const o = evt.data.object

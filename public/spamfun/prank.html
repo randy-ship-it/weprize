@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prank a friend (they opt in first) | WePrize Spam Fun</title>
+<meta name="description" content="Send a friend a harmless 60-second joke call. They get a text first and only get the call if they reply YES.">
+<meta property="og:title" content="Send a friend a harmless joke call (they opt in first)">
+<meta property="og:description" content="Lost Llama, a 40-foot pizza, or a lifetime supply of left socks. Your friend replies YES first. Free.">
+<meta property="og:url" content="https://weprize.net/spamfun/prank">
+<meta property="og:image" content="https://weprize.net/spamfun/og-free.png">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FF4A1C">
+<link rel="icon" href="/favicon.svg">
+<style>
+:root{--bg:#FAF7F2;--ink:#14110F;--mute:#6B645C;--line:#E7E0D6;--card:#fff;--acc:#FF4A1C;--acc2:#FFE6DD}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}.logo{font-weight:800;font-size:19px;text-decoration:none}.logo span{color:var(--acc)}
+h1{font-size:clamp(34px,6vw,54px);line-height:1.05;letter-spacing:-.03em;margin:10px 0 12px}h2{font-size:22px;margin:0 0 10px;letter-spacing:-.01em}
+.serif{font-family:Georgia,serif;font-style:italic;font-weight:500;color:var(--acc)}
+.lede{color:var(--mute);font-size:19px;margin:0 0 22px}.fine{font-size:14px;color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;margin:0 0 16px}
+.picks{display:grid;gap:10px}
+.pk{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;background:#fff}
+.pk input{margin-top:5px;accent-color:var(--acc);width:20px;height:20px;flex:none}.pk b{display:block}.pk span{font-size:14px;color:var(--mute)}
+.pk:has(input:checked){border-color:var(--acc);background:var(--acc2)}
+input[type=tel],input[type=email],input[type=text]{font:inherit;font-size:18px;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+input:focus{outline:0;border-color:var(--ink)}
+label.l{display:block;font-weight:700;font-size:15px;margin:0 0 6px}
+.readback{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:var(--bg);border:2px dashed var(--line);font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:15px 26px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;background:var(--acc);color:#fff;box-shadow:0 5px 0 -2px #C93410}
+.btn[disabled]{opacity:.5;cursor:not-allowed}.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}.btn.sm{padding:9px 16px;font-size:15px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>input{flex:1 1 220px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin:14px 0}.chk input{width:20px;height:20px;accent-color:var(--acc);flex:none;margin-top:3px}
+.err{color:#C93410;font-weight:600;min-height:1.2em;margin:10px 0 0}
+.hp{position:absolute;left:-9999px}
+.status{font-size:20px;font-weight:700}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#3DDC84;margin-right:8px;animation:p 1.2s infinite}@keyframes p{50%{opacity:.3}}
+.tx{background:var(--ink);color:#fff;border-radius:18px;padding:14px;margin-top:14px;max-height:340px;overflow:auto}
+.ln{margin:0 0 10px;max-width:90%}.ln small{display:block;color:#8F877E;font-size:11px}.ln span{display:inline-block;padding:8px 12px;border-radius:14px;background:#37312C;font-size:15px}
+.ln.f{margin-left:auto;text-align:right}.ln.f span{background:#fff;color:var(--ink)}
+.share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.share-row a,.share-row button{font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;cursor:pointer}
+[hidden]{display:none!important}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:24px 0 50px;font-size:14px;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><a class="logo" href="/spamfun">FunSpam<span>Cover</span></a><a class="fine" href="/spamfun">Back to Spam Fun</a></nav>
+
+<div id="build">
+  <h1>Prank a friend. <span class="serif">They say yes first.</span></h1>
+  <p class="lede">Pick a harmless 60-second joke call. Your friend gets a text first and only gets the call if they reply YES. Then you get the highlights.</p>
+
+  <form id="f" autocomplete="on" novalidate>
+  <div class="card">
+    <h2>1. Pick the joke</h2>
+    <div class="picks">
+      <label class="pk"><input type="radio" name="prank" value="llama" checked><div><b>🦙 Lost Llama</b><span>A pet delivery driver has their llama, Kevin. He's eaten a seat cushion.</span></div></label>
+      <label class="pk"><input type="radio" name="prank" value="pizza"><div><b>🍕 The 40-foot pizza</b><span>Their giant pizza is on a flatbed truck. Will it fit through the door?</span></div></label>
+      <label class="pk"><input type="radio" name="prank" value="socks"><div><b>🧦 Lifetime supply of left socks</b><span>Congratulations! Just the left ones.</span></div></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>2. Your friend's number</h2>
+    <label class="l" for="phone">Canadian mobile number</label>
+    <input type="tel" id="phone" inputmode="tel" placeholder="416 555 0123" autocomplete="off">
+    <div class="readback" id="rb" hidden></div>
+    <label class="chk"><input type="checkbox" id="ok1"> <span>That's the right number, and my friend would find this funny. I know they get a text first and nothing happens unless they reply YES.</span></label>
+  </div>
+  <div class="card">
+    <h2>3. Your email</h2>
+    <p class="fine" style="margin-top:-4px">We send a code to make sure you're a real person. Max 3 jokes a day.</p>
+    <div class="row"><input type="email" id="email" placeholder="you@example.com" autocomplete="email"><button class="btn ghost sm" type="button" id="sendCode">Send code</button></div>
+    <div id="codeRow" hidden style="margin-top:12px"><input type="text" id="code" inputmode="numeric" maxlength="6" placeholder="6-digit code" autocomplete="one-time-code"></div>
+    <input class="hp" name="company" id="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+  </div>
+  <button class="btn" type="submit" id="go" disabled style="width:100%;font-size:19px;padding:18px">Text my friend the invite</button>
+  <p class="err" id="err" role="alert"></p>
+  </form>
+  <p class="fine">Each number can only ever get one invite. Calls may be recorded and shared with the friend who sent them. No emergencies, money or scary stuff, ever: just llamas, pizza and socks.</p>
+</div>
+
+<div id="track" hidden>
+  <h1 id="tH">Invite sent!</h1>
+  <div class="card">
+    <p class="status" id="tS"></p>
+    <p class="fine" id="tSub"></p>
+    <button class="btn" type="button" id="revealBtn" hidden>Reveal now</button>
+    <div class="tx" id="tx" hidden></div>
+  </div>
+  <div class="card" id="hl" hidden>
+    <h2>The highlight</h2>
+    <audio id="clip" controls preload="metadata" style="width:100%" hidden></audio>
+    <p class="fine" id="clipNote"></p>
+    <p style="margin:16px 0 4px"><b>Get them back → weprize.net</b></p>
+    <div class="share-row">
+      <button type="button" data-sh="native">Share</button><button type="button" data-sh="copy">Copy link</button><a data-sh="sms">Text</a><a data-sh="wa" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <p class="fine" style="margin-top:12px">This page is private to you. Keep the link if you want to listen again.</p>
+  </div>
+  <p><a class="btn ghost sm" href="/spamfun/prank">Prank someone else</a></p>
+</div>
+
+<footer>
+  <p>Don't want joke calls or texts? <a href="/spamfun/nocall"><b>Add your number to the never-call list.</b></a></p>
+  <p>Spam Fun is a WePrize community project. We're the opposite of spam.</p>
+</footer>
+</div>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id), API = '/api/fsc/prank';
+  const W = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+  const digits = (v) => { let d = String(v).replace(/\D/g, ''); if (d.length === 11 && d[0] === '1') d = d.slice(1); return d; };
+  const spoken = (d) => [d.slice(0,3), d.slice(3,6), d.slice(6)].map((s) => [...s].map((c) => W[+c]).join(' ')).join(', ');
+  let fp = ''; try { fp = localStorage.getItem('prank_fp') || ''; if (!fp) { fp = crypto.getRandomValues(new Uint32Array(4)).join('-'); localStorage.setItem('prank_fp', fp); } } catch { fp = String(Math.random()).slice(2) + String(Date.now()); }
+  let stoken = '';
+  const post = (p, b) => fetch(API + p, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(b) }).then(async (r) => ({ r, j: await r.json().catch(() => ({})) }));
+  const err = (t) => { $('err').textContent = t || ''; };
+  const ready = () => { $('go').disabled = !(digits($('phone').value).length === 10 && $('ok1').checked && ($('code').value.replace(/\D/g, '').length === 6 || stoken)); };
+  $('phone').addEventListener('input', () => { const d = digits($('phone').value); $('rb').hidden = d.length !== 10; if (d.length === 10) $('rb').innerHTML = '🔊 I\'ll call <b>' + spoken(d) + '</b>. Is that right?'; ready(); });
+  $('ok1').addEventListener('change', ready); $('code').addEventListener('input', ready);
+  $('sendCode').addEventListener('click', async () => {
+    err(''); const email = $('email').value.trim(); if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return err('Enter a valid email.');
+    $('sendCode').disabled = true; const { r, j } = await post('/code', { email, fp, company: $('company').value }).catch(() => ({ r: { ok: false }, j: {} }));
+    $('sendCode').disabled = false; if (!r.ok) return err(j.error || 'Please try again.');
+    $('codeRow').hidden = false; $('sendCode').textContent = 'Resend'; $('code').focus();
+  });
+  $('f').addEventListener('submit', async (e) => {
+    e.preventDefault(); err(''); $('go').disabled = true;
+    const email = $('email').value.trim();
+    try {
+      if (!stoken) { const { r, j } = await post('/verify', { email, fp, code: $('code').value }); if (!r.ok) throw new Error(j.error); stoken = j.stoken; }
+      const prank = document.querySelector('input[name=prank]:checked').value;
+      const { r, j } = await post('/create', { email, fp, stoken, phone: digits($('phone').value), prank });
+      if (!r.ok) throw new Error(j.error);
+      try { localStorage.setItem('prank_last', j.id + '.' + j.k); } catch {}
+      history.replaceState(null, '', '/spamfun/prank?id=' + j.id + '&k=' + j.k); track(j.id, j.k);
+    } catch (x) { err(x.message || 'Please try again.'); ready(); }
+  });
+  // ---- tracking / share page ----
+  const label = { asked: ['Waiting for them to reply YES', 'We texted your friend. Nothing happens unless they reply YES within 24 hours.'], calling: ['They said YES! Calling now…', 'Their phone should be ringing.'],
+    in_call: ['Live now', 'Here\'s what they\'re saying. The reveal happens within a minute.'], done: ['Done! They got pranked.', ''], missed: ['They didn\'t pick up', 'We never call twice, so that one is over.'],
+    declined: ['They said no thanks', 'No call, ever. That number is now off our list.'], expired: ['No reply', 'They didn\'t reply YES within 24 hours, so nothing happens.'], failed: ['Our joke line is busy', 'No call was placed. Try again tomorrow.'], sms_failed: ['We couldn\'t text that number', 'No call was placed.'] };
+  let timer = null;
+  async function track(id, k) {
+    $('build').hidden = true; $('track').hidden = false; window.scrollTo(0, 0);
+    const tick = async () => {
+      const j = await fetch(API + '/state?id=' + id + '&k=' + k, { cache: 'no-store' }).then((r) => r.json()).catch(() => null);
+      if (!j || !j.ok) { $('tS').textContent = 'We couldn\'t find that joke.'; return; }
+      const [a, b] = label[j.status] || [j.status, ''];
+      $('tH').textContent = j.prank_name + ' for ' + j.number;
+      $('tS').innerHTML = (['calling', 'in_call'].includes(j.status) ? '<span class="dot"></span>' : '') + a; $('tSub').textContent = b;
+      $('revealBtn').hidden = !(j.status === 'in_call' && !j.revealed);
+      if (j.turns && j.turns.length) { $('tx').hidden = false; $('tx').innerHTML = j.turns.map((t) => '<div class="ln ' + (t.who === 'friend' ? 'f' : '') + '"><small>' + (t.who === 'friend' ? 'Your friend' : 'Dana') + (t.at != null ? ' · 0:' + String(t.at).padStart(2, '0') : '') + '</small><span></span></div>').join(''); [...$('tx').querySelectorAll('.ln span')].forEach((s, i) => { s.textContent = j.turns[i].text; }); }
+      if (j.status === 'done') {
+        $('hl').hidden = false;
+        if (j.clip) { const s = j.clip.start, el = $('clip'); if (el.hidden) { el.src = API + '/clip?id=' + id + '&k=' + k + '#t=' + s + ',' + (s + j.clip.len); el.hidden = false; } $('clipNote').textContent = 'A 15-second highlight. Hit play.'; }
+        else $('clipNote').textContent = j.turns.some((t) => t.who === 'friend') ? 'The recording is still processing. The transcript is above.' : 'They didn\'t say much, but the transcript is above.';
+      }
+      if (['asked', 'calling', 'in_call'].includes(j.status) || (j.status === 'done' && !j.clip && (Date.now() - start < 120e3))) timer = setTimeout(tick, j.status === 'in_call' ? 2000 : 3500);
+    };
+    const start = Date.now(); clearTimeout(timer); tick();
+    $('revealBtn').onclick = async () => { $('revealBtn').disabled = true; await post('/reveal', { id, k }).catch(() => {}); };
+  }
+  const SH = 'https://weprize.net/spamfun/prank', TXT = 'I just pranked a friend with a harmless joke call (they said yes first). Get someone back:';
+  document.querySelectorAll('[data-sh]').forEach((el) => {
+    const t = el.dataset.sh;
+    if (t === 'sms') el.href = 'sms:?&body=' + encodeURIComponent(TXT + ' ' + SH);
+    if (t === 'wa') el.href = 'https://wa.me/?text=' + encodeURIComponent(TXT + ' ' + SH);
+    if (t === 'native') { if (!navigator.share) el.hidden = true; el.onclick = () => navigator.share({ title: 'WePrize', text: TXT, url: SH }).catch(() => {}); }
+    if (t === 'copy') el.onclick = () => navigator.clipboard.writeText(SH).then(() => { el.textContent = 'Copied!'; });
+  });
+  const q = new URLSearchParams(location.search);
+  if (q.get('id') && q.get('k')) track(q.get('id'), q.get('k'));
+})();
+</script>
+</body>
+</html>
