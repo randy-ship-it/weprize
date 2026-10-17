@@ -32,3 +32,4 @@ data/*.tmp
 .env
 .env.*
 !.env.example
+public/spamfun/og-free.png
