@@ -82,7 +82,7 @@ function clean(t) { if (/https?:|www\.|\.(com|ca|org|net|io)\b|\/[a-z]/i.test(t)
 async function mail(to, subject, text) {
   if (!env('RESEND_API_KEY') || !to) return false
   const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { authorization: 'Bearer ' + env('RESEND_API_KEY'), 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env('FSC_EMAIL_FROM') || 'FunSpamCover <hello@weprize.net>', to: [to], subject, text: clean(text) }) })
+    body: JSON.stringify({ from: env('FSC_EMAIL_FROM') || 'Spam Fun <hello@weprize.net>', to: [to], subject, text: clean(text) }) })
   return r.ok
 }
 
