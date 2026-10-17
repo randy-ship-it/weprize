@@ -1,110 +1,109 @@
 {
- "title": "FunSpamCover demo: extended warranty robocall vs. the assistant",
+ "title": "Spam Fun demo: a pretend extended-warranty robocaller vs. the screener",
  "audio": "demo-call.mp3",
- "duration_ms": 68911,
- "note": "Simulated demo call. No real people or numbers.",
+ "duration_ms": 75674,
+ "note": "Real recorded test call (Oct 17, 2026) between the live Spam Fun screener and a pretend robocaller voice. No real people or numbers.",
  "events": [
   {
    "type": "hangup",
-   "start_ms": 67514
+   "start_ms": 75620
   }
  ],
  "lines": [
   {
-   "speaker": "Caller",
-   "role": "caller",
-   "text": "Hi there! We've been trying to reach you about your car's extended warranty. Our records show your coverage is about to expire!",
-   "start_ms": 350,
-   "end_ms": 5855,
-   "display_text": "Hi there! We've been trying to reach you about your car's extended warranty. Our records show your coverage is about to expire!"
+   "speaker": "Line notice",
+   "role": "note",
+   "text": "This call may be recorded.",
+   "start_ms": 60,
+   "end_ms": 1240
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "Ooh, a warranty. Can I ask you something first? Do you think cars dream? Like, when they're parked overnight?",
-   "start_ms": 6155,
-   "end_ms": 10596,
-   "display_text": "Ooh, a warranty. Can I ask you something first? Do you think cars dream? Like, when they're parked overnight?"
+   "text": "Hey there, you've reached this line.",
+   "start_ms": 1760,
+   "end_ms": 3260,
+   "display_text": "Hey there, you've reached this line."
   },
   {
-   "speaker": "Caller",
+   "speaker": "Robocaller",
    "role": "caller",
-   "text": "Uh... sir, am I speaking with the owner of the vehicle?",
-   "start_ms": 10996,
-   "end_ms": 14470,
-   "display_text": "Uh... sir, am I speaking with the owner of the vehicle?"
+   "text": "Hi there. We've been trying to reach you about your car's extended warranty. Your coverage is about to expire.",
+   "start_ms": 4540,
+   "end_ms": 10220,
+   "display_text": "Hi there. We've been trying to reach you about your car's extended warranty. Your coverage is about to expire."
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "Ha! I'm an automated assistant answering this line. But who really owns anything? Maybe the car owns me. Big question before lunch.",
-   "start_ms": 14750,
-   "end_ms": 23298,
-   "display_text": "Ha! I'm an automated assistant answering this line. But who really owns anything? Maybe the car owns me. Big question before lunch."
+   "text": "Ooh, I love surprises. Is this about my car getting old and sad, or is there some kind of exciting twist here?",
+   "start_ms": 11700,
+   "end_ms": 16940,
+   "display_text": "Ooh, I love surprises. Is this about my car getting old and sad, or is there some kind of exciting twist here?"
   },
   {
-   "speaker": "Caller",
+   "speaker": "Robocaller",
    "role": "caller",
-   "text": "Okay. I just need to confirm the make and model to activate your coverage today.",
-   "start_ms": 23648,
-   "end_ms": 27581,
-   "display_text": "Okay. I just need to confirm the make and model to activate your coverage today."
+   "text": "Am I speaking with the owner of the vehicle?",
+   "start_ms": 18140,
+   "end_ms": 19980,
+   "display_text": "Am I speaking with the owner of the vehicle?"
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "Love that. Quick one though. If a car gets an extended warranty, does it also get an extended personality? Like, more opinions?",
-   "start_ms": 27881,
-   "end_ms": 34428,
-   "display_text": "Love that. Quick one though. If a car gets an extended warranty, does it also get an extended personality? Like, more opinions?"
+   "text": "Well, that's a mystery wrapped in an enigma, isn't it? But I'm genuinely curious. When you say the coverage is about to expire, does that mean my car's been secretly insured this whole time without me knowing, or is this more of a hypothetical expiration situation?",
+   "start_ms": 21220,
+   "end_ms": 33940,
+   "display_text": "Well, that's a mystery wrapped in an enigma, isn't it? But I'm genuinely curious. When you say the coverage is about to expire, does that mean my car's been secretly insured this whole time without me knowing, or is this more of a hypothetical expiration situation?"
   },
   {
-   "speaker": "Caller",
+   "speaker": "Robocaller",
    "role": "caller",
-   "text": "Sir, this offer expires today. Can I just get your full name?",
-   "start_ms": 34848,
-   "end_ms": 37969,
-   "display_text": "Sir, this offer expires today. Can I just get your full name?"
+   "text": "I just need the make and model of your vehicle to activate your coverage today.",
+   "start_ms": 35500,
+   "end_ms": 39260,
+   "display_text": "I just need the make and model of your vehicle to activate your coverage today."
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "Names are fascinating! I'm just this line's automated assistant, so I don't have a full name. Do you have a favourite? Today feels like a Barnaby kind of afternoon.",
-   "start_ms": 38249,
-   "end_ms": 46814,
-   "display_text": "Names are fascinating! I'm just this line's automated assistant, so I don't have a full name. Do you have a favourite? Today feels like a Barnaby kind of afternoon."
+   "text": "Ah, here's a fun question for you though. Do you think cars dream about their make and model, or do they just dream about open highways and the occasional car wash? Because I feel like that's what really matters to them, you know?",
+   "start_ms": 40440,
+   "end_ms": 51040,
+   "display_text": "Ah, here's a fun question for you though. Do you think cars dream about their make and model, or do they just dream about open highways and the occasional car wash? Because I feel like that's what really matters to them, you know?"
   },
   {
-   "speaker": "Caller",
+   "speaker": "Robocaller",
    "role": "caller",
-   "text": "Look, are you interested in protecting your vehicle or not?",
-   "start_ms": 47164,
-   "end_ms": 49858,
-   "display_text": "Look, are you interested in protecting your vehicle or not?"
+   "text": "Look, this offer expires today. Can I please get your full name?",
+   "start_ms": 52560,
+   "end_ms": 55600,
+   "display_text": "Look, this offer expires today. Can I please get your full name?"
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "I'm interested in everything! Which is why you need WePrize dot net. It's a free sweepstakes aggregator. Tons of giveaways in one place, totally free to enter. Win a car, and then you'd need a warranty! Full circle!",
-   "start_ms": 50158,
-   "end_ms": 62335,
-   "display_text": "I'm interested in everything! Which is why you need WePrize.net. It's a free sweepstakes aggregator. Tons of giveaways in one place, totally free to enter. Win a car, and then you'd need a warranty! Full circle!"
+   "text": "I see in your future... free contests, specifically at WePrize.net. It's a free sweepstakes aggregator, all the free contests in one place, and honestly, you'd probably have better luck win\u2014",
+   "start_ms": 56660,
+   "end_ms": 66480,
+   "display_text": "I see in your future... free contests, specifically at WePrize.net. It's a free sweepstakes aggregator, all the free contests in one place, and honestly, you'd probably have better luck win\u2014"
   },
   {
-   "speaker": "Caller",
+   "speaker": "Robocaller",
    "role": "caller",
-   "text": "Did... did you just pitch me?",
-   "start_ms": 62785,
-   "end_ms": 64010,
-   "display_text": "Did... did you just pitch me?"
+   "text": "Did, did you just pitch me?",
+   "start_ms": 68040,
+   "end_ms": 69320,
+   "display_text": "Did, did you just pitch me?"
   },
   {
-   "speaker": "Glen",
+   "speaker": "Our bot",
    "role": "glen",
-   "text": "WePrize dot net. Tell your friends! Okay, g t g!",
-   "start_ms": 64260,
-   "end_ms": 67114,
-   "display_text": "WePrize.net. Tell your friends! Okay, gtg!"
+   "text": "Oops, gotta go. Check out WePrize.net, all the free contests in one place. Bye!",
+   "start_ms": 71560,
+   "end_ms": 75620,
+   "display_text": "Oops, gotta go. Check out WePrize.net, all the free contests in one place. Bye!"
   }
  ]
 }

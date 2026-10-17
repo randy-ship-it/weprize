@@ -90,16 +90,16 @@ async function mail(to, subject, text) {
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: 'Bearer ' + env('RESEND_API_KEY'), 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env('FSC_EMAIL_FROM') || 'FunSpamCover <hello@weprize.net>', to: [to], subject, text: clean(text) }),
+    body: JSON.stringify({ from: env('FSC_EMAIL_FROM') || 'Spam Fun <hello@weprize.net>', to: [to], subject, text: clean(text) }),
   })
   return r.ok
 }
 const UPGRADE = {
-  to_premium: ['FunSpamCover: your assistant needs a bigger plan', "Hi! Your FunSpamCover Basic plan used up this month's screening allowance. Your callers kept the assistant busy!\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message instead of the full spam-wasting show.\n\nWant the assistant back on duty? Open the FunSpamCover page on WePrize and pick Premium ($3.99 a month). Your Basic plan is cancelled automatically when you switch.\n\nThanks for wasting spammers' time with us.\nFunSpamCover"],
-  to_super: ['FunSpamCover: that is a lot of spam', "Hi! Your FunSpamCover Premium plan used up this month's screening allowance.\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message.\n\nIf you get mass inbound calls, Super ($6.99 a month) is built for that. Open the FunSpamCover page on WePrize and pick Super. Your Premium plan is cancelled automatically when you switch.\n\nFunSpamCover"],
-  to_smart: ['FunSpamCover: that is a lot of calls', "Hi! Your FunSpamCover Super plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nSmart ($9.99 a month) adds more calls and takes proper messages from people in your contacts. Open the FunSpamCover page on WePrize to switch.\n\nFunSpamCover"],
-  smart_cap: ['FunSpamCover: monthly allowance used', "Hi! Your FunSpamCover Smart plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nFunSpamCover"],
-  super_cap: ['FunSpamCover: monthly allowance used', "Hi! Your FunSpamCover Super plan used up this month's screening allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nFunSpamCover"],
+  to_premium: ['Spam Fun: your assistant needs a bigger plan', "Hi! Your Spam Fun Basic plan used up this month's screening allowance. Your callers kept the assistant busy!\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message instead of the full spam-wasting show.\n\nWant the assistant back on duty? Open the Spam Fun page on WePrize and pick Premium ($3.99 a month). Your Basic plan is cancelled automatically when you switch.\n\nThanks for wasting spammers' time with us.\nSpam Fun"],
+  to_super: ['Spam Fun: that is a lot of spam', "Hi! Your Spam Fun Premium plan used up this month's screening allowance.\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message.\n\nIf you get mass inbound calls, Super ($6.99 a month) is built for that. Open the Spam Fun page on WePrize and pick Super. Your Premium plan is cancelled automatically when you switch.\n\nSpam Fun"],
+  to_smart: ['Spam Fun: that is a lot of calls', "Hi! Your Spam Fun Super plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nSmart ($9.99 a month) adds more calls and takes proper messages from people in your contacts. Open the Spam Fun page on WePrize to switch.\n\nSpam Fun"],
+  smart_cap: ['Spam Fun: monthly allowance used', "Hi! Your Spam Fun Smart plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nSpam Fun"],
+  super_cap: ['Spam Fun: monthly allowance used', "Hi! Your Spam Fun Super plan used up this month's screening allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nSpam Fun"],
 }
 
 const STATUS = { trialing: 'trialing', active: 'active', past_due: 'past_due', unpaid: 'unpaid', canceled: 'canceled', incomplete: 'pending', incomplete_expired: 'canceled', paused: 'paused' }
@@ -170,7 +170,7 @@ export function createFscRouter({ stripe }) {
     const p = PLANS[plan]
     const s = await stripe.checkout.sessions.create({
       mode: 'subscription',
-      line_items: [{ quantity: 1, price_data: { currency: env('FSC_CURRENCY') || 'cad', unit_amount: Math.round(p.priceCad * 100), recurring: { interval: 'month' }, product_data: { name: 'FunSpamCover ' + p.name } } }],
+      line_items: [{ quantity: 1, price_data: { currency: env('FSC_CURRENCY') || 'cad', unit_amount: Math.round(p.priceCad * 100), recurring: { interval: 'month' }, product_data: { name: 'Spam Fun ' + p.name } } }],
       customer_email: email,
       client_reference_id: String(u.id),
       metadata: meta,
@@ -278,7 +278,7 @@ export function createFscRouter({ stripe }) {
     if (!ins.length) return true
     const u = (await sql('select email from fsc.users where id=$1', [uid]))[0]
     const when = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto', dateStyle: 'medium', timeStyle: 'short' }).format(new Date())
-    const sent = await mail(u?.email, 'FunSpamCover: new message from ' + m.name.slice(0, 40), `Hi! Someone in your contacts called and your assistant took a message.\n\nWhen: ${when} (Toronto time)\nName: ${m.name}\nCallback number: ${m.cb}\nReason: ${m.reason}\n\nThe assistant told them someone will get back to them.\n\nFunSpamCover`).catch(() => false)
+    const sent = await mail(u?.email, 'Spam Fun: new message from ' + m.name.slice(0, 40), `Hi! Someone in your contacts called and your assistant took a message.\n\nWhen: ${when} (Toronto time)\nName: ${m.name}\nCallback number: ${m.cb}\nReason: ${m.reason}\n\nThe assistant told them someone will get back to them.\n\nSpam Fun`).catch(() => false)
     await sql('update fsc.messages set emailed=$2 where id=$1', [ins[0].id, !!sent])
     return true
   }
@@ -394,7 +394,7 @@ export function createFscRouter({ stripe }) {
       if (recent.length >= 3) return res.status(429).json({ ok: false, error: 'Too many codes requested. Try again in an hour.' })
       const code = String(crypto.randomInt(100000, 1000000))
       await bput(key, { email, fp_hash: fph, code_hash: h('code:' + email + ':' + code), attempts: 0, exp: Date.now() + 15 * 60e3, sent: [...recent, Date.now()], email_verified: false })
-      const sent = await mail(email, 'Your FunSpamCover code: ' + code, 'Your FunSpamCover verification code is ' + code + '.\n\nEnter it on the FunSpamCover page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
+      const sent = await mail(email, 'Your Spam Fun code: ' + code, 'Your Spam Fun verification code is ' + code + '.\n\nEnter it on the Spam Fun page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
       if (!sent) return res.status(502).json({ ok: false, error: "We couldn't send the code. Check the email and try again." })
       return res.json({ ok: true })
     }
@@ -404,7 +404,7 @@ export function createFscRouter({ stripe }) {
     if (c.recent >= 3) return res.status(429).json({ ok: false, error: 'Too many codes requested. Try again in an hour.' })
     const code = String(crypto.randomInt(100000, 1000000))
     await sql('insert into fsc.tries(email, fp_hash, code_hash) values ($1,$2,$3)', [email, fph, h('code:' + email + ':' + code)])
-    const sent = await mail(email, 'Your FunSpamCover code: ' + code, 'Your FunSpamCover verification code is ' + code + '.\n\nEnter it on the FunSpamCover page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
+    const sent = await mail(email, 'Your Spam Fun code: ' + code, 'Your Spam Fun verification code is ' + code + '.\n\nEnter it on the Spam Fun page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
     if (!sent) return res.status(502).json({ ok: false, error: "We couldn't send the code. Check the email and try again." })
     res.json({ ok: true })
   }))

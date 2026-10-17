@@ -72,6 +72,7 @@ nav .links{display:flex;gap:22px;align-items:center;font-size:15px}nav .links a.
 .bub{background:#37312C;padding:9px 13px;border-radius:16px 16px 16px 4px;font-size:15px;line-height:1.4}
 .glen .bub{background:#fff;color:var(--ink);border-radius:16px 16px 4px 16px}
 .msg.speaking .bub{box-shadow:0 0 0 2px var(--acc)}
+.msg.note{max-width:100%;justify-content:center;font-size:12px;color:#8F877E;cursor:pointer}.msg.note .av,.msg.note .who{display:none}.msg.note .bub{background:none;padding:2px 0}
 .typing{display:none;margin:0 0 12px 36px}.typing.glen{margin:0 36px 12px auto;width:max-content}
 .typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#8F877E;animation:pulse 1s infinite}.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
 .ended{display:none;text-align:center;font-size:13px;color:#BDB5AB;padding:8px}
@@ -168,7 +169,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
 </head>
 <body>
 <div class="wrap">
-<nav><a class="logo" href="#top">FunSpam<span>Cover</span></a><div class="links"><a class="t" href="#setup">Setup</a><a class="t" href="#faq">FAQ</a><a class="btn ghost sm" href="#setup">Set it up free</a></div></nav>
+<nav><a class="logo" href="#top">Spam <span>Fun</span></a><div class="links"><a class="t" href="#setup">Setup</a><a class="t" href="#faq">FAQ</a><a class="btn ghost sm" href="#setup">Set it up free</a></div></nav>
 <div class="welcome" id="welcome" role="status"></div>
 
 <header class="hero" id="top">
@@ -178,7 +179,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
     <p class="lede" style="margin-top:18px">Forward the calls you don't answer. Our screener picks up and keeps spammers talking, so they waste their time, not yours.</p>
     <div class="tryhero" id="try">
       <a class="btn pri big" href="#setup" id="goSetup">Forward my spam calls free</a>
-      <p class="hook"><button type="button" class="link" id="heroPlay">▶ Hear it keep a warranty robocaller busy for 69 seconds</button></p>
+      <p class="hook"><button type="button" class="link" id="heroPlay">▶ Hear it keep a warranty robocaller busy for 75 seconds</button></p>
       <p class="fine">No signup, no card. One code, set once, about a minute.</p>
     </div>
     <div class="share" id="share"><button class="link" type="button" id="shareBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>Share with a friend</button>
@@ -192,11 +193,11 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
   <div class="phone" aria-label="Demo call player">
     <div class="ph-top"><span>Robocaller vs. our bot</span><div class="live off" id="live"><i></i><span id="liveTxt">Tap play</span></div></div>
     <div class="chat" id="chat" aria-live="polite">
-      <div class="hint" id="hint"><b>A sample call.</b><span>An extended-warranty robocall meets our bot.<br>Tap play. The chat follows along.</span></div>
+      <div class="hint" id="hint"><b>A real test call.</b><span>Our bot vs. a pretend warranty robocaller.<br>Tap play. The chat follows along.</span></div>
       <div class="typing" id="typing"><span></span><span></span><span></span></div>
-      <div class="ended" id="ended">Spammer hung up. That's 69 seconds they won't get back.</div>
+      <div class="ended" id="ended">Our bot hung up. That's 75 seconds they won't get back.</div>
     </div>
-    <div class="ctrl"><button class="play" id="play" aria-label="Play demo call">▶</button><div class="bar" id="bar"><i id="prog"></i></div><div class="time" id="time">0:00 / 1:09</div></div>
+    <div class="ctrl"><button class="play" id="play" aria-label="Play demo call">▶</button><div class="bar" id="bar"><i id="prog"></i></div><div class="time" id="time">0:00 / 1:15</div></div>
   </div>
   <audio id="audio" preload="metadata"></audio>
 </header>
@@ -222,7 +223,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
         <div class="xb g p">You need WePrize. Free giveaways, all in one place!</div>
         <div class="xb c">Did… did you just pitch me?</div>
       </div>
-      <div class="hang"><div><b>Caller hung up.</b><br><span>1:09 of their time. Zero of yours.</span></div></div>
+      <div class="hang"><div><b>Caller hung up.</b><br><span>1:15 of their time. Zero of yours.</span></div></div>
       <div class="xbar" id="xbar"></div>
     </div>
   </div>
@@ -284,13 +285,13 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
   const playDemo = () => audioReady.then(() => audio.play());
   setTimeout(() => { b64url('preview-male'); b64url('preview-female'); }, 1500);
   const chat = $('#chat'), typing = $('#typing'), ended = $('#ended');
-  let lines = [], hangupMs = 67500, els = [];
+  let lines = [], hangupMs = 75600, els = [];
   fetch('/spamfun/demo-call.json').then(r => r.json()).then(d => {
     lines = d.lines; hangupMs = (d.events || []).find(e => e.type === 'hangup')?.start_ms || d.duration_ms;
     els = lines.map((l) => {
       const glen = l.role === 'glen';
       const m = document.createElement('div');
-      m.className = 'msg ' + (glen ? 'glen' : 'caller');
+      m.className = 'msg ' + (glen ? 'glen' : l.role === 'note' ? 'note' : 'caller');
       m.innerHTML = `<div class="av ${glen ? 'g' : 'c'}">${glen ? 'B' : '?'}</div><div><div class="who">${glen ? 'Our bot' : 'Robocaller'}</div><div class="bub"></div></div>`;
       $('.bub', m).textContent = l.text;
       m.onclick = () => audioReady.then(() => { audio.currentTime = l.start_ms / 1000; audio.play(); });
@@ -301,7 +302,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
   });
   const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   function render() {
-    const t = audio.currentTime * 1000, dur = (audio.duration || 68.9);
+    const t = audio.currentTime * 1000, dur = (audio.duration || 75.7);
     let last = -1;
     els.forEach((m, i) => {
       const on = lines[i].start_ms <= t + 60;
@@ -333,7 +334,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
   audio.addEventListener('loadedmetadata', render);
   audio.addEventListener('seeked', render);
   function tick() { render(); if (!audio.paused) requestAnimationFrame(tick); }
-  $('#bar').onclick = (e) => { const r = e.currentTarget.getBoundingClientRect(); audio.currentTime = ((e.clientX - r.left) / r.width) * (audio.duration || 68.9); };
+  $('#bar').onclick = (e) => { const r = e.currentTarget.getBoundingClientRect(); audio.currentTime = ((e.clientX - r.left) / r.width) * (audio.duration || 75.7); };
 
   // ---------- setup picker ----------
   const tel = (c) => 'tel:' + c.replace(/#/g, '%23');
