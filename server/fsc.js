@@ -69,7 +69,7 @@ async function mail(to, subject, text) {
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: 'Bearer ' + env('RESEND_API_KEY'), 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env('RESEND_FROM'), to: [to], subject, text: clean(text) }),
+    body: JSON.stringify({ from: env('FSC_EMAIL_FROM') || 'FunSpamCover <hello@weprize.net>', to: [to], subject, text: clean(text) }),
   })
   return r.ok
 }
@@ -228,6 +228,11 @@ export function createFscRouter({ stripe }) {
       return res.json({ account: acct.id, name: acct.settings?.dashboard?.display_name || acct.business_profile?.name, country: acct.country, currency: acct.default_currency,
         mode: String(env('STRIPE_SECRET_KEY')).startsWith('sk_live') || String(env('STRIPE_SECRET_KEY')).startsWith('rk_live') ? 'live' : 'test',
         webhooks: hooks.data.map((h) => ({ url: h.url, events: h.enabled_events, status: h.status })) })
+    }
+    if (a === 'resend') {
+      const r = await fetch('https://api.resend.com/domains', { headers: { authorization: 'Bearer ' + env('RESEND_API_KEY') } })
+      const j = await r.json().catch(() => ({}))
+      return res.json({ status: r.status, domains: (j.data || []).map((x) => ({ name: x.name, status: x.status })) })
     }
     if (a === 'cancel') {
       const u = (await sql('select * from fsc.users where phone = $1', [normPhone(req.query.phone)]))[0]
