@@ -5,8 +5,8 @@
       "destination": "/api"
     },
     {
-      "source": "/funspamcover",
-      "destination": "/funspamcover/index.html"
+      "source": "/spamfun",
+      "destination": "/spamfun/index.html"
     },
     {
       "source": "/(.*)",
@@ -18,5 +18,17 @@
       "maxDuration": 30,
       "includeFiles": "{server/**,src/data/contests.json,data/**}"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/funspamcover",
+      "destination": "/spamfun",
+      "permanent": true
+    },
+    {
+      "source": "/funspamcover/:path*",
+      "destination": "/spamfun",
+      "permanent": true
+    }
+  ]
 }

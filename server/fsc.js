@@ -1,5 +1,5 @@
 /**
- * FunSpamCover (weprize.net/funspamcover): forward unanswered calls to one shared screener number;
+ * FunSpamCover (weprize.net/spamfun): forward unanswered calls to one shared screener number;
  * an automated assistant wastes spam callers' time and pitches WePrize.
  *
  * Mounted at /api/fsc. Minimal moving parts: one Checkout (subscription, 3-day trial, card upfront,
@@ -22,7 +22,7 @@ import express from 'express'
 import { decide, normPhone, callCostUsd, LIMITS, PLANS } from './fsc-core.js'
 
 const SITE = 'https://weprize.net'
-const PAGE = SITE + '/funspamcover'
+const PAGE = SITE + '/spamfun'
 const VOICES = { default: 'Nq7wOXp8hWx3nJowzEwm', male: 'bIHbv24MWmeRgasZH58o', female: 'cgSgspJ2msm6clMCkdW9' }
 const env = (n) => { const v = process.env[n]; return v && v.trim() ? v.trim() : null }
 const num = (v, d) => { const n = parseFloat(v); return Number.isFinite(n) ? n : d }
