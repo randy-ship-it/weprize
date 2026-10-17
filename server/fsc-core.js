@@ -1,0 +1,97 @@
+// FunSpamCover metering rules (pure, no I/O). Unit tests: scripts/fsc-core.test.mjs
+// All money is USD (Twilio + ElevenLabs bill in USD). Prices are CAD on Stripe; margins below assume
+// 1 USD = 1.40 CAD and Stripe 2.9% + C$0.30 per charge.
+
+export const RATES = {
+  twilioPerMin: 0.0085, // inbound local, billed per started minute
+  aiPerMin: 0.09, // voice AI, per minute of conversation
+};
+
+// Worst-case cost of ONE screened call: the voice agent hard-stops at 60s, Twilio rounds up to 2 min.
+export const MAX_SCREENED_CALL_USD = 2 * RATES.twilioPerMin + 1 * RATES.aiPerMin + 0.0025; // ~0.11
+// Cost of a short "say a line and hang up" call (no AI): 1 Twilio minute.
+export const SHORT_CALL_USD = RATES.twilioPerMin;
+
+export const PLANS = {
+  basic: { name: "Basic", priceCad: 0.99, capUsd: 0.25 },
+  premium: { name: "Premium", priceCad: 3.99, capUsd: 1.5 },
+  super: { name: "Super", priceCad: 6.99, capUsd: 3.0 },
+};
+
+export const LIMITS = {
+  userCallsPerDay: 30, // > this => auto-suspend + flag
+  callerCallsPerDay: 30, // same caller number > this => block + flag
+  burstWindowSec: 120,
+  userBurst: 6, // calls for one user inside the burst window
+  callerBurst: 4, // calls from one caller inside the burst window
+};
+
+export function stripeFeeCad(priceCad) {
+  return Math.round((priceCad * 0.029 + 0.3) * 100) / 100;
+}
+
+// Worst-case monthly margin per plan in CAD (cap fully used).
+export function worstMarginCad(plan, fx = 1.4) {
+  const p = PLANS[plan];
+  return Math.round((p.priceCad - stripeFeeCad(p.priceCad) - p.capUsd * fx) * 100) / 100;
+}
+
+export function callCostUsd(durationSec, usedAi) {
+  const d = Math.max(0, Number(durationSec) || 0);
+  const tw = Math.max(1, Math.ceil(d / 60)) * RATES.twilioPerMin;
+  const ai = usedAi ? (d / 60) * RATES.aiPerMin : 0;
+  return Math.round((tw + ai) * 100000) / 100000;
+}
+
+// Normalise a phone number or SIP Diversion header to +1XXXXXXXXXX (NANP only). Returns "" if not parseable.
+export function normPhone(raw) {
+  let s = String(raw ?? "").trim();
+  const sip = s.match(/sip:([^@;>]+)/i);
+  if (sip) s = sip[1];
+  const digits = s.replace(/[^0-9]/g, "");
+  if (digits.length === 10 && /^[2-9]/.test(digits)) return "+1" + digits;
+  if (digits.length === 11 && digits[0] === "1" && /^[2-9]/.test(digits[1])) return "+" + digits;
+  return "";
+}
+
+export const MSG = {
+  off: "Hi! This line's assistant is taking a nap. Bye for now!",
+  pool: "Hi! The assistant on this line is all booked up today. Bye for now!",
+  global: "Hi! The assistant on this line is all booked up today. Bye for now!",
+  blockedCaller: "Thanks for calling. This line can't take more calls from this number today. Goodbye!",
+  inactive: "Hi! The person you're calling isn't available. Please try again later. Bye!",
+  suspended: "Hi! The person you're calling isn't available. Please try again later. Bye!",
+  capped: "Hi! You've reached a voicemail-style message. The person you're calling isn't available right now. Bye!",
+};
+
+/**
+ * Decide what happens to an incoming forwarded call. Pure function: the caller supplies counters.
+ * s = {
+ *   off, globalTodayUsd, globalCapUsd, poolTodayUsd, poolCapUsd,
+ *   caller: { blocked, today, burst },
+ *   user: null | { status, plan, voice, monthUsd, today, burst },
+ * }
+ * Returns { action: "screen"|"say", reason, text?, voice?, suspendUser?, blockCaller?, upgradePrompt?, reserveUsd }
+ */
+export function decide(s) {
+  const say = (reason, text, extra = {}) => ({ action: "say", reason, text, reserveUsd: SHORT_CALL_USD, ...extra });
+  if (s.off) return say("off", MSG.off);
+  if (s.caller?.blocked) return say("caller_blocked", MSG.blockedCaller);
+  if ((s.caller?.today ?? 0) >= LIMITS.callerCallsPerDay || (s.caller?.burst ?? 0) >= LIMITS.callerBurst)
+    return say("caller_abuse", MSG.blockedCaller, { blockCaller: true });
+  if ((s.globalTodayUsd ?? 0) + MAX_SCREENED_CALL_USD > s.globalCapUsd) return say("global_cap", MSG.global);
+
+  const u = s.user;
+  if (u) {
+    if (u.status === "suspended") return say("user_suspended", MSG.suspended);
+    if (u.status !== "trialing" && u.status !== "active") return say("user_inactive", MSG.inactive);
+    if ((u.today ?? 0) >= LIMITS.userCallsPerDay || (u.burst ?? 0) >= LIMITS.userBurst)
+      return say("user_abuse", MSG.suspended, { suspendUser: true });
+    const plan = PLANS[u.plan] ?? PLANS.basic;
+    if ((u.monthUsd ?? 0) + MAX_SCREENED_CALL_USD > plan.capUsd)
+      return say("user_cap", MSG.capped, { upgradePrompt: u.plan === "super" ? "super_cap" : u.plan === "premium" ? "to_super" : "to_premium" });
+    return { action: "screen", reason: "user", voice: u.voice || "male", reserveUsd: MAX_SCREENED_CALL_USD };
+  }
+  if ((s.poolTodayUsd ?? 0) + MAX_SCREENED_CALL_USD > s.poolCapUsd) return say("pool_cap", MSG.pool);
+  return { action: "screen", reason: "pool", voice: "default", reserveUsd: MAX_SCREENED_CALL_USD };
+}

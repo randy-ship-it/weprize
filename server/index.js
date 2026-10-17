@@ -15,6 +15,7 @@ import { publicJob, publicOrder, humanNeedsYou } from './public.js'
 import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
 import { createQrRouter } from './qr/routes.js'
+import { createFscRouter } from './fsc.js'
 import { creditAttributionFromSession } from './qr/ledger.js'
 import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
 import {
@@ -35,12 +36,12 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || ''
 const stripe = stripeSecret ? new Stripe(stripeSecret) : null
 
 const app = express()
+const fscRouter = createFscRouter({ stripe })
 app.set('trust proxy', 1)
 
 /** Stripe webhook needs raw body BEFORE json parser. */
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   try {
-    const store = await getStore()
     let event
     if (stripe && webhookSecret) {
       const sig = req.headers['stripe-signature']
@@ -57,6 +58,13 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
       })
     }
 
+    // FunSpamCover events are handled separately (and never touch the contest-order store).
+    if (event.data?.object?.metadata?.app === 'fsc') {
+      await fscRouter.handleStripeEvent(event)
+      return res.json({ received: true })
+    }
+
+    const store = await getStore()
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object
       await fulfillCheckoutSession(store, session)
@@ -70,6 +78,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 })
 
 app.use(express.json({ limit: '1mb' }))
+app.use('/api/fsc', fscRouter)
 
 app.use('/api/qr', createQrRouter({ getStore, stripe }))
 app.use('/api', createConsumersPartnersRouter({ getStore }))
