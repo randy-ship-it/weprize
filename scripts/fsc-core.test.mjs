@@ -36,7 +36,8 @@ t("calls are trimmed so a user's month can never pass their cap", () => {
   }
   assert.equal(decide({ ...base, user: user({ plan: "basic", monthUsd: 0.07 }) }).upgradePrompt, "to_premium");
   assert.equal(decide({ ...base, user: user({ plan: "premium", monthUsd: 1.1 }) }).upgradePrompt, "to_super");
-  assert.equal(decide({ ...base, user: user({ plan: "super", monthUsd: 2.12 }) }).upgradePrompt, "super_cap");
+  assert.equal(decide({ ...base, user: user({ plan: "super", monthUsd: 2.12 }) }).upgradePrompt, "to_smart");
+  assert.equal(decide({ ...base, user: user({ plan: "smart", monthUsd: 3.14 }) }).upgradePrompt, "smart_cap");
 });
 t("trial users are screened; canceled/past_due/pending are not", () => {
   assert.equal(decide({ ...base, user: user({ status: "trialing" }) }).action, "screen");

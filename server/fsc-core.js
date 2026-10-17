@@ -21,7 +21,8 @@ const capFrom = (priceCad) => Math.floor(((priceCad * (1 - TARGET_GM) - stripeFe
 export const PLANS = {
   basic: { name: "Basic", priceCad: 0.99, capUsd: capFrom(0.99) }, // ~0.117
   premium: { name: "Premium", priceCad: 3.99, capUsd: capFrom(3.99) }, // ~1.125
-  super: { name: "Super", priceCad: 6.99, capUsd: capFrom(6.99) }, // ~2.139
+  super: { name: "Super", priceCad: 6.99, capUsd: capFrom(6.99) }, // ~2.132
+  smart: { name: "Smart", priceCad: 9.99, capUsd: capFrom(9.99), contacts: true }, // ~3.146; contact-aware message taking
 };
 
 // Seconds of AI talk we can afford with `budgetUsd` left (Twilio leg ~= talk + 10s, AI billed on the whole leg).
@@ -108,7 +109,7 @@ export function decide(s) {
     const plan = PLANS[u.plan] ?? PLANS.basic;
     const talk = affordableTalkSec(plan.capUsd - (u.monthUsd ?? 0));
     if (!talk)
-      return say("user_cap", MSG.capped, { upgradePrompt: u.plan === "super" ? "super_cap" : u.plan === "premium" ? "to_super" : "to_premium" });
+      return say("user_cap", MSG.capped, { upgradePrompt: u.plan === "smart" ? "smart_cap" : u.plan === "super" ? "to_smart" : u.plan === "premium" ? "to_super" : "to_premium" });
     return { action: "screen", reason: "user", voice: u.voice || "male", maxSec: talk, reserveUsd: worstCostUsd(talk) };
   }
   if ((s.poolTodayUsd ?? 0) + MAX_SCREENED_CALL_USD > s.poolCapUsd) return say("pool_cap", MSG.pool);

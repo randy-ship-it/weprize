@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FunSpamCover: let an AI assistant waste spammers' time | WePrize</title>
+<title>FunSpamCover: let spammers waste their own time | WePrize</title>
 <meta name="description" content="Forward unanswered calls to one number. A cheerful automated assistant asks spam callers delightfully pointless questions, then pitches them WePrize. 3-day free trial, then 99¢ a month.">
-<meta property="og:title" content="FunSpamCover: let an AI assistant waste spammers' time">
+<meta property="og:title" content="This bot wastes spam callers' time so you don't have to">
 <meta property="og:description" content="Forward unanswered calls. Our automated assistant keeps spammers busy with pointless questions, then pitches WePrize. Try it free for 3 days.">
 <meta property="og:url" content="https://weprize.net/spamfun">
 <meta property="og:type" content="website">
@@ -13,259 +13,293 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="This bot wastes spam callers' time so you don't have to">
 <meta name="twitter:image" content="https://weprize.net/spamfun/og.png">
-<meta name="theme-color" content="#0d9488">
+<meta name="theme-color" content="#FF4A1C">
 <link rel="icon" href="/favicon.svg">
 <style>
-:root{--teal:#0d9488;--teal2:#14b8a6;--navy:#123352;--amber:#f59e0b;--bg:#f4f8fb;--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--r:18px}
+:root{--bg:#FAF7F2;--ink:#14110F;--mute:#6B645C;--line:#E7E0D6;--card:#fff;--acc:#FF4A1C;--acc2:#FFE6DD;--r:14px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
-a{color:var(--teal)}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;max-width:1120px;margin:0 auto}
-.brand{display:flex;gap:10px;align-items:center;font-weight:800;color:var(--navy);text-decoration:none;font-size:18px}
-.brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--amber));display:grid;place-items:center;color:#fff;font-size:16px}
-.brand small{font-weight:600;color:var(--mut);font-size:13px}
-.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;transition:transform .12s,box-shadow .12s}
-.btn:hover{transform:translateY(-1px)}
-.btn.pri{background:var(--teal);color:#fff;box-shadow:0 8px 22px rgba(13,148,136,.28)}
-.btn.amb{background:var(--amber);color:#1f1300}
-.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
-.btn.sm{padding:8px 14px;font-size:14px}
-.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:28px 0 56px}
-.pill{display:inline-block;background:#fff7e6;color:#92400e;border:1px solid #fde3a7;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
-h1{font-size:clamp(34px,5vw,56px);line-height:1.04;margin:14px 0 14px;color:var(--navy);letter-spacing:-.02em}
-h1 em{font-style:normal;background:linear-gradient(90deg,var(--teal),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{font-size:19px;color:var(--mut);max-width:560px}
-.ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
-.fine{font-size:13px;color:var(--mut)}
-/* demo phone */
-.phone{background:var(--navy);border-radius:34px;padding:14px;box-shadow:0 30px 60px rgba(18,51,82,.28);max-width:440px;margin-left:auto;width:100%}
-.screen{background:#fff;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;height:520px}
-.callbar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:#f8fafc}
-.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:18px;flex:none}
-.av.c{background:#fee2e2}.av.g{background:#ccfbf1}
-.callbar b{display:block;font-size:14px}.callbar span{font-size:12px;color:var(--mut)}
-.live{margin-left:auto;font-size:12px;font-weight:700;color:#b91c1c;display:flex;align-items:center;gap:6px}
-.live i{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite}
-.live.off{color:var(--mut)}.live.off i{background:#94a3b8;animation:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-style:italic;font-weight:500}
+h1,h2,h3{letter-spacing:-.025em;line-height:1.05;margin:0}
+h1{font-size:clamp(40px,6.4vw,76px);font-weight:800}
+h2{font-size:clamp(30px,4vw,46px);font-weight:800;margin-bottom:14px}
+h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+.lede{font-size:clamp(18px,2vw,21px);color:var(--mute);max-width:34ch}
+.fine{font-size:14px;color:var(--mute)}
+section{padding:96px 0}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.logo{font-weight:800;letter-spacing:-.02em;font-size:19px;text-decoration:none}.logo span{color:var(--acc)}
+nav .links{display:flex;gap:22px;align-items:center;font-size:15px}nav .links a.t{text-decoration:none;color:var(--mute)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:15px 26px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s,background .15s;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.pri{background:var(--acc);color:#fff;box-shadow:0 6px 0 -2px #C93410}.pri:hover{transform:translateY(-2px)}
+.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}.ghost:hover{background:var(--ink);color:#fff}
+.sm{padding:9px 16px;font-size:14px}.big{padding:19px 34px;font-size:19px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:40px 0 30px}
+.hero h1 .serif{color:var(--acc)}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 10px}
+.steps{list-style:none;padding:0;margin:56px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
+.steps li{padding:18px 18px 0 0}
+.steps .n{font-size:13px;font-weight:800;color:var(--acc)}
+.steps svg{display:block;width:40px;height:40px;margin:10px 0 8px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.steps b{display:block;font-size:18px;letter-spacing:-.01em}
+.steps span{font-size:14px;color:var(--mute)}
+/* player */
+.phone{background:var(--ink);color:#fff;border-radius:30px;padding:16px;box-shadow:0 30px 60px -30px rgba(20,17,15,.55)}
+.ph-top{display:flex;justify-content:space-between;align-items:center;padding:4px 8px 12px;font-size:13px;color:#BDB5AB}
+.live{display:flex;gap:7px;align-items:center}.live i{width:8px;height:8px;border-radius:50%;background:#3DDC84;animation:pulse 1.2s infinite}.live.off i{background:#6B645C;animation:none}
 @keyframes pulse{50%{opacity:.3}}
-.chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
-.msg{display:none;gap:8px;max-width:88%;cursor:pointer}
-.msg.show{display:flex;animation:pop .28s ease-out}
+.chat{background:#211D1A;border-radius:20px;height:380px;overflow-y:auto;padding:16px 12px;position:relative;scroll-behavior:smooth}
+.hint{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:6px;padding:20px;color:#BDB5AB}
+.hint b{color:#fff;font-size:20px}
+.msg{display:none;gap:8px;margin-bottom:12px;max-width:88%;cursor:pointer}
+.msg.show{display:flex;animation:pop .35s ease}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}}
-.msg.glen{align-self:flex-end;flex-direction:row-reverse}
-.bub{padding:9px 13px;border-radius:16px;font-size:14.5px;background:#f1f5f9}
-.msg.glen .bub{background:var(--teal);color:#fff;border-bottom-right-radius:5px}
-.msg.caller .bub{border-bottom-left-radius:5px}
-.msg.speaking .bub{box-shadow:0 0 0 3px rgba(245,158,11,.55)}
-.who{font-size:11px;color:var(--mut);margin:0 4px 2px}
-.msg.glen .who{text-align:right}
-.typing{align-self:flex-start;background:#f1f5f9;border-radius:16px;padding:10px 14px;display:none}
-.typing.glen{align-self:flex-end;background:#ccfbf1}
-.typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#94a3b8;animation:b 1s infinite}
-.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
-@keyframes b{50%{transform:translateY(-4px)}}
-.hint{margin:auto;text-align:center;color:var(--mut);display:grid;gap:4px;font-size:14px}.hint b{color:var(--navy);font-size:16px}
-.ended{align-self:center;font-size:12px;color:var(--mut);background:#f1f5f9;border-radius:999px;padding:4px 12px;display:none}
-.controls{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
-.play{width:46px;height:46px;border-radius:50%;border:0;background:var(--amber);font-size:18px;cursor:pointer;flex:none}
-.bar{flex:1;height:6px;background:#e2e8f0;border-radius:6px;cursor:pointer;position:relative}
-.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--teal);border-radius:6px;width:0}
-.time{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;width:74px;text-align:right}
-.demo-note{font-size:12px;color:#cbd5e1;text-align:center;margin-top:8px}
-section{padding:56px 0}
-h2{font-size:clamp(26px,3.4vw,38px);color:var(--navy);margin:0 0 8px;letter-spacing:-.01em}
-.sub{color:var(--mut);margin:0 0 26px;font-size:17px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px}
-.card h3{margin:6px 0;color:var(--navy)}
-.step{width:34px;height:34px;border-radius:10px;background:#ccfbf1;color:var(--teal);font-weight:800;display:grid;place-items:center}
-.toggle{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px;gap:4px}
-.toggle button{border:0;background:transparent;border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px;cursor:pointer;color:var(--mut)}
-.toggle button.on{background:var(--navy);color:#fff}
-.voicebox{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;color:var(--navy)}
-.tabs button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-.code{display:flex;align-items:center;gap:10px;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;margin:8px 0;flex-wrap:wrap}
-.code b{color:#5eead4;letter-spacing:.03em}
-.code .btn{margin-left:auto}
-.setup{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
-.setup ol{padding-left:20px;margin:6px 0}.setup li{margin:6px 0}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.plan{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;position:relative}
-.plan.pop{border-color:var(--teal)}
-.plan .tag{position:absolute;top:-12px;left:20px;background:var(--amber);color:#1f1300;font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px}
-.price{font-size:42px;font-weight:800;color:var(--navy)}.price small{font-size:15px;color:var(--mut);font-weight:600}
-.plan ul{padding-left:18px;color:var(--mut);flex:1}.plan li{margin:5px 0}
-form.signup{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:14px;max-width:620px}
-label{font-weight:700;font-size:14px;color:var(--navy);display:grid;gap:6px}
-input,select{font:inherit;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;background:#fff}
-input:focus,select:focus{outline:3px solid rgba(13,148,136,.25);border-color:var(--teal)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.err{color:#b91c1c;font-weight:600;min-height:1.2em;margin:0}
-.hp{position:absolute;left:-9999px}
-.welcome{display:none;background:linear-gradient(135deg,#ccfbf1,#fff7e6);border:1px solid #99f6e4;border-radius:var(--r);padding:22px;margin:10px 0 0}
-details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:10px 0}
-summary{font-weight:700;cursor:pointer;color:var(--navy)}
-footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
-.num{font-weight:800;color:var(--navy);white-space:nowrap}
-.xs{display:none}
-@media (max-width:520px){.lg{display:none}.xs{display:inline}.brand small{display:none}}
-@media (max-width:880px){.hero>div:last-child{order:-1}.hero{padding-top:8px}.hero,.setup{grid-template-columns:1fr}.phone{margin:0 auto}.grid3,.plans{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.screen{height:470px}}
+.msg.glen{margin-left:auto;flex-direction:row-reverse}
+.av{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800}
+.av.g{background:var(--acc)}.av.c{background:#4A433D}
+.who{font-size:11px;color:#8F877E;margin:0 4px 3px}.glen .who{text-align:right}
+.bub{background:#37312C;padding:9px 13px;border-radius:16px 16px 16px 4px;font-size:15px;line-height:1.4}
+.glen .bub{background:#fff;color:var(--ink);border-radius:16px 16px 4px 16px}
+.msg.speaking .bub{box-shadow:0 0 0 2px var(--acc)}
+.typing{display:none;margin:0 0 12px 36px}.typing.glen{margin:0 36px 12px auto;width:max-content}
+.typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#8F877E;animation:pulse 1s infinite}.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+.ended{display:none;text-align:center;font-size:13px;color:#BDB5AB;padding:8px}
+.ctrl{display:flex;align-items:center;gap:12px;padding:14px 6px 4px}
+.play{width:52px;height:52px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:18px;cursor:pointer;flex:none}
+.bar{flex:1;height:6px;background:#3A3430;border-radius:3px;cursor:pointer}.bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:3px}
+.time{font-size:12px;color:#BDB5AB;font-variant-numeric:tabular-nums}
+/* explainer */
+.xp{background:var(--ink);color:#fff;border-radius:28px;padding:56px 40px;display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:center}
+.xp h2{color:#fff}.xp .lede{color:#BDB5AB}
+.stage{position:relative;height:340px;background:#211D1A;border-radius:20px;overflow:hidden}
+.stage .dev{position:absolute;top:50px;width:110px;height:200px;border:3px solid #fff;border-radius:22px;display:grid;place-items:center;text-align:center;font-size:12px;color:#BDB5AB;transition:all .5s}
+.d1{left:24px}.d2{right:24px;opacity:.25}
+.dev .ic{font-size:13px;font-weight:800;color:#fff}
+.ringing .d1{animation:ring .18s 10 alternate}
+@keyframes ring{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.arrow{position:absolute;left:150px;right:150px;top:140px;height:3px;background:repeating-linear-gradient(90deg,var(--acc) 0 10px,transparent 10px 18px);transform:scaleX(0);transform-origin:left;transition:transform .9s ease}
+.arrow:after{content:"";position:absolute;right:-2px;top:-6px;border:7px solid transparent;border-left:10px solid var(--acc)}
+.arrow em{position:absolute;top:-28px;left:0;right:0;text-align:center;font-style:normal;font-size:12px;color:#BDB5AB}
+.fwd .arrow{transform:scaleX(1)}.fwd .d2{opacity:1;border-color:var(--acc)}
+.bubs{position:absolute;inset:16px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;pointer-events:none}
+.xb{max-width:78%;padding:9px 13px;border-radius:16px;font-size:14px;line-height:1.35;opacity:0;transform:translateY(10px);transition:all .4s}
+.xb.c{background:#37312C;border-bottom-left-radius:4px}.xb.g{background:#fff;color:var(--ink);margin-left:auto;border-bottom-right-radius:4px}
+.xb.p{background:var(--acc);color:#fff;font-weight:700}
+.xb.on{opacity:1;transform:none}
+.chatting .dev,.chatting .arrow{opacity:0}
+.hang{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:rgba(20,17,15,.92);opacity:0;transition:opacity .5s;pointer-events:none}
+.hang b{font-size:26px;letter-spacing:-.02em}.hang span{color:#BDB5AB;font-size:14px}
+.over .hang{opacity:1}
+.xbar{position:absolute;left:0;bottom:0;height:3px;background:var(--acc);width:0}
+.replay{margin-top:18px}
+/* try */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:40px;max-width:640px}
+form .row{display:flex;gap:10px;flex-wrap:wrap}
+input,select{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);-webkit-appearance:none;appearance:none}
+select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2314110F' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 16px center;padding-right:40px}
+input:focus,select:focus{outline:0;border-color:var(--ink)}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:14px}label input,label select{margin-top:6px}
+.row label{flex:1 1 220px;margin:0}
+.err{color:#C93410;font-weight:600;min-height:1em;margin-top:10px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px}
+.done ol{padding-left:20px}.done li{margin-bottom:6px}
+/* setup */
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:640px;margin:26px 0}
+.result{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:32px;max-width:760px}
+.result ol{padding-left:22px;margin:0}.result li{margin-bottom:12px}
+.code{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg);border:2px dashed var(--line);border-radius:14px;padding:12px 14px;margin:8px 0 4px}
+.code b{font:700 22px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;margin-right:auto}
+.num{font-weight:700;white-space:nowrap}
+/* pricing */
+.cols{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid var(--ink);border-radius:24px;overflow:hidden;background:var(--card);margin-top:34px}
+@media (max-width:1060px) and (min-width:881px){.cols{grid-template-columns:repeat(2,1fr)}.col:nth-child(3){border-left:0}.col:nth-child(n+3){border-top:2px solid var(--ink)}}
+.col{padding:34px 28px;border-left:2px solid var(--ink);display:flex;flex-direction:column}.col:first-child{border-left:0}
+.col.hot{background:var(--acc2)}
+.price{font-size:52px;font-weight:800;letter-spacing:-.04em;margin:10px 0 2px}.price small{font-size:16px;font-weight:600;color:var(--mute);letter-spacing:0}
+.col ul{list-style:none;padding:0;margin:18px 0 26px;font-size:15px}.col li{padding:7px 0;border-top:1px solid var(--line)}
+.col .btn{margin-top:auto}
+.tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--acc)}
+.consent{display:flex;gap:12px;align-items:flex-start;font-weight:500;font-size:14px;color:var(--mute)}.consent input{width:22px;height:22px;flex:none;margin:0;-webkit-appearance:checkbox;appearance:auto;accent-color:var(--acc)}
+.voicepick{display:flex;gap:8px;margin-top:6px}
+.faq{max-width:760px}details{border-top:1px solid var(--line);padding:18px 0}details summary{font-weight:700;cursor:pointer;list-style:none;font-size:18px}details summary::-webkit-details-marker{display:none}details summary:after{content:"+";float:right;color:var(--acc);font-weight:800}details[open] summary:after{content:"–"}details p{margin:10px 0 0;color:var(--mute)}
+.why{font-size:clamp(18px,2vw,22px);max-width:62ch;border-left:4px solid var(--acc);padding-left:18px;margin:0}
+.rg{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.rg h3{font-size:15px;margin-bottom:6px;color:var(--ink)}.rg a{margin-right:18px;display:inline-block;margin-bottom:6px}
+.smartbox{margin-top:18px;padding-top:16px;border-top:1px solid #3A3430}.smartbox input[type=text]{max-width:220px;padding:9px 12px;margin:0}.smartbox label{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-weight:500}
+.share{margin-top:18px}.share .btn svg{margin-right:2px}
+.share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.share-row[hidden]{display:none}
+.share-row a,.share-row button{font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;cursor:pointer}
+.share-row a:hover,.share-row button:hover{border-color:var(--acc);color:var(--acc)}
+.fab{display:none;position:fixed;right:16px;bottom:16px;z-index:40;width:52px;height:52px;border-radius:50%;border:0;background:var(--acc);color:#fff;box-shadow:0 8px 20px -6px rgba(20,17,15,.45);place-items:center;cursor:pointer}
+@media (pointer:coarse) and (max-width:880px){.fab{display:grid}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:50}.toast.on{opacity:1;transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color:var(--mute)}
+.welcome{display:none;background:var(--ink);color:#fff;border-radius:20px;padding:24px 26px;margin:10px 0 0}.welcome .fine{color:#BDB5AB}
+.welcome .btn.ghost{color:#fff;box-shadow:inset 0 0 0 2px #fff}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}.reveal.in{opacity:1;transform:none}
+@media (max-width:880px){
+ section{padding:64px 0}
+ .hero{grid-template-columns:1fr;gap:28px;padding-top:16px}
+ .steps{margin-top:34px;grid-template-columns:1fr;border-top:0}
+ .steps li{display:grid;grid-template-columns:44px 1fr;column-gap:12px;padding:12px 0;border-top:1px solid var(--line);align-items:center}
+ .steps svg{grid-row:span 2;margin:0;width:34px;height:34px}.steps .n{display:none}
+ .chat{height:330px}
+ .xp{grid-template-columns:1fr;padding:34px 18px;border-radius:22px}
+ .stage{height:320px}.stage .dev{width:84px;height:156px}.arrow{left:116px;right:116px}
+ .cols{grid-template-columns:1fr}.col{border-left:0;border-top:2px solid var(--ink)}.col:first-child{border-top:0}
+ .pick{grid-template-columns:1fr}.panel,.result{padding:24px}
+ nav .links a.t{display:none}
+ .ctas .big{padding:15px 22px;font-size:17px}
+ .cols{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<header class="top">
-  <a class="brand" href="/"><span class="dot">✦</span> WePrize <small>/ FunSpamCover</small></a>
-  <a class="btn pri sm" href="#signup"><span class="lg">Try free for 3 days</span><span class="xs">Try free</span></a>
-</header>
+<div class="wrap">
+<nav><a class="logo" href="#top">FunSpam<span>Cover</span></a><div class="links"><a class="t" href="#setup">Setup</a><a class="t" href="#pricing">Pricing</a><a class="btn pri sm" href="#try">Try it free</a></div></nav>
+<div class="welcome" id="welcome" role="status"></div>
 
-<main class="wrap">
-  <div class="welcome" id="welcome" role="status"></div>
-
-  <div class="hero">
-    <div>
-      <span class="pill">📵 Spam calls, but make it fun</span>
-      <h1>Let an AI assistant <em>waste spammers' time</em> for 99¢.</h1>
-      <p class="lead">Forward your unanswered calls to one number. <b>Glen</b>, a cheerful automated assistant, picks up, asks spam callers delightfully pointless questions, then pitches them WePrize. Everyone else gets about 30 friendly seconds and a "gotta go!"</p>
-      <div class="ctas">
-        <a class="btn pri" href="#try">Try it free, no card</a>
-        <button class="btn ghost" id="heroPlay" type="button">▶ Hear a real-sounding demo</button>
-      </div>
-      <p class="fine">Free test call with just your email. Plans from $0.99/month CAD after a 3-day trial. Glen always says it's an automated assistant, and calls may be recorded.</p>
+<header class="hero" id="top">
+  <div>
+    <div class="kicker">A WePrize community project · We take spam seriously</div>
+    <h1>Let spammers waste <span class="serif">their</span> time, not yours.</h1>
+    <p class="lede" style="margin-top:22px">We're building Spam Fun so our members can beat spam calls. Forward the calls you don't pick up, and Glen, our automated assistant, keeps robocallers busy asking whether cars dream.</p>
+    <div class="ctas"><a class="btn pri big" href="#try">Try it free</a><button class="btn ghost big" id="heroPlay" type="button">▶ Hear a call</button></div>
+    <p class="fine">No card for the free try. Plans from 99¢ a month.</p>
+    <div class="share" id="share"><button class="btn ghost sm" type="button" id="shareBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>Share with a friend</button>
+      <div class="share-row" id="shareRow" hidden><button type="button" data-sh="copy">Copy link</button><a data-sh="sms">Text</a><a data-sh="wa" target="_blank" rel="noopener">WhatsApp</a><a data-sh="x" target="_blank" rel="noopener">X</a><a data-sh="fb" target="_blank" rel="noopener">Facebook</a><a data-sh="mail">Email</a></div></div>
+    <ol class="steps">
+      <li><svg viewBox="0 0 40 40"><rect x="11" y="4" width="18" height="32" rx="4"/><path d="M18 31h4"/><path d="M5 13a10 10 0 0 1 0 14M35 13a10 10 0 0 0 0 14"/></svg><div><div class="n">01</div><b>Spam calls you</b><span>You don't answer. Obviously.</span></div></li>
+      <li><svg viewBox="0 0 40 40"><path d="M6 20h24"/><path d="M23 12l8 8-8 8"/><circle cx="6" cy="20" r="2"/></svg><div><div class="n">02</div><b>Your phone forwards it</b><span>One code, set once.</span></div></li>
+      <li><svg viewBox="0 0 40 40"><path d="M8 10h24a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H18l-7 6v-6H8a3 3 0 0 1-3-3V13a3 3 0 0 1 3-3z"/><path d="M13 19h.01M20 19h.01M27 19h.01" stroke-width="3"/></svg><div><div class="n">03</div><b>Our bot wastes their time</b><span>A full minute of nonsense.</span></div></li>
+    </ol>
+  </div>
+  <div class="phone" aria-label="Demo call player">
+    <div class="ph-top"><span>Robocaller vs. Glen</span><div class="live off" id="live"><i></i><span id="liveTxt">Tap play</span></div></div>
+    <div class="chat" id="chat" aria-live="polite">
+      <div class="hint" id="hint"><b>A real recording.</b><span>An extended-warranty robocall meets Glen.<br>Tap play. The chat follows along.</span></div>
+      <div class="typing" id="typing"><span></span><span></span><span></span></div>
+      <div class="ended" id="ended">Spammer hung up. That's 69 seconds they won't get back.</div>
     </div>
+    <div class="ctrl"><button class="play" id="play" aria-label="Play demo call">▶</button><div class="bar" id="bar"><i id="prog"></i></div><div class="time" id="time">0:00 / 1:09</div></div>
+  </div>
+  <audio id="audio" preload="metadata"></audio>
+</header>
+</div>
 
+<section id="explainer"><div class="wrap">
+  <div class="xp reveal">
     <div>
-      <div class="phone">
-        <div class="screen">
-          <div class="callbar">
-            <div class="av c">📞</div>
-            <div><b>Unknown caller</b><span>"Extended warranty" robocall</span></div>
-            <div class="live off" id="live"><i></i><span id="liveTxt">Tap play</span></div>
-          </div>
-          <div class="chat" id="chat" aria-live="polite">
-            <div class="hint" id="hint"><div style="font-size:40px">🤖📞</div><b>A robocaller vs. Glen</b><span>Tap ▶ to listen. The chat follows along.</span></div>
-            <div class="typing" id="typing"><span></span><span></span><span></span></div>
-            <div class="ended" id="ended">📵 Spammer hung up · 1 min of their time, gone</div>
-          </div>
-          <div class="controls">
-            <button class="play" id="play" aria-label="Play demo call">▶</button>
-            <div class="bar" id="bar"><i id="prog"></i></div>
-            <div class="time" id="time">0:00 / 1:09</div>
-          </div>
-        </div>
+      <div class="kicker">The 18-second version</div>
+      <h2>Ring. Forward. Chat. <span class="serif">Click.</span></h2>
+      <p class="lede">Your phone stays quiet. Glen picks up, asks a few delightfully pointless questions, plugs WePrize, and the spammer hangs up on themselves.</p>
+      <button class="btn ghost sm replay" id="replay" type="button" style="color:#fff;box-shadow:inset 0 0 0 2px #fff">↻ Replay</button>
+    </div>
+    <div class="stage" id="stage" aria-label="Animated explainer: a spam call is forwarded to the assistant, which chats and pitches WePrize until the caller hangs up">
+      <div class="dev d1"><div><div class="ic">Unknown</div>calling…</div></div>
+      <div class="arrow"><em>forwarded</em></div>
+      <div class="dev d2"><div><div class="ic">Glen</div>automated<br>assistant</div></div>
+      <div class="bubs">
+        <div class="xb c">We've been trying to reach you about your car's extended warranty!</div>
+        <div class="xb g">Ooh. Quick question first: do you think cars dream?</div>
+        <div class="xb c">Sir, can I just get your full name?</div>
+        <div class="xb g">Today feels like a Barnaby kind of afternoon.</div>
+        <div class="xb g p">You need WePrize. Free giveaways, all in one place!</div>
+        <div class="xb c">Did… did you just pitch me?</div>
       </div>
-      <p class="demo-note">Simulated demo call. No real people or numbers.</p>
-      <audio id="audio" preload="metadata"></audio>
+      <div class="hang"><div><b>Caller hung up.</b><br><span>1:09 of their time. Zero of yours.</span></div></div>
+      <div class="xbar" id="xbar"></div>
     </div>
   </div>
+</div></section>
 
-  <section id="try" style="padding-top:8px">
-    <div class="card" style="max-width:720px">
-      <h2 style="font-size:28px">Try it free: call Glen yourself</h2>
-      <div id="tryA"><p class="sub" style="margin-bottom:14px">Verify your email and we'll unlock a test call. No card. One free try per device.</p>
-        <form id="tryForm" class="row2" novalidate style="align-items:end"><label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><button class="btn pri" type="submit">Email me a code</button><input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true"></form></div>
-      <div id="tryB" style="display:none"><p class="sub" style="margin-bottom:14px">We sent a 6-digit code to <b id="tryEmail"></b>.</p>
-        <form id="codeForm" class="row2" novalidate style="align-items:end"><label>Code<input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required></label><button class="btn pri" type="submit">Unlock my test call</button></form></div>
-      <div id="tryC" style="display:none">
-        <ol style="font-size:17px;padding-left:22px;margin:4px 0 16px"><li>Tap the big button to call Glen.</li><li>Pretend you're a spammer: "Hi, this is about your car's extended warranty…"</li><li>Enjoy ~60 seconds of pointless questions and a WePrize pitch.</li></ol>
-        <a class="btn amb" style="font-size:22px;padding:18px 30px" href="tel:+12893675302">📞 Call it now</a>
-        <p class="fine" style="margin-top:10px">+1 289-367-5302 · Calls may be recorded by an automated assistant. Liked it? <a href="#signup">Start the 3-day trial</a> and forward your own spam.</p></div>
-      <p class="err" id="tryErr"></p>
+<section id="why" style="padding-top:0;padding-bottom:40px"><div class="wrap"><p class="why reveal"><b>Why is WePrize doing this?</b> WePrize helps you enter legit free contests. We're the opposite of spam: no robocalls, no mass texts. So we built something to fight back.</p></div></section>
+
+<section id="try" style="padding-top:20px"><div class="wrap">
+  <div class="kicker">Free try</div>
+  <h2>Call Glen yourself.</h2>
+  <p class="lede" style="margin-bottom:26px">Pretend you're selling duct cleaning. Verify your email and we'll unlock one test call. No card.</p>
+  <div class="panel reveal">
+    <div id="tryA"><form id="tryForm" class="row" novalidate><label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><button class="btn pri" type="submit" style="align-self:flex-end">Email me a code</button><input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true"></form><p class="fine" style="margin-top:12px">One free try per device.</p></div>
+    <div id="tryB" style="display:none"><p>We sent a 6-digit code to <b id="tryEmail"></b>.</p><form id="codeForm" class="row" novalidate><label>Code<input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required></label><button class="btn pri" type="submit" style="align-self:flex-end">Unlock my test call</button></form></div>
+    <div id="tryC" class="done" style="display:none">
+      <h3 style="margin-bottom:10px">You're unlocked.</h3>
+      <ol><li>Tap the button below.</li><li>Play the spammer. Ask about their warranty.</li><li>Enjoy being on the other side for once.</li></ol>
+      <a class="btn pri big" href="tel:+12893675302" style="margin-top:8px">Call it now</a>
+      <p class="fine" style="margin-top:12px">Calls may be recorded by an automated assistant.</p>
     </div>
-  </section>
+    <p class="err" id="tryErr"></p>
+  </div>
+</div></section>
 
-  <section id="how">
-    <h2>How it works</h2>
-    <p class="sub">Three minutes to set up. Zero minutes talking to "the warranty department."</p>
-    <div class="grid3">
-      <div class="card"><div class="step">1</div><h3>Silence unknown callers</h3><p>Your contacts still ring. Everyone else skips your phone and goes to forwarding instead of voicemail.</p></div>
-      <div class="card"><div class="step">2</div><h3>Forward to our number</h3><p>Dial one carrier code to forward unanswered calls to <span class="num">+1 289-367-5302</span>.</p></div>
-      <div class="card"><div class="step">3</div><h3>Glen takes it from here</h3><p>Spammers get curious questions and a WePrize pitch. Real people get a short, friendly chat and a "gotta go!" Glen never shares your info.</p></div>
-    </div>
-  </section>
+<section id="setup"><div class="wrap">
+  <div class="kicker">Setup, about a minute</div>
+  <h2>Pick your carrier and phone.</h2>
+  <p class="lede">We'll show you the exact code. Dial it once and you're done.</p>
+  <div class="pick">
+    <label>Carrier<select id="carrier"><option>Telus</option><option>Rogers</option><option>Bell</option><option>Freedom</option><option>Fido</option><option value="Koodo">Koodo / Public Mobile</option></select></label>
+    <label>Phone<select id="os"><option value="ios">iPhone</option><option value="android">Android</option></select></label>
+  </div>
+  <div class="result reveal" id="result" aria-live="polite"></div>
+</div></section>
 
-  <section id="voice">
-    <h2>Pick your assistant's voice</h2>
-    <p class="sub">Same honest, chatty automated assistant. Two voices. Switch anytime.</p>
-    <div class="voicebox">
-      <div class="toggle" role="tablist" aria-label="Assistant voice">
-        <button type="button" class="on" data-voice="male" role="tab" aria-selected="true">🧔 Glen (male)</button>
-        <button type="button" data-voice="female" role="tab" aria-selected="false">👩 Jess (female)</button>
-      </div>
-      <button class="btn amb" type="button" id="previewBtn">▶ Preview Glen</button>
-      <audio id="preview" preload="none"></audio>
-    </div>
-  </section>
+<section id="pricing" style="padding-top:20px"><div class="wrap">
+  <div class="kicker">Pricing</div>
+  <h2>Cheaper than one bad phone call.</h2>
+  <p class="lede">Every paid plan starts with 3 free days. Cancel anytime.</p>
+  <div class="cols reveal">
+    <div class="col"><h3>Basic</h3><div class="price">99¢<small>/mo</small></div><span class="fine">For the occasional pest.</span><ul><li>About 1 full call a month</li><li>Glen or Jess voice</li><li>3-day free trial</li></ul><button class="btn ghost" type="button" data-plan="basic">Start Basic</button></div>
+    <div class="col hot"><span class="tag">Most popular</span><h3>Premium</h3><div class="price">$3.99<small>/mo</small></div><span class="fine">For people who get "the warranty call".</span><ul><li>About 9 to 14 calls a month</li><li>12-month transcript history</li><li>Custom voice (coming soon)</li></ul><button class="btn pri" type="button" data-plan="premium">Start Premium</button></div>
+    <div class="col"><h3>Super</h3><div class="price">$6.99<small>/mo</small></div><span class="fine">For the truly besieged.</span><ul><li>About 17 to 28 calls a month</li><li>12-month transcript history</li><li>Custom voice (coming soon)</li></ul><button class="btn ghost" type="button" data-plan="super">Start Super</button></div>
+    <div class="col"><span class="tag">New</span><h3>Smart</h3><div class="price">$9.99<small>/mo</small></div><span class="fine">Knows friends from spam.</span><ul><li>About 25 to 40 calls a month</li><li>People in your contacts get a polite message-taker, and you get the message by email</li><li>Gmail and Microsoft sync (coming soon)</li></ul><button class="btn ghost" type="button" data-plan="smart">Start Smart</button></div>
+  </div>
+  <p class="fine" style="margin-top:14px">Prices in CAD. Calls run up to about a minute each.</p>
+</div></section>
 
-  <section id="setup">
-    <h2>Set it up on your phone</h2>
-    <p class="sub">Pick your carrier, tap the code to dial it, and you're done. Use the "turn off" code anytime to go back to normal.</p>
-    <div class="tabs" id="carrierTabs"></div>
-    <div class="setup">
-      <div class="card" id="carrierBox"></div>
-      <div class="card">
-        <div class="tabs" id="osTabs">
-          <button type="button" class="on" data-os="ios">iPhone</button><button type="button" data-os="android">Android</button>
-        </div>
-        <div id="osBox"></div>
-      </div>
-    </div>
-  </section>
+<section id="signup" style="padding-top:20px"><div class="wrap">
+  <div class="kicker">Sign up</div>
+  <h2>Put Glen on your line.</h2>
+  <p class="lede" style="margin-bottom:26px">Use the mobile number you'll forward from. That's how Glen knows the call is yours.</p>
+  <form class="panel" id="form" novalidate>
+    <div class="row" style="margin-bottom:14px"><label>Mobile number<input name="phone" inputmode="tel" autocomplete="tel" placeholder="416 555 0123" required></label><label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label></div>
+    <div class="row" style="margin-bottom:14px"><label>Plan<select name="plan"><option value="basic">Basic · 99¢/mo</option><option value="premium">Premium · $3.99/mo</option><option value="super">Super · $6.99/mo</option><option value="smart">Smart · $9.99/mo</option></select></label>
+      <label>Voice<select name="voice"><option value="male">Glen</option><option value="female">Jess</option></select></label></div>
+    <div class="voicepick"><button class="btn ghost sm" type="button" id="previewBtn">▶ Hear Glen</button></div><audio id="preview" preload="none"></audio>
+    <label style="margin-top:14px">Personality<select name="mode"><option value="shill" selected>WePrize shill</option><option value="jokes">Jokester: two classic jokes, then bye</option><option value="curious">Inquisitive (coming soon)</option><option value="professional">Professional: takes a message (coming soon)</option></select></label>
+    <label class="consent"><input type="checkbox" name="consent" required><span>I agree that calls forwarded to FunSpamCover are answered by an automated assistant and may be recorded. Call transcripts and recordings are saved for up to 12 months to run and improve the service, and are not reviewed individually.</span></label>
+    <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn pri big" type="submit" id="go" style="width:100%">Start my 3 free days</button>
+    <p class="err" id="err"></p>
+    <p class="fine">Then billed monthly. Stripe handles your card; we never see it. Cancel anytime.</p>
+  </form>
+</div></section>
 
-  <section id="plans">
-    <h2>Plans</h2>
-    <p class="sub">Every plan starts with a 3-day free trial. Prices in CAD, billed monthly. No annual anything.</p>
-    <div class="plans">
-      <div class="plan pop"><span class="tag">Most fun per penny</span><h3>Basic</h3><div class="price">$0.99<small>/month</small></div>
-        <ul><li>Glen or Jess answers your forwarded calls</li><li>About 1 full spam-wasting call a month (it's 99¢!)</li><li>Then a short voicemail-style message until next month</li></ul>
-        <button class="btn pri" data-plan="basic" type="button">Start free trial</button></div>
-      <div class="plan"><h3>Premium</h3><div class="price">$3.99<small>/month</small></div>
-        <ul><li>About 9 to 14 spam-wasting calls a month</li><li>12-month transcript history</li><li>Custom voice (coming soon)</li></ul>
-        <button class="btn ghost" data-plan="premium" type="button">Start free trial</button></div>
-      <div class="plan"><h3>Super</h3><div class="price">$6.99<small>/month</small></div>
-        <ul><li>Heavy use: about 17 to 28 calls a month</li><li>Built for mass inbound</li><li>12-month transcripts + custom voice (coming soon)</li></ul>
-        <button class="btn ghost" data-plan="super" type="button">Start free trial</button></div>
-    </div>
-    <p class="fine" style="margin-top:12px">Calls last up to a minute, so the count depends on how long spammers stick around. When a plan's monthly allowance is used up, calls get a short voicemail-style message and we email you an upgrade option. Unusual call volumes (more than 30 calls a day, or rapid-fire bursts) pause the account for review.</p>
-  </section>
+<section id="faq" style="padding-top:20px"><div class="wrap faq">
+  <h2>Fair questions.</h2>
+  <details><summary>Is Glen a real person?</summary><p>No. Glen is an AI assistant that answers for you. If asked, Glen says it's an automated assistant answering the line. It never pretends to be you or a human.</p></details>
+  <details><summary>What about real callers?</summary><p>About 30 seconds of friendly small talk, then "sorry, gotta go!" Save people you know in Contacts so they ring straight through.</p></details>
+  <details><summary>What's under the hood?</summary><p>Top AI models for conversation and natural-sounding voice.</p></details>
+  <details><summary>Will it give out my info?</summary><p>Never. It doesn't know your name or address, and it never presses buttons or agrees to anything.</p></details>
+  <details><summary>What happens to my contacts on Smart?</summary><p>Your contacts never leave your device in readable form. Your browser turns each number into a one-way code, and we store only that, scrambled again with a secret key. No names, no raw numbers.</p></details>
+  <details><summary>How do I turn it off?</summary><p>Dial your carrier's off code (shown in setup), and cancel from your welcome screen or your Stripe receipt.</p></details>
+</div></section>
 
-  <section id="signup">
-    <h2>Start your free trial</h2>
-    <p class="sub">Use the mobile number you'll forward from. That's how Glen knows the call is yours.</p>
-    <form class="signup" id="form" novalidate>
-      <div class="row2">
-        <label>Your mobile number<input name="phone" inputmode="tel" autocomplete="tel" placeholder="416 555 0123" required></label>
-        <label>Email (for receipts)<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
-      </div>
-      <div class="row2">
-        <label>Plan<select name="plan"><option value="basic">Basic · $0.99/mo</option><option value="premium">Premium · $3.99/mo</option><option value="super">Super · $6.99/mo</option></select></label>
-        <label>Voice<select name="voice"><option value="male">Glen (male)</option><option value="female">Jess (female)</option></select></label>
-      </div>
-      <label>Mode<select name="mode"><option value="shill" selected>WePrize shill (default)</option><option value="jokes">Funny (coming soon)</option><option value="curious">Inquisitive (coming soon)</option><option value="professional">Professional: takes name, number and reason (coming soon)</option></select></label>
-      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--ink)"><input type="checkbox" name="consent" required style="margin-top:4px;width:18px;height:18px"><span>I agree that calls forwarded to FunSpamCover are answered by an automated assistant and may be recorded. Call transcripts and recordings are saved for up to 12 months to run and improve the service, and are not reviewed individually.</span></label>
-      <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button class="btn pri" type="submit" id="go">Continue to secure checkout →</button>
-      <p class="err" id="err"></p>
-      <p class="fine">3 days free, then billed monthly. Card collected by Stripe; we never see it. Cancel anytime from your welcome screen.</p>
-    </form>
-  </section>
-
-  <section id="faq">
-    <h2>Questions</h2>
-    <details><summary>Is Glen a real person?</summary><p>No. Glen is an AI assistant that answers for you. If anyone asks, Glen says it's an automated assistant answering the line. It never pretends to be you or a human.</p></details>
-    <details><summary>What does Glen say to real (non-spam) callers?</summary><p>About 30 seconds of friendly, curious small talk, then "sorry, gotta go!" It doesn't take messages or share anything about you. Tip: save the people you know in Contacts so they ring straight through.</p></details>
-    <details><summary>What AI is this?</summary><p>Glen runs on top AI models for conversation and natural-sounding voice.</p></details>
-    <details><summary>Will it give out my info?</summary><p>Never. It doesn't know your name, address, or anything else, and it never presses buttons or agrees to anything.</p></details>
-    <details><summary>How do I turn it off?</summary><p>Dial your carrier's "turn off" code above, and cancel your plan from your welcome screen (or the link in your Stripe receipt).</p></details>
-    <details><summary>Can my friends use it too?</summary><p>Yes! Each person signs up with their own mobile number and forwards to the same screener number.</p></details>
-  </section>
-</main>
-
-<footer>Calls may be recorded by an automated assistant. Transcripts and recordings are kept up to 12 months to run and improve the service and are not reviewed individually.<br>Coming soon: earn a share when callers you send join WePrize.<br>FunSpamCover is a just-for-fun corner of WePrize. Only forward a phone number you own. · <a href="/">Back to WePrize</a></footer>
-
+<footer><div class="wrap">
+  <p>Calls forwarded to FunSpamCover may be recorded by an automated assistant.</p>
+  <p>Coming soon: earn a share when callers you send join WePrize.</p>
+  <p>FunSpamCover is part of WePrize.</p>
+  <div class="rg"><h3>Play responsibly</h3><p>Contests should stay fun. If gambling or chasing prizes stops feeling fun, free and confidential help is available.</p>
+    <a href="https://connexontario.ca/" target="_blank" rel="noopener">ConnexOntario</a><a href="https://responsiblegambling.org/" target="_blank" rel="noopener">Responsible Gambling Council</a><a href="https://connexontario.ca/our-services/gambling-treatment/" target="_blank" rel="noopener">Problem Gambling Helpline: 1-866-531-2600</a></div>
+</div></footer>
+<button class="fab" id="shareFab" type="button" aria-label="Share with a friend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg></button>
+<div class="toast" id="toast" role="status">Copied</div>
 <script>
 (() => {
   const NUM = '2893675302', NUM_FMT = '289-367-5302';
@@ -292,7 +326,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
       const glen = l.role === 'glen';
       const m = document.createElement('div');
       m.className = 'msg ' + (glen ? 'glen' : 'caller');
-      m.innerHTML = `<div class="av ${glen ? 'g' : 'c'}">${glen ? '🤖' : '📞'}</div><div><div class="who">${glen ? 'Glen (automated assistant)' : 'Robocaller'}</div><div class="bub"></div></div>`;
+      m.innerHTML = `<div class="av ${glen ? 'g' : 'c'}">${glen ? 'G' : '?'}</div><div><div class="who">${glen ? 'Glen (automated assistant)' : 'Robocaller'}</div><div class="bub"></div></div>`;
       $('.bub', m).textContent = l.text;
       m.onclick = () => audioReady.then(() => { audio.currentTime = l.start_ms / 1000; audio.play(); });
       chat.insertBefore(m, typing);
@@ -340,7 +374,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
   function setVoice(v) {
     voice = v;
     $$('.toggle button').forEach(b => { const on = b.dataset.voice === v; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-    $('#previewBtn').textContent = '▶ Preview ' + names[v];
+    $('#previewBtn').textContent = '▶ Hear ' + names[v];
     $('select[name=voice]').value = v;
     preview.pause();
   }
@@ -350,48 +384,47 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     if (!preview.paused) { preview.pause(); return; }
     audio.pause(); b64url('preview-' + voice).then(u => { preview.src = u; preview.play(); });
   };
-  preview.addEventListener('play', () => $('#previewBtn').textContent = '❚❚ Playing ' + names[voice]);
-  preview.addEventListener('pause', () => $('#previewBtn').textContent = '▶ Preview ' + names[voice]);
-  preview.addEventListener('ended', () => $('#previewBtn').textContent = '▶ Preview ' + names[voice]);
+  preview.addEventListener('play', () => $('#previewBtn').textContent = '❚❚ ' + names[voice]);
+  preview.addEventListener('pause', () => $('#previewBtn').textContent = '▶ Hear ' + names[voice]);
+  preview.addEventListener('ended', () => $('#previewBtn').textContent = '▶ Hear ' + names[voice]);
 
-  // ---------- carrier setup ----------
+  // ---------- setup picker ----------
   const tel = (c) => 'tel:' + c.replace(/#/g, '%23');
-  const code = (label, c) => `<div class="fine" style="margin-top:10px">${label}</div><div class="code"><b>${c}</b><a class="btn amb sm" href="${tel(c)}">Tap to dial</a><button class="btn ghost sm" type="button" data-copy="${c}">Copy</button></div>`;
+  const codeBox = (c) => `<div class="code"><b>${c}</b><a class="btn pri sm" href="${tel(c)}">Dial</a><button class="btn ghost sm" type="button" data-copy="${c}">Copy</button></div>`;
+  const R = (off, note) => ({ on: [['Forward calls you don\'t answer', `*61*${NUM}#`], ['Forward calls you decline', `*67*${NUM}#`]], off, note });
   const CARRIERS = {
-    Telus: { on: [['Forward when busy, unanswered or unreachable', `*004*${NUM}*20#`]], off: '#004#', note: 'The 20 is how many seconds your phone rings first. Koodo and Public Mobile use the Rogers-style codes.' },
-    Rogers: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '##61# then ##67#', note: 'Rogers only forwards conditionally when voicemail is turned off on your line (call 611 or use the MyRogers app).' },
-    Bell: { on: [], off: '', note: '' },
-    Freedom: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '#61# then #67#', note: 'Freedom forwards to any Canadian number, so our Ontario number is fine.' },
-    Fido: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '##61# then ##67#', note: 'Like Rogers, conditional forwarding needs voicemail turned off on your line.' },
+    Telus: { on: [['Forward unanswered, busy and declined calls', `*004*${NUM}*20#`]], off: '#004#', note: 'The 20 is how many seconds your phone rings before Glen picks up.' },
+    Rogers: R('##61# then ##67#', 'Rogers only forwards these when voicemail is off on your line. Call 611 or use the MyRogers app to switch it off.'),
+    Fido: R('##61# then ##67#', 'Like Rogers, this needs voicemail turned off on your line.'),
+    Freedom: R('#61# then #67#', ''),
+    Koodo: R('##61# then ##67#', ''),
+    Bell: null,
   };
-  function showCarrier(name) {
-    $$('#carrierTabs button').forEach(b => b.classList.toggle('on', b.dataset.c === name));
-    const c = CARRIERS[name];
-    let h = `<h3>${name}</h3>`;
-    if (name === 'Bell') {
-      h += `<p>Bell Mobility sets forwarding in your phone's settings instead of a dial code:</p><ol>
-        <li><b>iPhone:</b> Bell uses <b>No Answer Transfer</b>. Turn it on in the MyBell app or by calling 611, and set the number to <span class="num">${NUM_FMT}</span>.</li>
-        <li><b>Android:</b> Phone app → Settings → Supplementary services (or Calls) → Call forwarding → <b>Forward when unanswered</b> and <b>Forward when busy</b> → enter <span class="num">${NUM_FMT}</span>.</li></ol>
-        <p class="fine">Bell sends a free text to confirm forwarding is on. To turn it off, switch those settings back off.</p>`;
+  const OSSTEP = {
+    ios: 'On your iPhone, open <b>Settings → Apps → Phone</b> (older iOS: Settings → Phone) and turn on <b>Silence Unknown Callers</b>. Contacts still ring; strangers go to Glen.',
+    android: 'On Android, send unknown callers away. <b>Pixel:</b> Phone → Settings → Call Screen → Unknown numbers → <b>Decline</b>. <b>Samsung:</b> Phone → ⋮ → Settings → Block numbers → <b>Block unknown/private numbers</b>.',
+  };
+  function showSetup() {
+    const name = $('#carrier').value, os = $('#os').value, c = CARRIERS[name];
+    let s = [];
+    if (!c) {
+      s.push(os === 'ios'
+        ? `Bell sets this up for you. Turn on <b>No Answer Transfer</b> in the MyBell app (or call 611) and set the number to <span class="num">${NUM_FMT}</span>.`
+        : `Phone app → Settings → Calls (or Supplementary services) → <b>Call forwarding</b>. Set <b>Forward when unanswered</b> and <b>Forward when busy</b> to <span class="num">${NUM_FMT}</span>.`);
     } else {
-      h += c.on.map(([l, x]) => code(l, x)).join('');
-      h += `<p class="fine" style="margin-top:14px"><b>Turn it off:</b> dial <code>${c.off}</code></p><p class="fine">${c.note}</p>`;
+      c.on.forEach(([l, x]) => s.push(`${l}: dial${codeBox(x)}`));
     }
-    $('#carrierBox').innerHTML = h;
+    s.push(OSSTEP[os]);
+    s.push('Done. Next time spam calls, let it ring.');
+    const off = c ? `To turn it off, dial <b>${c.off}</b>. ` : 'To turn it off, switch those settings back off. ';
+    $('#result').innerHTML = `<h3 style="margin-bottom:16px">${$('#carrier').selectedOptions[0].text} on ${os === 'ios' ? 'iPhone' : 'Android'}</h3><ol>${s.map(x => `<li>${x}</li>`).join('')}</ol><p class="fine" style="margin:14px 0 0">${off}${c?.note || ''}</p>`;
   }
-  $('#carrierTabs').innerHTML = Object.keys(CARRIERS).map(n => `<button type="button" data-c="${n}">${n}</button>`).join('');
-  $$('#carrierTabs button').forEach(b => b.onclick = () => showCarrier(b.dataset.c));
-  showCarrier('Telus');
-  const OS = {
-    ios: `<h3>iPhone: Silence Unknown Callers</h3><ol><li>Open <b>Settings</b> → <b>Apps</b> → <b>Phone</b> (older iOS: Settings → Phone).</li><li>Turn on <b>Silence Unknown Callers</b>.</li><li>Contacts, recent outgoing calls and Siri suggestions still ring. Everyone else is forwarded to Glen.</li></ol>`,
-    android: `<h3>Android: screen unknown numbers</h3><ol><li><b>Pixel:</b> Phone app → Settings → <b>Call Screen</b> (or Spam and Call Screen) → set <b>Unknown numbers</b> to <b>Decline</b>.</li><li><b>Samsung:</b> Phone app → ⋮ → Settings → <b>Block numbers</b> → turn on <b>Block unknown/private numbers</b>, and turn on <b>Block spam and scam calls</b>.</li><li>Declined calls follow your carrier's "busy" forwarding, so set up both codes on the left.</li></ol>`,
-  };
-  const showOS = (o) => { $$('#osTabs button').forEach(b => b.classList.toggle('on', b.dataset.os === o)); $('#osBox').innerHTML = OS[o]; };
-  $$('#osTabs button').forEach(b => b.onclick = () => showOS(b.dataset.os));
-  showOS(/android/i.test(navigator.userAgent) ? 'android' : 'ios');
+  $('#carrier').onchange = $('#os').onchange = showSetup;
+  $('#os').value = /android/i.test(navigator.userAgent) ? 'android' : 'ios';
+  showSetup();
   document.addEventListener('click', (e) => {
     const c = e.target.closest('[data-copy]'); if (!c) return;
-    navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = 'Copied!'; setTimeout(() => c.textContent = 'Copy', 1400); });
+    const ok = () => { c.textContent = 'Copied!'; setTimeout(() => c.textContent = 'Copy', 1400); }; const fb = () => { const t = document.createElement('textarea'); t.value = c.dataset.copy; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok(); } catch {} t.remove(); }; navigator.clipboard ? navigator.clipboard.writeText(c.dataset.copy).then(ok, fb) : fb();
   });
 
   // ---------- plans + signup ----------
@@ -410,7 +443,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
       if (j.url) { location.href = j.url; return; }
       err.textContent = j.error || 'Something went sideways. Please try again.';
     } catch { err.textContent = 'Network hiccup. Please try again.'; }
-    go.disabled = false; go.textContent = 'Continue to secure checkout →';
+    go.disabled = false; go.textContent = 'Start my 3 free days';
   };
 
   // ---------- free try (one per device) ----------
@@ -441,6 +474,42 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     else $('#tryErr').textContent = j.error || 'Network hiccup. Try again.';
   };
 
+  // ---------- explainer (18s, muted, no audio) ----------
+  const stage = $('#stage'), xbs = $$('.xb', stage), xbar = $('#xbar');
+  const XT = [[0, 'ringing'], [2600, 'fwd'], [4800, 'chatting'], [5000, 0], [7000, 1], [9200, 2], [11200, 3], [13400, 4], [15600, 5], [17000, 'over']];
+  let timers = [];
+  function runXp() {
+    timers.forEach(clearTimeout); timers = [];
+    stage.className = 'stage'; xbs.forEach(b => b.classList.remove('on'));
+    xbar.style.transition = 'none'; xbar.style.width = '0'; void xbar.offsetWidth;
+    xbar.style.transition = 'width 18s linear'; xbar.style.width = '100%';
+    XT.forEach(([t, a]) => timers.push(setTimeout(() => typeof a === 'number' ? xbs[a].classList.add('on') : stage.classList.add(a), t)));
+  }
+  $('#replay').onclick = runXp;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { stage.classList.add('chatting', 'over'); xbs.forEach(b => b.classList.add('on')); }
+  else if ('IntersectionObserver' in window) { const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { runXp(); io.disconnect(); } }, { threshold: .4 }); io.observe(stage); }
+  else runXp();
+  // reveal on scroll
+  if ('IntersectionObserver' in window) { const ro = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } }), { threshold: .12 }); $$('.reveal').forEach(el => ro.observe(el)); }
+  else $$('.reveal').forEach(el => el.classList.add('in'));
+
+  // ---------- share ----------
+  const SHARE_TEXT = 'This bot wastes spam callers\' time so you don\'t have to. Try it free:';
+  const shareUrl = () => { const u = new URL('https://weprize.net/spamfun'); u.searchParams.set('source', 'share'); u.searchParams.set('utm_source', 'share'); u.searchParams.set('utm_medium', 'friend'); u.searchParams.set('utm_campaign', 'spamfun');
+    let ref = ''; try { ref = localStorage.getItem('fsc_ref') || localStorage.getItem('weprize_share_code') || ''; } catch {} ref = ref.toLowerCase().replace(/[^a-z0-9]/g, ''); if (ref) u.searchParams.set('ref', ref); return u.toString(); };
+  const toast = (t) => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 1600); };
+  function fillShare() { const url = shareUrl(), e = encodeURIComponent, msg = SHARE_TEXT + ' ' + url;
+    const H = { sms: 'sms:?&body=' + e(msg), wa: 'https://wa.me/?text=' + e(msg), x: 'https://x.com/intent/post?text=' + e(SHARE_TEXT) + '&url=' + e(url), fb: 'https://www.facebook.com/sharer/sharer.php?u=' + e(url), mail: 'mailto:?subject=' + e('Ha, you need this') + '&body=' + e(msg) };
+    $$('#shareRow a').forEach(a => a.href = H[a.dataset.sh]); }
+  async function doShare() {
+    const url = shareUrl();
+    if (matchMedia('(pointer: coarse)').matches && navigator.share) { try { await navigator.share({ title: 'FunSpamCover by WePrize', text: SHARE_TEXT, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    fillShare(); const row = $('#shareRow'); row.hidden = !row.hidden; if (!row.hidden) $('#share').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  $('#shareBtn').onclick = doShare; $('#shareFab').onclick = doShare;
+  $('[data-sh=copy]').onclick = async () => { const url = shareUrl(); try { await navigator.clipboard.writeText(url); } catch { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch {} t.remove(); } toast('Copied'); };
+  fillShare();
+
   // ---------- welcome / manage ----------
   const qs = new URLSearchParams(location.search), sid = qs.get('welcome');
   if (qs.get('canceled')) { const w = $('#welcome'); w.style.display = 'block'; w.innerHTML = '<b>No worries, checkout was cancelled.</b> Your trial is waiting whenever you are.'; }
@@ -449,17 +518,44 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     const load = (n = 0) => fetch('/api/fsc/session?sid=' + encodeURIComponent(sid)).then(r => r.json()).then(j => {
       if (!j.ok) { w.innerHTML = "<b>We couldn't find that checkout.</b> If you just paid, refresh in a minute."; return; }
       if (j.status === 'pending' && n < 5) { setTimeout(() => load(n + 1), 2500); return; }
-      const plan = { basic: 'Basic', premium: 'Premium', super: 'Super' }[j.plan];
+      const plan = { basic: 'Basic', premium: 'Premium', super: 'Super', smart: 'Smart' }[j.plan]; try { if (j.ref_code) localStorage.setItem('fsc_ref', j.ref_code); } catch {} fillShare();
       const live = j.status === 'trialing' || j.status === 'active';
-      w.innerHTML = `<h2 style="margin:0 0 6px">${live ? `🎉 You're in! ${j.voice === 'female' ? 'Jess' : 'Glen'} is on duty.` : 'Almost there'}</h2>
+      w.innerHTML = `<h2 style="margin:0 0 6px">${live ? `You're in. ${j.voice === 'female' ? 'Jess' : 'Glen'} is on duty.` : 'Almost there'}</h2>
         <p style="margin:0 0 12px">Plan: <b>${plan}</b> · Status: <b>${j.status === 'trialing' ? '3-day free trial' : j.status}</b> · Forwarding from <b>${j.phone}</b></p>
         <p style="margin:0 0 12px"><b>Last step:</b> dial your carrier's code below to forward to <span class="num">${NUM_FMT}</span>, and turn on Silence Unknown Callers.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-          <div class="toggle" id="wvoice"><button type="button" data-v="male" class="${j.voice === 'male' ? 'on' : ''}">🧔 Glen</button><button type="button" data-v="female" class="${j.voice === 'female' ? 'on' : ''}">👩 Jess</button></div>
-          <a class="btn amb sm" href="#setup">Set up forwarding</a>
+          <div class="toggle" id="wvoice"><button type="button" data-v="male" class="${j.voice === 'male' ? 'on' : ''}">Glen</button><button type="button" data-v="female" class="${j.voice === 'female' ? 'on' : ''}">Jess</button></div>
+          <a class="btn pri sm" href="#setup">Set up forwarding</a>
           <button class="btn ghost sm" type="button" id="manage">Manage or cancel plan</button>
         </div>
-        <p style="margin:14px 0 0">Your WePrize referral code: <b>${j.ref_code || ''}</b> · Share link: <b>weprize.net/?ref=${j.ref_code || ''}</b> · Your rev share: <b>$${(j.rev_share_cad || 0).toFixed(2)}</b> <span class="fine">(rev share coming soon)</span></p>`;
+        <p style="margin:14px 0 0">Your WePrize referral code: <b>${j.ref_code || ''}</b> · Share link: <b>weprize.net/?ref=${j.ref_code || ''}</b> · Your rev share: <b>$${(j.rev_share_cad || 0).toFixed(2)}</b> <span class="fine">(rev share coming soon)</span></p>
+        ${j.smart ? `<div class="smartbox"><h3 style="margin-bottom:6px">Smart: contacts get a message-taker</h3>
+          <p class="fine">Your contacts never leave your device in readable form. We turn each number into a one-way code in your browser and store only that.</p>
+          <label>Upload contacts (CSV or vCard) <input type="file" id="cfile" accept=".csv,.vcf,text/csv,text/vcard,text/x-vcard"></label>
+          <p id="cstat" class="fine">${j.contacts ? j.contacts + ' contacts matched so far.' : 'No contacts yet.'}</p>
+          <label><input type="checkbox" id="sayname" ${j.say_name ? 'checked' : ''} style="width:20px;height:20px;margin:0;appearance:auto"> OK to say my first name <input type="text" id="fname" maxlength="30" placeholder="First name" value="${(j.first_name || '').replace(/"/g, '')}"> <button class="btn ghost sm" type="button" id="savename">Save</button></label>
+          <p class="fine">Gmail and Microsoft contact sync: coming soon.</p></div>` : ''}`;
+      if (j.smart) {
+        const e164 = (raw) => { const plus = /^\s*\+/.test(raw), d = raw.replace(/\D/g, ''); if (plus && d.length >= 8 && d.length <= 15) return '+' + d; if (d.length === 10) return '+1' + d; if (d.length === 11 && d[0] === '1') return '+' + d; return null; };
+        const sha = async (x) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(x)))].map(b => b.toString(16).padStart(2, '0')).join('');
+        $('#cfile').onchange = async (ev) => {
+          const f = ev.target.files[0]; if (!f) return; const st = $('#cstat'); st.textContent = 'Reading on your device…';
+          const text = await f.text();
+          const raw = /BEGIN:VCARD/i.test(text) ? [...text.matchAll(/^TEL[^:\n]*:(.+)$/gim)].map(m => m[1]) : text.split(/[\n,;\t]/).filter(c => (c.match(/\d/g) || []).length >= 10);
+          const nums = [...new Set(raw.map(e164).filter(Boolean))].slice(0, 5000);
+          if (!nums.length) { st.textContent = 'No phone numbers found in that file.'; return; }
+          const hashes = await Promise.all(nums.map(sha)); let count = 0;
+          for (let i = 0; i < hashes.length; i += 1000) {
+            const r = await fetch('/api/fsc/contacts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid, hashes: hashes.slice(i, i + 1000), replace: i === 0 }) }).then(r => r.json()).catch(() => ({}));
+            if (!r.ok) { st.textContent = r.error || 'Upload hiccup. Try again.'; return; } count = r.count;
+          }
+          st.textContent = count + ' contacts matched. Only one-way codes were sent.'; ev.target.value = '';
+        };
+        $('#savename').onclick = async () => {
+          const r = await fetch('/api/fsc/prefs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid, say_name: $('#sayname').checked, first_name: $('#fname').value }) }).then(r => r.json()).catch(() => ({}));
+          $('#savename').textContent = r.ok ? 'Saved' : 'Try again'; setTimeout(() => $('#savename').textContent = 'Save', 1500);
+        };
+      }
       $$('#wvoice button').forEach(b => b.onclick = async () => {
         const r = await fetch('/api/fsc/voice', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid, voice: b.dataset.v }) }).then(r => r.json());
         if (r.ok) $$('#wvoice button').forEach(x => x.classList.toggle('on', x.dataset.v === r.voice));
