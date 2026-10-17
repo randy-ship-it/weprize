@@ -47,6 +47,21 @@ async function sql(query, params) {
   await schemaReady
   return q(query, params)
 }
+// ---------- interim fallback (no SQL): auto-used while FSC_DATABASE_URL is unreachable ----------
+let dbState = { ok: null, at: 0 }
+async function dbOk() {
+  if (Date.now() - dbState.at < 20000 && dbState.ok !== null) return dbState.ok
+  let ok = false
+  try { if (env('FSC_DATABASE_URL')) { await q('select 1'); ok = true } } catch {}
+  dbState = { ok, at: Date.now() }
+  return ok
+}
+let blobMod = null
+const blob = async () => (blobMod ||= await import('@vercel/blob'))
+async function bput(path, obj) { const { put } = await blob(); await put('fsc/' + path + '.json', JSON.stringify(obj), { access: 'private', addRandomSuffix: false, allowOverwrite: true, contentType: 'application/json' }) }
+async function bget(path) {
+  try { const { get } = await blob(); const r = await get('fsc/' + path + '.json', { access: 'private', useCache: false }); if (!r || !r.stream) return null; return JSON.parse(await new Response(r.stream).text()) } catch { return null }
+}
 const torontoDay = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto' }).format(d)
 const monthOf = (day) => day.slice(0, 7)
 const hashCaller = (n) => crypto.createHmac('sha256', env('FSC_HOOK_SECRET') || 'x').update(String(n || 'none')).digest('hex').slice(0, 24)
@@ -135,6 +150,10 @@ export function createFscRouter({ stripe }) {
     if (!phone) return res.status(400).json({ ok: false, error: 'Enter the 10-digit Canadian or US mobile number you forward from.' })
     if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return res.status(400).json({ ok: false, error: 'Enter a valid email.' })
     if (!stripe) return res.status(503).json({ ok: false, error: 'Checkout is warming up. Try again shortly.' })
+    if (!(await dbOk())) {
+      await bput('signups/' + h('phone:' + phone).slice(0, 32), { phone, email, plan, voice, mode, consent_at: new Date().toISOString(), status: 'waitlist' })
+      return res.status(503).json({ ok: false, waitlisted: true, error: "Paid plans are opening shortly. We saved your spot and we'll email you when checkout opens." })
+    }
     const u = (await sql(
       `insert into fsc.users(phone, email, plan, voice, mode, consent_at, status) values ($1,$2,$3,$4,$5,now(),'pending')
        on conflict (phone) do update set consent_at = now(),
@@ -167,6 +186,7 @@ export function createFscRouter({ stripe }) {
 
   async function route(req, res) {
     if (!safeEq(req.headers['x-fsc-secret'], env('FSC_HOOK_SECRET'))) return res.status(403).json({ error: 'forbidden' })
+    if (!(await dbOk())) return res.json(env('FSC_OFF') === '1' ? { action: 'say', reason: 'off', text: "Hi! This line's assistant is taking a nap. Bye for now!" } : { action: 'fallback', reason: 'db_down' })
     const b = req.body || {}
     const callSid = String(b.callSid || '').slice(0, 64) || 'sim-' + crypto.randomUUID()
     const fwd = normPhone(b.fwd)
@@ -355,6 +375,7 @@ export function createFscRouter({ stripe }) {
     res.json({ ok: true, url: p.url })
   }))
   router.get('/', (_req, res) => res.json({ ok: true, service: 'funspamcover' }))
+  router.get('/health', wrap(async (_req, res) => res.json({ ok: true, db: await dbOk(), paid_open: !!stripe && (await dbOk()) })))
 
   // ---------- free try: verified email, one per device, no card ----------
   const h = (x) => crypto.createHmac('sha256', env('FSC_HOOK_SECRET') || 'x').update(String(x)).digest('hex')
@@ -365,6 +386,18 @@ export function createFscRouter({ stripe }) {
     if (!okEmail(email)) return res.status(400).json({ ok: false, error: 'Enter a valid email.' })
     if (fp.length < 16) return res.status(400).json({ ok: false, error: 'Please reload the page and try again.' })
     const fph = h('fp:' + fp)
+    if (!(await dbOk())) {
+      if ((await bget('tries/fp/' + fph.slice(0, 40)))?.verified_at) return res.status(409).json({ ok: false, used: true, error: "This device already used its free try. Paid plans are opening shortly!" })
+      const key = 'tries/pending/' + h('try:' + email + ':' + fph).slice(0, 40)
+      const prev = await bget(key)
+      const recent = (prev?.sent || []).filter((t) => Date.now() - t < 3600e3)
+      if (recent.length >= 3) return res.status(429).json({ ok: false, error: 'Too many codes requested. Try again in an hour.' })
+      const code = String(crypto.randomInt(100000, 1000000))
+      await bput(key, { email, fp_hash: fph, code_hash: h('code:' + email + ':' + code), attempts: 0, exp: Date.now() + 15 * 60e3, sent: [...recent, Date.now()], email_verified: false })
+      const sent = await mail(email, 'Your FunSpamCover code: ' + code, 'Your FunSpamCover verification code is ' + code + '.\n\nEnter it on the FunSpamCover page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
+      if (!sent) return res.status(502).json({ ok: false, error: "We couldn't send the code. Check the email and try again." })
+      return res.json({ ok: true })
+    }
     const [c] = await sql(`select exists(select 1 from fsc.tries where fp_hash=$1 and verified_at is not null) as used,
       (select count(*) from fsc.tries where (fp_hash=$1 or email=$2) and created_at > now() - interval '1 hour')::int as recent`, [fph, email])
     if (c.used) return res.status(409).json({ ok: false, used: true, error: "This device already used its free try. Start the 3-day trial to keep going!" })
@@ -378,6 +411,18 @@ export function createFscRouter({ stripe }) {
   router.post('/try/verify', wrap(async (req, res) => {
     const email = String(req.body?.email || '').trim().toLowerCase(), fp = String(req.body?.fp || ''), code = String(req.body?.code || '').replace(/\D/g, '')
     const fph = h('fp:' + fp)
+    if (!(await dbOk())) {
+      const key = 'tries/pending/' + h('try:' + email + ':' + fph).slice(0, 40)
+      const t = await bget(key)
+      if (!t || t.email_verified || Date.now() > t.exp) return res.status(400).json({ ok: false, error: 'Code expired. Request a new one.' })
+      if (t.attempts >= 5) return res.status(429).json({ ok: false, error: 'Too many tries. Request a new code.' })
+      if (!safeEq(h('code:' + email + ':' + code), t.code_hash)) { await bput(key, { ...t, attempts: t.attempts + 1 }); return res.status(400).json({ ok: false, error: "That code didn't match." }) }
+      if ((await bget('tries/fp/' + fph.slice(0, 40)))?.verified_at) return res.status(409).json({ ok: false, used: true, error: 'This device already used its free try.' })
+      const now = new Date().toISOString()
+      await bput(key, { ...t, email_verified: true, verified_at: now })
+      await bput('tries/fp/' + fph.slice(0, 40), { email, fp_hash: fph, email_verified: true, verified_at: now })
+      return res.json({ ok: true, number: '+12893675302' })
+    }
     const t = (await sql("select id, code_hash, attempts from fsc.tries where email=$1 and fp_hash=$2 and verified_at is null and created_at > now() - interval '15 minutes' order by id desc limit 1", [email, fph]))[0]
     if (!t) return res.status(400).json({ ok: false, error: 'Code expired. Request a new one.' })
     if (t.attempts >= 5) return res.status(429).json({ ok: false, error: 'Too many tries. Request a new code.' })
