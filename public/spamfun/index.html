@@ -7,7 +7,7 @@
 <meta name="description" content="Forward unanswered calls to one number. A cheerful automated assistant asks spam callers delightfully pointless questions, then pitches them WePrize. 3-day free trial, then 99¢ a month.">
 <meta property="og:title" content="FunSpamCover: let an AI assistant waste spammers' time">
 <meta property="og:description" content="Forward unanswered calls. Our automated assistant keeps spammers busy with pointless questions, then pitches WePrize. Try it free for 3 days.">
-<meta property="og:url" content="https://weprize.net/funspamcover">
+<meta property="og:url" content="https://weprize.net/spamfun">
 <link rel="icon" href="/favicon.svg">
 <style>
 :root{--teal:#0d9488;--teal2:#14b8a6;--navy:#123352;--amber:#f59e0b;--bg:#f4f8fb;--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--r:18px}
@@ -250,7 +250,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
 
   // ---------- audio (stored as base64 text so the repo stays text-only) ----------
   const b64cache = {};
-  const b64url = (name) => b64cache[name] || (b64cache[name] = fetch('/funspamcover/' + name + '.b64').then(r => r.text()).then(t => {
+  const b64url = (name) => b64cache[name] || (b64cache[name] = fetch('/spamfun/' + name + '.b64').then(r => r.text()).then(t => {
     const bin = atob(t.trim()), u8 = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
     return URL.createObjectURL(new Blob([u8], { type: 'audio/mpeg' }));
@@ -262,7 +262,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
   setTimeout(() => { b64url('preview-male'); b64url('preview-female'); }, 1500);
   const chat = $('#chat'), typing = $('#typing'), ended = $('#ended');
   let lines = [], hangupMs = 67500, els = [];
-  fetch('/funspamcover/demo-call.json').then(r => r.json()).then(d => {
+  fetch('/spamfun/demo-call.json').then(r => r.json()).then(d => {
     lines = d.lines; hangupMs = (d.events || []).find(e => e.type === 'hangup')?.start_ms || d.duration_ms;
     els = lines.map((l) => {
       const glen = l.role === 'glen';
