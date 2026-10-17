@@ -51,6 +51,12 @@ const torontoDay = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZo
 const monthOf = (day) => day.slice(0, 7)
 const hashCaller = (n) => crypto.createHmac('sha256', env('FSC_HOOK_SECRET') || 'x').update(String(n || 'none')).digest('hex').slice(0, 24)
 async function event(kind, detail) { try { await sql('insert into fsc.events(kind, detail) values ($1, $2)', [kind, JSON.stringify(detail || {})]) } catch {} }
+// Contacts: the browser sends sha256(E.164); we store only HMAC(server secret, user id + that digest).
+const sha256hex = (x) => crypto.createHash('sha256').update(x).digest('hex')
+const contactKey = (uid, digest) => crypto.createHmac('sha256', env('FSC_CONTACT_SECRET') || env('FSC_HOOK_SECRET') || 'x').update(uid + ':' + digest).digest('hex').slice(0, 40)
+const PRO_AGENT = () => env('FSC_PRO_AGENT_ID') || 'agent_0101m55npptre8ev15wa2rg6ejrg'
+// Caller-supplied text goes into a no-link email, so neutralise anything link-like instead of failing.
+const unlink = (t) => String(t || '').replace(/https?:\/\/\S+|www\.\S+/gi, '[link removed]').replace(/\b([a-z0-9-]+)\.(com|ca|org|net|io)\b/gi, '$1 dot $2').replace(/\/(?=[a-z])/gi, ' ').slice(0, 300)
 const safeEq = (a, b) => typeof a === 'string' && typeof b === 'string' && a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
 
 function verifyTwilio(url, params, sig, token) {
@@ -76,6 +82,8 @@ async function mail(to, subject, text) {
 const UPGRADE = {
   to_premium: ['FunSpamCover: your assistant needs a bigger plan', "Hi! Your FunSpamCover Basic plan used up this month's screening allowance. Your callers kept the assistant busy!\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message instead of the full spam-wasting show.\n\nWant the assistant back on duty? Open the FunSpamCover page on WePrize and pick Premium ($3.99 a month). Your Basic plan is cancelled automatically when you switch.\n\nThanks for wasting spammers' time with us.\nFunSpamCover"],
   to_super: ['FunSpamCover: that is a lot of spam', "Hi! Your FunSpamCover Premium plan used up this month's screening allowance.\n\nUntil your plan renews, new forwarded calls get a short voicemail-style message.\n\nIf you get mass inbound calls, Super ($6.99 a month) is built for that. Open the FunSpamCover page on WePrize and pick Super. Your Premium plan is cancelled automatically when you switch.\n\nFunSpamCover"],
+  to_smart: ['FunSpamCover: that is a lot of calls', "Hi! Your FunSpamCover Super plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nSmart ($9.99 a month) adds more calls and takes proper messages from people in your contacts. Open the FunSpamCover page on WePrize to switch.\n\nFunSpamCover"],
+  smart_cap: ['FunSpamCover: monthly allowance used', "Hi! Your FunSpamCover Smart plan used up this month's allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nFunSpamCover"],
   super_cap: ['FunSpamCover: monthly allowance used', "Hi! Your FunSpamCover Super plan used up this month's screening allowance. New forwarded calls get a short voicemail-style message until your plan renews.\n\nFunSpamCover"],
 }
 
@@ -199,7 +207,16 @@ export function createFscRouter({ stripe }) {
       const sent = await mail(u.email, subj, text).catch(() => false)
       await event('upgrade_prompt', { uid: u.id, kind: d.upgradePrompt, sent })
     }
-    if (d.action === 'screen') return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '', mode: u?.mode || 'shill', max_secs: d.maxSec || 60 })
+    if (d.action === 'screen') {
+      let pro = false
+      const fromE164 = normPhone(b.from)
+      if (u && PLANS[u.plan]?.contacts && fromE164) {
+        pro = !!(await sql('select 1 from fsc.contacts where user_id=$1 and h=$2', [u.id, contactKey(u.id, sha256hex(fromE164))]))[0]
+        if (pro) await sql('update fsc.calls set pro=true where call_sid=$1', [callSid])
+      }
+      return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '', mode: pro ? 'professional' : (u?.mode || 'shill'), max_secs: d.maxSec || 60,
+        ...(pro ? { agent_id: PRO_AGENT(), owner_name: u.say_name && u.first_name ? u.first_name : 'none' } : {}) })
+    }
     res.json({ action: 'say', reason: d.reason, text: d.text })
   }
 
@@ -207,8 +224,9 @@ export function createFscRouter({ stripe }) {
     const params = req.body || {}
     if (!verifyTwilio(SITE + '/api/fsc/status', params, req.headers['x-twilio-signature'], env('FSC_TWILIO_AUTH_TOKEN'))) return res.status(403).send('forbidden')
     const dur = Number(params.CallDuration || 0)
-    const row = (await sql('select used_ai from fsc.calls where call_sid = $1', [params.CallSid]))[0]
+    const row = (await sql('select used_ai, pro, user_id from fsc.calls where call_sid = $1', [params.CallSid]))[0]
     if (row) await sql('update fsc.calls set duration_s=$2, cost_usd=$3, final=true where call_sid=$1', [params.CallSid, dur, callCostUsd(dur, row.used_ai)])
+    if (row?.pro && row.user_id) { await captureMessage(params.CallSid, row.user_id).catch((e) => event('msg_failed', { sid: params.CallSid, err: String(e.message).slice(0, 120) })) }
     else {
       const day = torontoDay()
       await sql(`insert into fsc.calls(call_sid, caller_h, pool, month, day, cost_usd, outcome, used_ai, duration_s, final)
@@ -218,10 +236,45 @@ export function createFscRouter({ stripe }) {
     res.type('text/plain').send('ok')
   }
 
+  // Pull the message-taker's collected fields from ElevenLabs, store, and email the user (no links).
+  async function captureMessage(callSid, uid, tries = 6) {
+    const key = env('FSC_ELEVENLABS_KEY'); if (!key) throw new Error('no el key')
+    const h = { 'xi-api-key': key }
+    let conv = null
+    for (let i = 0; i < tries && !conv; i++) {
+      const l = await fetch('https://api.elevenlabs.io/v1/convai/conversations?page_size=10&agent_id=' + PRO_AGENT(), { headers: h }).then((r) => r.json())
+      for (const c of l.conversations || []) {
+        const d = await fetch('https://api.elevenlabs.io/v1/convai/conversations/' + c.conversation_id, { headers: h }).then((r) => r.json())
+        if (d.metadata?.phone_call?.call_sid === callSid) { if (d.status === 'done' && d.analysis) conv = d; break }
+      }
+      if (!conv) await new Promise((r) => setTimeout(r, 2500))
+    }
+    if (!conv) { await event('msg_pending', { sid: callSid }); return false }
+    const dc = conv.analysis.data_collection_results || {}
+    const v = (k) => unlink(dc[k]?.value ?? '')
+    const m = { name: v('caller_name') || 'Not given', cb: v('callback_number') || 'Not given', reason: v('reason') || unlink(conv.analysis.transcript_summary) || 'Not given' }
+    const ins = await sql(`insert into fsc.messages(user_id, call_sid, conv_id, caller_name, callback, reason, summary) values ($1,$2,$3,$4,$5,$6,$7)
+      on conflict (call_sid) do nothing returning id`, [uid, callSid, conv.conversation_id, m.name, m.cb, m.reason, unlink(conv.analysis.transcript_summary)])
+    if (!ins.length) return true
+    const u = (await sql('select email from fsc.users where id=$1', [uid]))[0]
+    const when = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto', dateStyle: 'medium', timeStyle: 'short' }).format(new Date())
+    const sent = await mail(u?.email, 'FunSpamCover: new message from ' + m.name.slice(0, 40), `Hi! Someone in your contacts called and your assistant took a message.\n\nWhen: ${when} (Toronto time)\nName: ${m.name}\nCallback number: ${m.cb}\nReason: ${m.reason}\n\nThe assistant told them someone will get back to them.\n\nFunSpamCover`).catch(() => false)
+    await sql('update fsc.messages set emailed=$2 where id=$1', [ins[0].id, !!sent])
+    return true
+  }
+
   async function admin(req, res) {
     if (!env('FSC_ADMIN_KEY') || !safeEq(req.headers['x-fsc-admin'], env('FSC_ADMIN_KEY'))) return res.status(403).json({ error: 'forbidden' })
     const a = req.query.a
     if (a === 'checkout') return checkout(req, res, true)
+    if (a === 'migrate') {
+      for (const st of ["create table if not exists fsc.contacts(user_id bigint not null, h text not null, primary key(user_id,h))",
+        "alter table fsc.users add column if not exists first_name text, add column if not exists say_name boolean not null default false",
+        "alter table fsc.calls add column if not exists pro boolean not null default false",
+        "create table if not exists fsc.messages(id bigserial primary key, user_id bigint not null, call_sid text unique, conv_id text, caller_name text, callback text, reason text, summary text, emailed boolean not null default false, created_at timestamptz not null default now())"]) await q(st)
+      return res.json({ ok: true })
+    }
+    if (a === 'msg') return res.json({ ok: await captureMessage(String(req.query.sid), Number(req.query.uid), 2) })
     if (a === 'stripe') {
       const acct = await stripe.accounts.retrieve()
       const hooks = await stripe.webhookEndpoints.list({ limit: 20 })
@@ -265,7 +318,8 @@ export function createFscRouter({ stripe }) {
   router.get('/session', wrap(async (req, res) => {
     const r = await sessionUser(req.query.sid)
     if (!r) return res.status(404).json({ ok: false })
-    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, mode: r.u.mode, ref_code: r.u.ref_code, rev_share_cad: 0, phone: mask(r.u.phone), trial_end: r.u.trial_end })
+    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, mode: r.u.mode, ref_code: r.u.ref_code, rev_share_cad: 0, smart: !!PLANS[r.u.plan]?.contacts, say_name: !!r.u.say_name, first_name: r.u.first_name || '',
+      contacts: PLANS[r.u.plan]?.contacts ? (await sql('select count(*)::int n from fsc.contacts where user_id=$1', [r.u.id]))[0].n : 0, phone: mask(r.u.phone), trial_end: r.u.trial_end })
   }))
   router.post('/voice', wrap(async (req, res) => {
     const r = await sessionUser(req.body?.sid)
@@ -273,6 +327,25 @@ export function createFscRouter({ stripe }) {
     const v = req.body.voice === 'female' ? 'female' : 'male'
     await sql('update fsc.users set voice=$2, updated_at=now() where id=$1', [r.u.id, v])
     res.json({ ok: true, voice: v })
+  }))
+  router.post('/contacts', wrap(async (req, res) => {
+    const r = await sessionUser(req.body?.sid)
+    if (!r) return res.status(404).json({ ok: false, error: 'Session not found.' })
+    if (!PLANS[r.u.plan]?.contacts) return res.status(403).json({ ok: false, error: 'Contact matching is part of the Smart plan.' })
+    const hs = [...new Set((Array.isArray(req.body.hashes) ? req.body.hashes : []).filter((x) => /^[a-f0-9]{64}$/.test(x)))].slice(0, 1000)
+    if (req.body.replace) await sql('delete from fsc.contacts where user_id=$1', [r.u.id])
+    if (hs.length) await sql('insert into fsc.contacts(user_id, h) select $1, unnest($2::text[]) on conflict do nothing', [r.u.id, hs.map((x) => contactKey(r.u.id, x))])
+    const [c] = await sql('select count(*)::int n from fsc.contacts where user_id=$1', [r.u.id])
+    if (c.n > 5000) { await sql('delete from fsc.contacts where user_id=$1 and h in (select h from fsc.contacts where user_id=$1 offset 5000)', [r.u.id]) }
+    res.json({ ok: true, count: Math.min(c.n, 5000) })
+  }))
+  router.post('/prefs', wrap(async (req, res) => {
+    const r = await sessionUser(req.body?.sid)
+    if (!r) return res.status(404).json({ ok: false, error: 'Session not found.' })
+    const fn = String(req.body.first_name || '').replace(/[^\p{L}\p{M}' -]/gu, '').trim().slice(0, 30)
+    const say = !!req.body.say_name && !!fn
+    await sql('update fsc.users set first_name=$2, say_name=$3, updated_at=now() where id=$1', [r.u.id, fn || null, say])
+    res.json({ ok: true, say_name: say, first_name: fn })
   }))
   router.post('/portal', wrap(async (req, res) => {
     const r = await sessionUser(req.body?.sid)

@@ -69,6 +69,15 @@ export function Layout() {
             ]}
           />
         </div>
+        <div className="mx-auto max-w-[1200px] px-4 pb-6 text-xs">
+          <p className="mb-1 text-sm font-semibold text-navy-950">Play responsibly</p>
+          <p className="mb-2">Contests should stay fun. If chasing prizes or gambling stops feeling fun, free and confidential help is available.</p>
+          <p className="flex flex-wrap gap-x-5 gap-y-1">
+            <a href="https://connexontario.ca/" target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-600">ConnexOntario</a>
+            <a href="https://responsiblegambling.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-600">Responsible Gambling Council</a>
+            <a href="https://connexontario.ca/our-services/gambling-treatment/" target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-600">Problem Gambling Helpline: 1-866-531-2600</a>
+          </p>
+        </div>
         <div className="mx-auto max-w-[1200px] px-4 pb-8">
           <DisclaimerStrip />
         </div>
