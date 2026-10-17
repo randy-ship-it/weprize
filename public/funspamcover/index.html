@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FunSpamCover: let an AI assistant waste spammers' time | WePrize</title>
+<meta name="description" content="Forward unanswered calls to one number. A cheerful automated assistant asks spam callers delightfully pointless questions, then pitches them WePrize. 3-day free trial, then 99¢ a month.">
+<meta property="og:title" content="FunSpamCover: let an AI assistant waste spammers' time">
+<meta property="og:description" content="Forward unanswered calls. Our automated assistant keeps spammers busy with pointless questions, then pitches WePrize. Try it free for 3 days.">
+<meta property="og:url" content="https://weprize.net/funspamcover">
+<link rel="icon" href="/favicon.svg">
+<style>
+:root{--teal:#0d9488;--teal2:#14b8a6;--navy:#123352;--amber:#f59e0b;--bg:#f4f8fb;--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--r:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+a{color:var(--teal)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;max-width:1120px;margin:0 auto}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;color:var(--navy);text-decoration:none;font-size:18px}
+.brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--amber));display:grid;place-items:center;color:#fff;font-size:16px}
+.brand small{font-weight:600;color:var(--mut);font-size:13px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.pri{background:var(--teal);color:#fff;box-shadow:0 8px 22px rgba(13,148,136,.28)}
+.btn.amb{background:var(--amber);color:#1f1300}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.sm{padding:8px 14px;font-size:14px}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:28px 0 56px}
+.pill{display:inline-block;background:#fff7e6;color:#92400e;border:1px solid #fde3a7;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+h1{font-size:clamp(34px,5vw,56px);line-height:1.04;margin:14px 0 14px;color:var(--navy);letter-spacing:-.02em}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--teal),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:19px;color:var(--mut);max-width:560px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
+.fine{font-size:13px;color:var(--mut)}
+/* demo phone */
+.phone{background:var(--navy);border-radius:34px;padding:14px;box-shadow:0 30px 60px rgba(18,51,82,.28);max-width:440px;margin-left:auto;width:100%}
+.screen{background:#fff;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;height:520px}
+.callbar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:#f8fafc}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:18px;flex:none}
+.av.c{background:#fee2e2}.av.g{background:#ccfbf1}
+.callbar b{display:block;font-size:14px}.callbar span{font-size:12px;color:var(--mut)}
+.live{margin-left:auto;font-size:12px;font-weight:700;color:#b91c1c;display:flex;align-items:center;gap:6px}
+.live i{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite}
+.live.off{color:var(--mut)}.live.off i{background:#94a3b8;animation:none}
+@keyframes pulse{50%{opacity:.3}}
+.chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.msg{display:none;gap:8px;max-width:88%;cursor:pointer}
+.msg.show{display:flex;animation:pop .28s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}}
+.msg.glen{align-self:flex-end;flex-direction:row-reverse}
+.bub{padding:9px 13px;border-radius:16px;font-size:14.5px;background:#f1f5f9}
+.msg.glen .bub{background:var(--teal);color:#fff;border-bottom-right-radius:5px}
+.msg.caller .bub{border-bottom-left-radius:5px}
+.msg.speaking .bub{box-shadow:0 0 0 3px rgba(245,158,11,.55)}
+.who{font-size:11px;color:var(--mut);margin:0 4px 2px}
+.msg.glen .who{text-align:right}
+.typing{align-self:flex-start;background:#f1f5f9;border-radius:16px;padding:10px 14px;display:none}
+.typing.glen{align-self:flex-end;background:#ccfbf1}
+.typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#94a3b8;animation:b 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{transform:translateY(-4px)}}
+.hint{margin:auto;text-align:center;color:var(--mut);display:grid;gap:4px;font-size:14px}.hint b{color:var(--navy);font-size:16px}
+.ended{align-self:center;font-size:12px;color:var(--mut);background:#f1f5f9;border-radius:999px;padding:4px 12px;display:none}
+.controls{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
+.play{width:46px;height:46px;border-radius:50%;border:0;background:var(--amber);font-size:18px;cursor:pointer;flex:none}
+.bar{flex:1;height:6px;background:#e2e8f0;border-radius:6px;cursor:pointer;position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--teal);border-radius:6px;width:0}
+.time{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;width:74px;text-align:right}
+.demo-note{font-size:12px;color:#cbd5e1;text-align:center;margin-top:8px}
+section{padding:56px 0}
+h2{font-size:clamp(26px,3.4vw,38px);color:var(--navy);margin:0 0 8px;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:0 0 26px;font-size:17px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.card h3{margin:6px 0;color:var(--navy)}
+.step{width:34px;height:34px;border-radius:10px;background:#ccfbf1;color:var(--teal);font-weight:800;display:grid;place-items:center}
+.toggle{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px;gap:4px}
+.toggle button{border:0;background:transparent;border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px;cursor:pointer;color:var(--mut)}
+.toggle button.on{background:var(--navy);color:#fff}
+.voicebox{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;color:var(--navy)}
+.tabs button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.code{display:flex;align-items:center;gap:10px;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;margin:8px 0;flex-wrap:wrap}
+.code b{color:#5eead4;letter-spacing:.03em}
+.code .btn{margin-left:auto}
+.setup{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.setup ol{padding-left:20px;margin:6px 0}.setup li{margin:6px 0}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;position:relative}
+.plan.pop{border-color:var(--teal)}
+.plan .tag{position:absolute;top:-12px;left:20px;background:var(--amber);color:#1f1300;font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px}
+.price{font-size:42px;font-weight:800;color:var(--navy)}.price small{font-size:15px;color:var(--mut);font-weight:600}
+.plan ul{padding-left:18px;color:var(--mut);flex:1}.plan li{margin:5px 0}
+form.signup{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:14px;max-width:620px}
+label{font-weight:700;font-size:14px;color:var(--navy);display:grid;gap:6px}
+input,select{font:inherit;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;background:#fff}
+input:focus,select:focus{outline:3px solid rgba(13,148,136,.25);border-color:var(--teal)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.err{color:#b91c1c;font-weight:600;min-height:1.2em;margin:0}
+.hp{position:absolute;left:-9999px}
+.welcome{display:none;background:linear-gradient(135deg,#ccfbf1,#fff7e6);border:1px solid #99f6e4;border-radius:var(--r);padding:22px;margin:10px 0 0}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:10px 0}
+summary{font-weight:700;cursor:pointer;color:var(--navy)}
+footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
+.num{font-weight:800;color:var(--navy);white-space:nowrap}
+.xs{display:none}
+@media (max-width:520px){.lg{display:none}.xs{display:inline}.brand small{display:none}}
+@media (max-width:880px){.hero,.setup{grid-template-columns:1fr}.phone{margin:0 auto}.grid3,.plans{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.screen{height:470px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><span class="dot">✦</span> WePrize <small>/ FunSpamCover</small></a>
+  <a class="btn pri sm" href="#signup"><span class="lg">Try free for 3 days</span><span class="xs">Try free</span></a>
+</header>
+
+<main class="wrap">
+  <div class="welcome" id="welcome" role="status"></div>
+
+  <div class="hero">
+    <div>
+      <span class="pill">📵 Spam calls, but make it fun</span>
+      <h1>Let an AI assistant <em>waste spammers' time</em> for 99¢.</h1>
+      <p class="lead">Forward your unanswered calls to one number. <b>Glen</b>, a cheerful automated assistant, picks up, asks spam callers delightfully pointless questions, then pitches them WePrize. Everyone else gets about 30 friendly seconds and a "gotta go!"</p>
+      <div class="ctas">
+        <a class="btn pri" href="#signup">Start my 3-day free trial</a>
+        <button class="btn ghost" id="heroPlay" type="button">▶ Hear a real-sounding demo</button>
+      </div>
+      <p class="fine">Then $0.99/month CAD. Card required, cancel anytime in one click. Glen always says it's an automated assistant if asked.</p>
+    </div>
+
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="callbar">
+            <div class="av c">📞</div>
+            <div><b>Unknown caller</b><span>"Extended warranty" robocall</span></div>
+            <div class="live off" id="live"><i></i><span id="liveTxt">Tap play</span></div>
+          </div>
+          <div class="chat" id="chat" aria-live="polite">
+            <div class="hint" id="hint"><div style="font-size:40px">🤖📞</div><b>A robocaller vs. Glen</b><span>Tap ▶ to listen. The chat follows along.</span></div>
+            <div class="typing" id="typing"><span></span><span></span><span></span></div>
+            <div class="ended" id="ended">📵 Spammer hung up · 1 min of their time, gone</div>
+          </div>
+          <div class="controls">
+            <button class="play" id="play" aria-label="Play demo call">▶</button>
+            <div class="bar" id="bar"><i id="prog"></i></div>
+            <div class="time" id="time">0:00 / 1:09</div>
+          </div>
+        </div>
+      </div>
+      <p class="demo-note">Simulated demo call. No real people or numbers.</p>
+      <audio id="audio" preload="metadata"></audio>
+    </div>
+  </div>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="sub">Three minutes to set up. Zero minutes talking to "the warranty department."</p>
+    <div class="grid3">
+      <div class="card"><div class="step">1</div><h3>Silence unknown callers</h3><p>Your contacts still ring. Everyone else skips your phone and goes to forwarding instead of voicemail.</p></div>
+      <div class="card"><div class="step">2</div><h3>Forward to our number</h3><p>Dial one carrier code to forward unanswered calls to <span class="num">+1 289-367-5302</span>.</p></div>
+      <div class="card"><div class="step">3</div><h3>Glen takes it from here</h3><p>Spammers get curious questions and a WePrize pitch. Real people get a short, friendly chat and a "gotta go!" Glen never shares your info.</p></div>
+    </div>
+  </section>
+
+  <section id="voice">
+    <h2>Pick your assistant's voice</h2>
+    <p class="sub">Same honest, chatty automated assistant. Two voices. Switch anytime.</p>
+    <div class="voicebox">
+      <div class="toggle" role="tablist" aria-label="Assistant voice">
+        <button type="button" class="on" data-voice="male" role="tab" aria-selected="true">🧔 Glen (male)</button>
+        <button type="button" data-voice="female" role="tab" aria-selected="false">👩 Jess (female)</button>
+      </div>
+      <button class="btn amb" type="button" id="previewBtn">▶ Preview Glen</button>
+      <audio id="preview" preload="none"></audio>
+    </div>
+  </section>
+
+  <section id="setup">
+    <h2>Set it up on your phone</h2>
+    <p class="sub">Pick your carrier, tap the code to dial it, and you're done. Use the "turn off" code anytime to go back to normal.</p>
+    <div class="tabs" id="carrierTabs"></div>
+    <div class="setup">
+      <div class="card" id="carrierBox"></div>
+      <div class="card">
+        <div class="tabs" id="osTabs">
+          <button type="button" class="on" data-os="ios">iPhone</button><button type="button" data-os="android">Android</button>
+        </div>
+        <div id="osBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans">
+    <h2>Plans</h2>
+    <p class="sub">Every plan starts with a 3-day free trial. Prices in CAD, billed monthly. No annual anything.</p>
+    <div class="plans">
+      <div class="plan pop"><span class="tag">Most fun per penny</span><h3>Basic</h3><div class="price">$0.99<small>/month</small></div>
+        <ul><li>Glen or Jess answers your forwarded calls</li><li>A light month of spam: about 2 to 4 spam-wasting calls</li><li>Then a short voicemail-style message until next month</li></ul>
+        <button class="btn pri" data-plan="basic" type="button">Start free trial</button></div>
+      <div class="plan"><h3>Premium</h3><div class="price">$3.99<small>/month</small></div>
+        <ul><li>Everything in Basic</li><li>About 15 to 25 spam-wasting calls a month</li><li>For people whose number got "sold"</li></ul>
+        <button class="btn ghost" data-plan="premium" type="button">Start free trial</button></div>
+      <div class="plan"><h3>Super</h3><div class="price">$6.99<small>/month</small></div>
+        <ul><li>Everything in Premium</li><li>About 30 to 50 spam-wasting calls a month</li><li>Built for mass inbound</li></ul>
+        <button class="btn ghost" data-plan="super" type="button">Start free trial</button></div>
+    </div>
+    <p class="fine" style="margin-top:12px">Calls last up to a minute, so the count depends on how long spammers stick around. When a plan's monthly allowance is used up, calls get a short voicemail-style message and we email you an upgrade option. Unusual call volumes (more than 30 calls a day, or rapid-fire bursts) pause the account for review.</p>
+  </section>
+
+  <section id="signup">
+    <h2>Start your free trial</h2>
+    <p class="sub">Use the mobile number you'll forward from. That's how Glen knows the call is yours.</p>
+    <form class="signup" id="form" novalidate>
+      <div class="row2">
+        <label>Your mobile number<input name="phone" inputmode="tel" autocomplete="tel" placeholder="416 555 0123" required></label>
+        <label>Email (for receipts)<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      </div>
+      <div class="row2">
+        <label>Plan<select name="plan"><option value="basic">Basic · $0.99/mo</option><option value="premium">Premium · $3.99/mo</option><option value="super">Super · $6.99/mo</option></select></label>
+        <label>Voice<select name="voice"><option value="male">Glen (male)</option><option value="female">Jess (female)</option></select></label>
+      </div>
+      <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn pri" type="submit" id="go">Continue to secure checkout →</button>
+      <p class="err" id="err"></p>
+      <p class="fine">3 days free, then billed monthly. Card collected by Stripe; we never see it. Cancel anytime from your welcome screen.</p>
+    </form>
+  </section>
+
+  <section id="faq">
+    <h2>Questions</h2>
+    <details><summary>Is Glen a real person?</summary><p>No. Glen is an AI assistant that answers for you. If anyone asks, Glen says it's an automated assistant answering the line. It never pretends to be you or a human.</p></details>
+    <details><summary>What does Glen say to real (non-spam) callers?</summary><p>About 30 seconds of friendly, curious small talk, then "sorry, gotta go!" It doesn't take messages or share anything about you. Tip: save the people you know in Contacts so they ring straight through.</p></details>
+    <details><summary>What AI is this?</summary><p>Glen runs on top AI models for conversation and natural-sounding voice.</p></details>
+    <details><summary>Will it give out my info?</summary><p>Never. It doesn't know your name, address, or anything else, and it never presses buttons or agrees to anything.</p></details>
+    <details><summary>How do I turn it off?</summary><p>Dial your carrier's "turn off" code above, and cancel your plan from your welcome screen (or the link in your Stripe receipt).</p></details>
+    <details><summary>Can my friends use it too?</summary><p>Yes! Each person signs up with their own mobile number and forwards to the same screener number.</p></details>
+  </section>
+</main>
+
+<footer>FunSpamCover is a just-for-fun corner of WePrize. Only forward a phone number you own. · <a href="/">Back to WePrize</a></footer>
+
+<script>
+(() => {
+  const NUM = '2893675302', NUM_FMT = '289-367-5302';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // ---------- audio (stored as base64 text so the repo stays text-only) ----------
+  const b64cache = {};
+  const b64url = (name) => b64cache[name] || (b64cache[name] = fetch('/funspamcover/' + name + '.b64').then(r => r.text()).then(t => {
+    const bin = atob(t.trim()), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([u8], { type: 'audio/mpeg' }));
+  }));
+  // ---------- demo player ----------
+  const audio = $('#audio');
+  const audioReady = b64url('demo-call').then(u => { audio.src = u; });
+  const playDemo = () => audioReady.then(() => audio.play());
+  setTimeout(() => { b64url('preview-male'); b64url('preview-female'); }, 1500);
+  const chat = $('#chat'), typing = $('#typing'), ended = $('#ended');
+  let lines = [], hangupMs = 67500, els = [];
+  fetch('/funspamcover/demo-call.json').then(r => r.json()).then(d => {
+    lines = d.lines; hangupMs = (d.events || []).find(e => e.type === 'hangup')?.start_ms || d.duration_ms;
+    els = lines.map((l) => {
+      const glen = l.role === 'glen';
+      const m = document.createElement('div');
+      m.className = 'msg ' + (glen ? 'glen' : 'caller');
+      m.innerHTML = `<div class="av ${glen ? 'g' : 'c'}">${glen ? '🤖' : '📞'}</div><div><div class="who">${glen ? 'Glen (automated assistant)' : 'Robocaller'}</div><div class="bub"></div></div>`;
+      $('.bub', m).textContent = l.text;
+      m.onclick = () => audioReady.then(() => { audio.currentTime = l.start_ms / 1000; audio.play(); });
+      chat.insertBefore(m, typing);
+      return m;
+    });
+    render();
+  });
+  const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  function render() {
+    const t = audio.currentTime * 1000, dur = (audio.duration || 68.9);
+    let last = -1;
+    els.forEach((m, i) => {
+      const on = lines[i].start_ms <= t + 60;
+      m.classList.toggle('show', on);
+      m.classList.toggle('speaking', on && t <= lines[i].end_ms && !audio.paused);
+      if (on) last = i;
+    });
+    const next = lines[last + 1];
+    const gap = next && t > (lines[last]?.end_ms ?? 0) && next.start_ms - t < 900;
+    typing.style.display = gap && !audio.paused ? 'block' : 'none';
+    typing.className = 'typing' + (next && next.role === 'glen' ? ' glen' : '');
+    ended.style.display = t >= hangupMs ? 'block' : 'none';
+    $('#hint').style.display = t < 200 && audio.paused ? 'grid' : 'none';
+    $('#prog').style.width = (100 * audio.currentTime / dur) + '%';
+    $('#time').textContent = fmt(audio.currentTime) + ' / ' + fmt(dur);
+    if (last !== render.last) { chat.scrollTop = chat.scrollHeight; render.last = last; }
+    const live = $('#live');
+    live.classList.toggle('off', audio.paused);
+    $('#liveTxt').textContent = audio.paused ? (t >= hangupMs ? 'Call ended' : 'Paused') : 'On call';
+  }
+  const toggle = () => (audio.paused ? playDemo() : audio.pause());
+  $('#play').onclick = toggle;
+  $('#heroPlay').onclick = () => { playDemo(); if (innerWidth < 880) $('.phone').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+  audio.addEventListener('play', () => { $('#play').textContent = '❚❚'; tick(); });
+  audio.addEventListener('pause', () => { $('#play').textContent = '▶'; render(); });
+  audio.addEventListener('ended', () => { $('#play').textContent = '↻'; render(); });
+  audio.addEventListener('loadedmetadata', render);
+  audio.addEventListener('seeked', render);
+  function tick() { render(); if (!audio.paused) requestAnimationFrame(tick); }
+  $('#bar').onclick = (e) => { const r = e.currentTarget.getBoundingClientRect(); audio.currentTime = ((e.clientX - r.left) / r.width) * (audio.duration || 68.9); };
+
+  // ---------- voice toggle ----------
+  const preview = $('#preview'); let voice = 'male';
+  const names = { male: 'Glen', female: 'Jess' };
+  function setVoice(v) {
+    voice = v;
+    $$('.toggle button').forEach(b => { const on = b.dataset.voice === v; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    $('#previewBtn').textContent = '▶ Preview ' + names[v];
+    $('select[name=voice]').value = v;
+    preview.pause();
+  }
+  $$('.toggle button').forEach(b => b.onclick = () => setVoice(b.dataset.voice));
+  $('select[name=voice]').onchange = (e) => setVoice(e.target.value);
+  $('#previewBtn').onclick = () => {
+    if (!preview.paused) { preview.pause(); return; }
+    audio.pause(); b64url('preview-' + voice).then(u => { preview.src = u; preview.play(); });
+  };
+  preview.addEventListener('play', () => $('#previewBtn').textContent = '❚❚ Playing ' + names[voice]);
+  preview.addEventListener('pause', () => $('#previewBtn').textContent = '▶ Preview ' + names[voice]);
+  preview.addEventListener('ended', () => $('#previewBtn').textContent = '▶ Preview ' + names[voice]);
+
+  // ---------- carrier setup ----------
+  const tel = (c) => 'tel:' + c.replace(/#/g, '%23');
+  const code = (label, c) => `<div class="fine" style="margin-top:10px">${label}</div><div class="code"><b>${c}</b><a class="btn amb sm" href="${tel(c)}">Tap to dial</a><button class="btn ghost sm" type="button" data-copy="${c}">Copy</button></div>`;
+  const CARRIERS = {
+    Telus: { on: [['Forward when busy, unanswered or unreachable', `*004*${NUM}*20#`]], off: '#004#', note: 'The 20 is how many seconds your phone rings first. Koodo and Public Mobile use the Rogers-style codes.' },
+    Rogers: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '##61# then ##67#', note: 'Rogers only forwards conditionally when voicemail is turned off on your line (call 611 or use the MyRogers app).' },
+    Bell: { on: [], off: '', note: '' },
+    Freedom: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '#61# then #67#', note: 'Freedom forwards to any Canadian number, so our Ontario number is fine.' },
+    Fido: { on: [['Forward unanswered calls', `*61*${NUM}#`], ['Forward silenced or declined calls (busy)', `*67*${NUM}#`]], off: '##61# then ##67#', note: 'Like Rogers, conditional forwarding needs voicemail turned off on your line.' },
+  };
+  function showCarrier(name) {
+    $$('#carrierTabs button').forEach(b => b.classList.toggle('on', b.dataset.c === name));
+    const c = CARRIERS[name];
+    let h = `<h3>${name}</h3>`;
+    if (name === 'Bell') {
+      h += `<p>Bell Mobility sets forwarding in your phone's settings instead of a dial code:</p><ol>
+        <li><b>iPhone:</b> Bell uses <b>No Answer Transfer</b>. Turn it on in the MyBell app or by calling 611, and set the number to <span class="num">${NUM_FMT}</span>.</li>
+        <li><b>Android:</b> Phone app → Settings → Supplementary services (or Calls) → Call forwarding → <b>Forward when unanswered</b> and <b>Forward when busy</b> → enter <span class="num">${NUM_FMT}</span>.</li></ol>
+        <p class="fine">Bell sends a free text to confirm forwarding is on. To turn it off, switch those settings back off.</p>`;
+    } else {
+      h += c.on.map(([l, x]) => code(l, x)).join('');
+      h += `<p class="fine" style="margin-top:14px"><b>Turn it off:</b> dial <code>${c.off}</code></p><p class="fine">${c.note}</p>`;
+    }
+    $('#carrierBox').innerHTML = h;
+  }
+  $('#carrierTabs').innerHTML = Object.keys(CARRIERS).map(n => `<button type="button" data-c="${n}">${n}</button>`).join('');
+  $$('#carrierTabs button').forEach(b => b.onclick = () => showCarrier(b.dataset.c));
+  showCarrier('Telus');
+  const OS = {
+    ios: `<h3>iPhone: Silence Unknown Callers</h3><ol><li>Open <b>Settings</b> → <b>Apps</b> → <b>Phone</b> (older iOS: Settings → Phone).</li><li>Turn on <b>Silence Unknown Callers</b>.</li><li>Contacts, recent outgoing calls and Siri suggestions still ring. Everyone else is forwarded to Glen.</li></ol>`,
+    android: `<h3>Android: screen unknown numbers</h3><ol><li><b>Pixel:</b> Phone app → Settings → <b>Call Screen</b> (or Spam and Call Screen) → set <b>Unknown numbers</b> to <b>Decline</b>.</li><li><b>Samsung:</b> Phone app → ⋮ → Settings → <b>Block numbers</b> → turn on <b>Block unknown/private numbers</b>, and turn on <b>Block spam and scam calls</b>.</li><li>Declined calls follow your carrier's "busy" forwarding, so set up both codes on the left.</li></ol>`,
+  };
+  const showOS = (o) => { $$('#osTabs button').forEach(b => b.classList.toggle('on', b.dataset.os === o)); $('#osBox').innerHTML = OS[o]; };
+  $$('#osTabs button').forEach(b => b.onclick = () => showOS(b.dataset.os));
+  showOS(/android/i.test(navigator.userAgent) ? 'android' : 'ios');
+  document.addEventListener('click', (e) => {
+    const c = e.target.closest('[data-copy]'); if (!c) return;
+    navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = 'Copied!'; setTimeout(() => c.textContent = 'Copy', 1400); });
+  });
+
+  // ---------- plans + signup ----------
+  $$('[data-plan]').forEach(b => b.onclick = () => { $('select[name=plan]').value = b.dataset.plan; $('#signup').scrollIntoView({ behavior: 'smooth' }); setTimeout(() => $('input[name=phone]').focus(), 500); });
+  $('#form').onsubmit = async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target), body = Object.fromEntries(f.entries());
+    const err = $('#err'), go = $('#go'); err.textContent = '';
+    if (body.phone.replace(/\D/g, '').length < 10) { err.textContent = 'Enter the 10-digit mobile number you forward from.'; return; }
+    go.disabled = true; go.textContent = 'Opening secure checkout…';
+    try {
+      const r = await fetch('/api/fsc/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+      const j = await r.json();
+      if (j.url) { location.href = j.url; return; }
+      err.textContent = j.error || 'Something went sideways. Please try again.';
+    } catch { err.textContent = 'Network hiccup. Please try again.'; }
+    go.disabled = false; go.textContent = 'Continue to secure checkout →';
+  };
+
+  // ---------- welcome / manage ----------
+  const qs = new URLSearchParams(location.search), sid = qs.get('welcome');
+  if (qs.get('canceled')) { const w = $('#welcome'); w.style.display = 'block'; w.innerHTML = '<b>No worries, checkout was cancelled.</b> Your trial is waiting whenever you are.'; }
+  if (sid) {
+    const w = $('#welcome'); w.style.display = 'block'; w.innerHTML = '<b>Setting up your assistant…</b>';
+    const load = (n = 0) => fetch('/api/fsc/session?sid=' + encodeURIComponent(sid)).then(r => r.json()).then(j => {
+      if (!j.ok) { w.innerHTML = "<b>We couldn't find that checkout.</b> If you just paid, refresh in a minute."; return; }
+      if (j.status === 'pending' && n < 5) { setTimeout(() => load(n + 1), 2500); return; }
+      const plan = { basic: 'Basic', premium: 'Premium', super: 'Super' }[j.plan];
+      const live = j.status === 'trialing' || j.status === 'active';
+      w.innerHTML = `<h2 style="margin:0 0 6px">${live ? "🎉 You're in! Glen is on duty." : 'Almost there'}</h2>
+        <p style="margin:0 0 12px">Plan: <b>${plan}</b> · Status: <b>${j.status === 'trialing' ? '3-day free trial' : j.status}</b> · Forwarding from <b>${j.phone}</b></p>
+        <p style="margin:0 0 12px"><b>Last step:</b> dial your carrier's code below to forward to <span class="num">${NUM_FMT}</span>, and turn on Silence Unknown Callers.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div class="toggle" id="wvoice"><button type="button" data-v="male" class="${j.voice === 'male' ? 'on' : ''}">🧔 Glen</button><button type="button" data-v="female" class="${j.voice === 'female' ? 'on' : ''}">👩 Jess</button></div>
+          <a class="btn amb sm" href="#setup">Set up forwarding</a>
+          <button class="btn ghost sm" type="button" id="manage">Manage or cancel plan</button>
+        </div>`;
+      $$('#wvoice button').forEach(b => b.onclick = async () => {
+        const r = await fetch('/api/fsc/voice', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid, voice: b.dataset.v }) }).then(r => r.json());
+        if (r.ok) $$('#wvoice button').forEach(x => x.classList.toggle('on', x.dataset.v === r.voice));
+      });
+      $('#manage').onclick = async () => {
+        const r = await fetch('/api/fsc/portal', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid }) }).then(r => r.json());
+        if (r.url) location.href = r.url; else alert(r.error || 'Try again in a minute.');
+      };
+    });
+    load();
+  }
+})();
+</script>
+</body>
+</html>
