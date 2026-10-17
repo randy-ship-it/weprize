@@ -127,7 +127,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
         <a class="btn pri" href="#signup">Start my 3-day free trial</a>
         <button class="btn ghost" id="heroPlay" type="button">▶ Hear a real-sounding demo</button>
       </div>
-      <p class="fine">Then $0.99/month CAD. Card required, cancel anytime in one click. Glen always says it's an automated assistant if asked.</p>
+      <p class="fine">Then $0.99/month CAD. Card required, cancel anytime in one click. Glen always says it's an automated assistant, and calls may be recorded.</p>
     </div>
 
     <div>
@@ -222,6 +222,8 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
         <label>Plan<select name="plan"><option value="basic">Basic · $0.99/mo</option><option value="premium">Premium · $3.99/mo</option><option value="super">Super · $6.99/mo</option></select></label>
         <label>Voice<select name="voice"><option value="male">Glen (male)</option><option value="female">Jess (female)</option></select></label>
       </div>
+      <label>Mode<select name="mode"><option value="shill" selected>WePrize shill (default)</option><option value="jokes">Funny jokes (coming soon)</option><option value="curious">Curious questions (coming soon)</option><option value="professional">Professional: takes a message (coming soon)</option></select></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--ink)"><input type="checkbox" name="consent" required style="margin-top:4px;width:18px;height:18px"><span>I agree that calls forwarded to FunSpamCover are answered by an automated assistant and may be recorded. Call transcripts and recordings are saved for up to 12 months to run and improve the service, and are not reviewed individually.</span></label>
       <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn pri" type="submit" id="go">Continue to secure checkout →</button>
       <p class="err" id="err"></p>
@@ -240,7 +242,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
   </section>
 </main>
 
-<footer>FunSpamCover is a just-for-fun corner of WePrize. Only forward a phone number you own. · <a href="/">Back to WePrize</a></footer>
+<footer>Calls may be recorded by an automated assistant. Transcripts and recordings are kept up to 12 months to run and improve the service and are not reviewed individually.<br>Coming soon: earn a share when callers you send join WePrize.<br>FunSpamCover is a just-for-fun corner of WePrize. Only forward a phone number you own. · <a href="/">Back to WePrize</a></footer>
 
 <script>
 (() => {
@@ -376,6 +378,8 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     e.preventDefault();
     const f = new FormData(e.target), body = Object.fromEntries(f.entries());
     const err = $('#err'), go = $('#go'); err.textContent = '';
+    body.consent = !!e.target.consent.checked;
+    if (!body.consent) { err.textContent = 'Please tick the consent box to continue.'; return; }
     if (body.phone.replace(/\D/g, '').length < 10) { err.textContent = 'Enter the 10-digit mobile number you forward from.'; return; }
     go.disabled = true; go.textContent = 'Opening secure checkout…';
     try {

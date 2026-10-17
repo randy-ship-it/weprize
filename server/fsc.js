@@ -122,15 +122,18 @@ export function createFscRouter({ stripe }) {
     const email = String(b.email || '').trim().toLowerCase()
     const plan = PLANS[b.plan] ? b.plan : 'basic'
     const voice = b.voice === 'female' ? 'female' : 'male'
+    const mode = ['jokes', 'shill', 'curious', 'professional'].includes(b.mode) ? b.mode : 'shill'
+    if (!(b.consent === true || b.consent === 'on' || b.consent === 'true')) return res.status(400).json({ ok: false, error: 'Please tick the consent box to continue.' })
     if (!phone) return res.status(400).json({ ok: false, error: 'Enter the 10-digit Canadian or US mobile number you forward from.' })
     if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return res.status(400).json({ ok: false, error: 'Enter a valid email.' })
     if (!stripe) return res.status(503).json({ ok: false, error: 'Checkout is warming up. Try again shortly.' })
     const u = (await sql(
-      `insert into fsc.users(phone, email, plan, voice, status) values ($1,$2,$3,$4,'pending')
-       on conflict (phone) do update set
+      `insert into fsc.users(phone, email, plan, voice, mode, consent_at, status) values ($1,$2,$3,$4,$5,now(),'pending')
+       on conflict (phone) do update set consent_at = now(),
+         mode = case when fsc.users.status in ('trialing','active') then fsc.users.mode else excluded.mode end,
          email = case when fsc.users.status in ('trialing','active') then fsc.users.email else excluded.email end,
          voice = case when fsc.users.status in ('trialing','active') then fsc.users.voice else excluded.voice end, updated_at = now()
-       returning id, status, plan, trial_used`, [phone, email, plan, voice]))[0]
+       returning id, status, plan, trial_used`, [phone, email, plan, voice, mode]))[0]
     const live = u.status === 'active' || u.status === 'trialing'
     if (live && u.plan === plan) return res.status(409).json({ ok: false, error: 'That number already has this plan. Manage it from the link on your welcome screen.' })
     if (u.status === 'suspended') return res.status(403).json({ ok: false, error: 'This number is paused for review.' })
@@ -195,7 +198,7 @@ export function createFscRouter({ stripe }) {
       const sent = await mail(u.email, subj, text).catch(() => false)
       await event('upgrade_prompt', { uid: u.id, kind: d.upgradePrompt, sent })
     }
-    if (d.action === 'screen') return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '' })
+    if (d.action === 'screen') return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '', mode: u?.mode || 'shill' })
     res.json({ action: 'say', reason: d.reason, text: d.text })
   }
 
@@ -256,7 +259,7 @@ export function createFscRouter({ stripe }) {
   router.get('/session', wrap(async (req, res) => {
     const r = await sessionUser(req.query.sid)
     if (!r) return res.status(404).json({ ok: false })
-    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, phone: mask(r.u.phone), trial_end: r.u.trial_end })
+    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, mode: r.u.mode, phone: mask(r.u.phone), trial_end: r.u.trial_end })
   }))
   router.post('/voice', wrap(async (req, res) => {
     const r = await sessionUser(req.body?.sid)
