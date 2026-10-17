@@ -5,6 +5,14 @@
       "destination": "/api"
     },
     {
+      "source": "/spamfun/prank",
+      "destination": "/spamfun/prank.html"
+    },
+    {
+      "source": "/spamfun/nocall",
+      "destination": "/spamfun/nocall.html"
+    },
+    {
       "source": "/spamfun",
       "destination": "/spamfun/index.html"
     },
