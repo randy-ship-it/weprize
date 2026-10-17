@@ -397,7 +397,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
       if (j.status === 'pending' && n < 5) { setTimeout(() => load(n + 1), 2500); return; }
       const plan = { basic: 'Basic', premium: 'Premium', super: 'Super' }[j.plan];
       const live = j.status === 'trialing' || j.status === 'active';
-      w.innerHTML = `<h2 style="margin:0 0 6px">${live ? "🎉 You're in! Glen is on duty." : 'Almost there'}</h2>
+      w.innerHTML = `<h2 style="margin:0 0 6px">${live ? `🎉 You're in! ${j.voice === 'female' ? 'Jess' : 'Glen'} is on duty.` : 'Almost there'}</h2>
         <p style="margin:0 0 12px">Plan: <b>${plan}</b> · Status: <b>${j.status === 'trialing' ? '3-day free trial' : j.status}</b> · Forwarding from <b>${j.phone}</b></p>
         <p style="margin:0 0 12px"><b>Last step:</b> dial your carrier's code below to forward to <span class="num">${NUM_FMT}</span>, and turn on Silence Unknown Callers.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
