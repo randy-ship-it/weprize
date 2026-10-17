@@ -7,8 +7,9 @@ export const RATES = {
   aiPerMin: 0.09, // voice AI, per minute of conversation
 };
 
-// Worst-case cost of ONE screened call: the voice agent hard-stops at 60s, Twilio rounds up to 2 min.
-export const MAX_SCREENED_CALL_USD = 2 * RATES.twilioPerMin + 1 * RATES.aiPerMin + 0.0025; // ~0.11
+// Worst-case cost of ONE screened call: the voice agent hard-stops at 60s, but the Twilio leg runs ~70s
+// (notice + setup) and we bill AI on the full Twilio duration, so budget 2 Twilio min + 1.2 AI min.
+export const MAX_SCREENED_CALL_USD = 2 * RATES.twilioPerMin + 1.2 * RATES.aiPerMin; // 0.125
 // Cost of a short "say a line and hang up" call (no AI): 1 Twilio minute.
 export const SHORT_CALL_USD = RATES.twilioPerMin;
 

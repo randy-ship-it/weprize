@@ -14,7 +14,7 @@ t("normPhone handles E.164, 10-digit, SIP Diversion", () => {
 t("call cost: Twilio per started minute + AI per minute", () => {
   assert.equal(callCostUsd(34, true), 0.0085 + 0.051);
   assert.equal(callCostUsd(5, false), 0.0085);
-  assert.ok(MAX_SCREENED_CALL_USD >= callCostUsd(60, true) + 0.0085);
+  assert.ok(MAX_SCREENED_CALL_USD >= callCostUsd(70, true), "real call 69s cost must fit the reserve");
 });
 t("every plan keeps a positive worst-case margin after Stripe fees", () => {
   for (const p of Object.keys(PLANS)) assert.ok(worstMarginCad(p) > 0, p + " margin " + worstMarginCad(p));
@@ -34,9 +34,9 @@ t("basic user is cut over BEFORE COGS can pass $0.25 and gets the $3.99 prompt",
 });
 t("premium caps at $1.50 (prompt Super), super caps at $3.00", () => {
   assert.equal(decide({ ...base, user: user({ plan: "premium", monthUsd: 1.45 }) }).upgradePrompt, "to_super");
-  assert.equal(decide({ ...base, user: user({ plan: "premium", monthUsd: 1.3 }) }).action, "screen");
+  assert.equal(decide({ ...base, user: user({ plan: "premium", monthUsd: 1.35 }) }).action, "screen");
   assert.equal(decide({ ...base, user: user({ plan: "super", monthUsd: 2.95 }) }).upgradePrompt, "super_cap");
-  assert.equal(decide({ ...base, user: user({ plan: "super", monthUsd: 2.8 }) }).action, "screen");
+  assert.equal(decide({ ...base, user: user({ plan: "super", monthUsd: 2.85 }) }).action, "screen");
 });
 t("trial users are screened; canceled/past_due/pending are not", () => {
   assert.equal(decide({ ...base, user: user({ status: "trialing" }) }).action, "screen");
@@ -54,10 +54,10 @@ t("abuse: a single caller with 30/day or a burst is blocked", () => {
 });
 t("unmatched calls use the shared pool with a hard daily cap", () => {
   assert.equal(decide(base).reason, "pool");
-  assert.equal(decide({ ...base, poolTodayUsd: 0.95 }).reason, "pool_cap");
+  assert.equal(decide({ ...base, poolTodayUsd: 0.9 }).reason, "pool_cap");
 });
 t("global daily cap beats everything, kill switch beats all", () => {
-  assert.equal(decide({ ...base, globalTodayUsd: 2.95, user: user() }).reason, "global_cap");
+  assert.equal(decide({ ...base, globalTodayUsd: 2.9, user: user() }).reason, "global_cap");
   assert.equal(decide({ ...base, off: true }).reason, "off");
 });
 console.log(`PASS ${n} tests; margins CAD: basic ${worstMarginCad("basic")}, premium ${worstMarginCad("premium")}, super ${worstMarginCad("super")}`);

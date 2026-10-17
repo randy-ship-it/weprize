@@ -106,7 +106,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
 .num{font-weight:800;color:var(--navy);white-space:nowrap}
 .xs{display:none}
 @media (max-width:520px){.lg{display:none}.xs{display:inline}.brand small{display:none}}
-@media (max-width:880px){.hero,.setup{grid-template-columns:1fr}.phone{margin:0 auto}.grid3,.plans{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.screen{height:470px}}
+@media (max-width:880px){.hero>div:last-child{order:-1}.hero{padding-top:8px}.hero,.setup{grid-template-columns:1fr}.phone{margin:0 auto}.grid3,.plans{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.screen{height:470px}}
 </style>
 </head>
 <body>
@@ -201,10 +201,10 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
         <ul><li>Glen or Jess answers your forwarded calls</li><li>A light month of spam: about 2 to 4 spam-wasting calls</li><li>Then a short voicemail-style message until next month</li></ul>
         <button class="btn pri" data-plan="basic" type="button">Start free trial</button></div>
       <div class="plan"><h3>Premium</h3><div class="price">$3.99<small>/month</small></div>
-        <ul><li>Everything in Basic</li><li>About 15 to 25 spam-wasting calls a month</li><li>For people whose number got "sold"</li></ul>
+        <ul><li>Everything in Basic</li><li>About 12 to 25 spam-wasting calls a month</li><li>For people whose number got "sold"</li></ul>
         <button class="btn ghost" data-plan="premium" type="button">Start free trial</button></div>
       <div class="plan"><h3>Super</h3><div class="price">$6.99<small>/month</small></div>
-        <ul><li>Everything in Premium</li><li>About 30 to 50 spam-wasting calls a month</li><li>Built for mass inbound</li></ul>
+        <ul><li>Everything in Premium</li><li>About 24 to 45 spam-wasting calls a month</li><li>Built for mass inbound</li></ul>
         <button class="btn ghost" data-plan="super" type="button">Start free trial</button></div>
     </div>
     <p class="fine" style="margin-top:12px">Calls last up to a minute, so the count depends on how long spammers stick around. When a plan's monthly allowance is used up, calls get a short voicemail-style message and we email you an upgrade option. Unusual call volumes (more than 30 calls a day, or rapid-fire bursts) pause the account for review.</p>
