@@ -133,7 +133,8 @@ export function createFscRouter({ stripe }) {
          mode = case when fsc.users.status in ('trialing','active') then fsc.users.mode else excluded.mode end,
          email = case when fsc.users.status in ('trialing','active') then fsc.users.email else excluded.email end,
          voice = case when fsc.users.status in ('trialing','active') then fsc.users.voice else excluded.voice end, updated_at = now()
-       returning id, status, plan, trial_used`, [phone, email, plan, voice, mode]))[0]
+       returning id, status, plan, trial_used, ref_code`, [phone, email, plan, voice, mode]))[0]
+    if (!u.ref_code) await sql("update fsc.users set ref_code = $2 where id = $1 and ref_code is null", [u.id, 'SPAM' + crypto.randomBytes(3).toString('hex').toUpperCase()])
     const live = u.status === 'active' || u.status === 'trialing'
     if (live && u.plan === plan) return res.status(409).json({ ok: false, error: 'That number already has this plan. Manage it from the link on your welcome screen.' })
     if (u.status === 'suspended') return res.status(403).json({ ok: false, error: 'This number is paused for review.' })
@@ -198,7 +199,7 @@ export function createFscRouter({ stripe }) {
       const sent = await mail(u.email, subj, text).catch(() => false)
       await event('upgrade_prompt', { uid: u.id, kind: d.upgradePrompt, sent })
     }
-    if (d.action === 'screen') return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '', mode: u?.mode || 'shill' })
+    if (d.action === 'screen') return res.json({ action: 'screen', reason: d.reason, voice_id: d.voice === 'default' ? '' : VOICES[d.voice] || '', mode: u?.mode || 'shill', max_secs: d.maxSec || 60 })
     res.json({ action: 'say', reason: d.reason, text: d.text })
   }
 
@@ -259,7 +260,7 @@ export function createFscRouter({ stripe }) {
   router.get('/session', wrap(async (req, res) => {
     const r = await sessionUser(req.query.sid)
     if (!r) return res.status(404).json({ ok: false })
-    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, mode: r.u.mode, phone: mask(r.u.phone), trial_end: r.u.trial_end })
+    res.json({ ok: true, plan: r.u.plan, status: r.u.status, voice: r.u.voice, mode: r.u.mode, ref_code: r.u.ref_code, rev_share_cad: 0, phone: mask(r.u.phone), trial_end: r.u.trial_end })
   }))
   router.post('/voice', wrap(async (req, res) => {
     const r = await sessionUser(req.body?.sid)
@@ -276,6 +277,37 @@ export function createFscRouter({ stripe }) {
     res.json({ ok: true, url: p.url })
   }))
   router.get('/', (_req, res) => res.json({ ok: true, service: 'funspamcover' }))
+
+  // ---------- free try: verified email, one per device, no card ----------
+  const h = (x) => crypto.createHmac('sha256', env('FSC_HOOK_SECRET') || 'x').update(String(x)).digest('hex')
+  const okEmail = (e) => /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(e)
+  router.post('/try/start', wrap(async (req, res) => {
+    const email = String(req.body?.email || '').trim().toLowerCase(), fp = String(req.body?.fp || '')
+    if (req.body?.company) return res.json({ ok: true })
+    if (!okEmail(email)) return res.status(400).json({ ok: false, error: 'Enter a valid email.' })
+    if (fp.length < 16) return res.status(400).json({ ok: false, error: 'Please reload the page and try again.' })
+    const fph = h('fp:' + fp)
+    const [c] = await sql(`select exists(select 1 from fsc.tries where fp_hash=$1 and verified_at is not null) as used,
+      (select count(*) from fsc.tries where (fp_hash=$1 or email=$2) and created_at > now() - interval '1 hour')::int as recent`, [fph, email])
+    if (c.used) return res.status(409).json({ ok: false, used: true, error: "This device already used its free try. Start the 3-day trial to keep going!" })
+    if (c.recent >= 3) return res.status(429).json({ ok: false, error: 'Too many codes requested. Try again in an hour.' })
+    const code = String(crypto.randomInt(100000, 1000000))
+    await sql('insert into fsc.tries(email, fp_hash, code_hash) values ($1,$2,$3)', [email, fph, h('code:' + email + ':' + code)])
+    const sent = await mail(email, 'Your FunSpamCover code: ' + code, 'Your FunSpamCover verification code is ' + code + '.\n\nEnter it on the FunSpamCover page on WePrize to unlock your free test call. It expires in 15 minutes.\n\nDidn\'t ask for this? You can ignore this email.')
+    if (!sent) return res.status(502).json({ ok: false, error: "We couldn't send the code. Check the email and try again." })
+    res.json({ ok: true })
+  }))
+  router.post('/try/verify', wrap(async (req, res) => {
+    const email = String(req.body?.email || '').trim().toLowerCase(), fp = String(req.body?.fp || ''), code = String(req.body?.code || '').replace(/\D/g, '')
+    const fph = h('fp:' + fp)
+    const t = (await sql("select id, code_hash, attempts from fsc.tries where email=$1 and fp_hash=$2 and verified_at is null and created_at > now() - interval '15 minutes' order by id desc limit 1", [email, fph]))[0]
+    if (!t) return res.status(400).json({ ok: false, error: 'Code expired. Request a new one.' })
+    if (t.attempts >= 5) return res.status(429).json({ ok: false, error: 'Too many tries. Request a new code.' })
+    if (!safeEq(h('code:' + email + ':' + code), t.code_hash)) { await sql('update fsc.tries set attempts=attempts+1 where id=$1', [t.id]); return res.status(400).json({ ok: false, error: "That code didn't match." }) }
+    try { await sql('update fsc.tries set verified_at=now() where id=$1', [t.id]) } catch { return res.status(409).json({ ok: false, used: true, error: 'This device already used its free try.' }) }
+    await event('free_try_verified', { tid: t.id })
+    res.json({ ok: true, number: '+12893675302' })
+  }))
 
   /** Called from the shared Stripe webhook for events whose object carries metadata.app === "fsc". */
   router.handleStripeEvent = async (evt) => {

@@ -8,6 +8,13 @@
 <meta property="og:title" content="FunSpamCover: let an AI assistant waste spammers' time">
 <meta property="og:description" content="Forward unanswered calls. Our automated assistant keeps spammers busy with pointless questions, then pitches WePrize. Try it free for 3 days.">
 <meta property="og:url" content="https://weprize.net/spamfun">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://weprize.net/spamfun/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weprize.net/spamfun/og.png">
+<meta name="theme-color" content="#0d9488">
 <link rel="icon" href="/favicon.svg">
 <style>
 :root{--teal:#0d9488;--teal2:#14b8a6;--navy:#123352;--amber:#f59e0b;--bg:#f4f8fb;--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--r:18px}
@@ -124,10 +131,10 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
       <h1>Let an AI assistant <em>waste spammers' time</em> for 99¢.</h1>
       <p class="lead">Forward your unanswered calls to one number. <b>Glen</b>, a cheerful automated assistant, picks up, asks spam callers delightfully pointless questions, then pitches them WePrize. Everyone else gets about 30 friendly seconds and a "gotta go!"</p>
       <div class="ctas">
-        <a class="btn pri" href="#signup">Start my 3-day free trial</a>
+        <a class="btn pri" href="#try">Try it free, no card</a>
         <button class="btn ghost" id="heroPlay" type="button">▶ Hear a real-sounding demo</button>
       </div>
-      <p class="fine">Then $0.99/month CAD. Card required, cancel anytime in one click. Glen always says it's an automated assistant, and calls may be recorded.</p>
+      <p class="fine">Free test call with just your email. Plans from $0.99/month CAD after a 3-day trial. Glen always says it's an automated assistant, and calls may be recorded.</p>
     </div>
 
     <div>
@@ -154,6 +161,21 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
       <audio id="audio" preload="metadata"></audio>
     </div>
   </div>
+
+  <section id="try" style="padding-top:8px">
+    <div class="card" style="max-width:720px">
+      <h2 style="font-size:28px">Try it free: call Glen yourself</h2>
+      <div id="tryA"><p class="sub" style="margin-bottom:14px">Verify your email and we'll unlock a test call. No card. One free try per device.</p>
+        <form id="tryForm" class="row2" novalidate style="align-items:end"><label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><button class="btn pri" type="submit">Email me a code</button><input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true"></form></div>
+      <div id="tryB" style="display:none"><p class="sub" style="margin-bottom:14px">We sent a 6-digit code to <b id="tryEmail"></b>.</p>
+        <form id="codeForm" class="row2" novalidate style="align-items:end"><label>Code<input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required></label><button class="btn pri" type="submit">Unlock my test call</button></form></div>
+      <div id="tryC" style="display:none">
+        <ol style="font-size:17px;padding-left:22px;margin:4px 0 16px"><li>Tap the big button to call Glen.</li><li>Pretend you're a spammer: "Hi, this is about your car's extended warranty…"</li><li>Enjoy ~60 seconds of pointless questions and a WePrize pitch.</li></ol>
+        <a class="btn amb" style="font-size:22px;padding:18px 30px" href="tel:+12893675302">📞 Call it now</a>
+        <p class="fine" style="margin-top:10px">+1 289-367-5302 · Calls may be recorded by an automated assistant. Liked it? <a href="#signup">Start the 3-day trial</a> and forward your own spam.</p></div>
+      <p class="err" id="tryErr"></p>
+    </div>
+  </section>
 
   <section id="how">
     <h2>How it works</h2>
@@ -198,13 +220,13 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     <p class="sub">Every plan starts with a 3-day free trial. Prices in CAD, billed monthly. No annual anything.</p>
     <div class="plans">
       <div class="plan pop"><span class="tag">Most fun per penny</span><h3>Basic</h3><div class="price">$0.99<small>/month</small></div>
-        <ul><li>Glen or Jess answers your forwarded calls</li><li>A light month of spam: about 2 to 4 spam-wasting calls</li><li>Then a short voicemail-style message until next month</li></ul>
+        <ul><li>Glen or Jess answers your forwarded calls</li><li>About 1 full spam-wasting call a month (it's 99¢!)</li><li>Then a short voicemail-style message until next month</li></ul>
         <button class="btn pri" data-plan="basic" type="button">Start free trial</button></div>
       <div class="plan"><h3>Premium</h3><div class="price">$3.99<small>/month</small></div>
-        <ul><li>Everything in Basic</li><li>About 12 to 25 spam-wasting calls a month</li><li>For people whose number got "sold"</li></ul>
+        <ul><li>About 9 to 14 spam-wasting calls a month</li><li>12-month transcript history</li><li>Custom voice (coming soon)</li></ul>
         <button class="btn ghost" data-plan="premium" type="button">Start free trial</button></div>
       <div class="plan"><h3>Super</h3><div class="price">$6.99<small>/month</small></div>
-        <ul><li>Everything in Premium</li><li>About 24 to 45 spam-wasting calls a month</li><li>Built for mass inbound</li></ul>
+        <ul><li>Heavy use: about 17 to 28 calls a month</li><li>Built for mass inbound</li><li>12-month transcripts + custom voice (coming soon)</li></ul>
         <button class="btn ghost" data-plan="super" type="button">Start free trial</button></div>
     </div>
     <p class="fine" style="margin-top:12px">Calls last up to a minute, so the count depends on how long spammers stick around. When a plan's monthly allowance is used up, calls get a short voicemail-style message and we email you an upgrade option. Unusual call volumes (more than 30 calls a day, or rapid-fire bursts) pause the account for review.</p>
@@ -222,7 +244,7 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
         <label>Plan<select name="plan"><option value="basic">Basic · $0.99/mo</option><option value="premium">Premium · $3.99/mo</option><option value="super">Super · $6.99/mo</option></select></label>
         <label>Voice<select name="voice"><option value="male">Glen (male)</option><option value="female">Jess (female)</option></select></label>
       </div>
-      <label>Mode<select name="mode"><option value="shill" selected>WePrize shill (default)</option><option value="jokes">Funny jokes (coming soon)</option><option value="curious">Curious questions (coming soon)</option><option value="professional">Professional: takes a message (coming soon)</option></select></label>
+      <label>Mode<select name="mode"><option value="shill" selected>WePrize shill (default)</option><option value="jokes">Funny (coming soon)</option><option value="curious">Inquisitive (coming soon)</option><option value="professional">Professional: takes name, number and reason (coming soon)</option></select></label>
       <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--ink)"><input type="checkbox" name="consent" required style="margin-top:4px;width:18px;height:18px"><span>I agree that calls forwarded to FunSpamCover are answered by an automated assistant and may be recorded. Call transcripts and recordings are saved for up to 12 months to run and improve the service, and are not reviewed individually.</span></label>
       <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn pri" type="submit" id="go">Continue to secure checkout →</button>
@@ -391,6 +413,34 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
     go.disabled = false; go.textContent = 'Continue to secure checkout →';
   };
 
+  // ---------- free try (one per device) ----------
+  async function fingerprint() {
+    let fp = localStorage.getItem('fsc_fp'); if (fp) return fp;
+    const c = document.createElement('canvas'); const x = c.getContext('2d'); x.textBaseline = 'top'; x.font = '14px Arial'; x.fillText('FunSpamCover✦', 2, 2);
+    const raw = [navigator.userAgent, navigator.language, navigator.platform, screen.width, screen.height, screen.colorDepth, Intl.DateTimeFormat().resolvedOptions().timeZone, navigator.hardwareConcurrency, navigator.deviceMemory, c.toDataURL()].join('|');
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+    fp = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    try { localStorage.setItem('fsc_fp', fp); } catch {}
+    return fp;
+  }
+  let tryEmail = '';
+  const post = (u, b) => fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(b) }).then(r => r.json());
+  const showTry = (k) => ['A', 'B', 'C'].forEach(x => $('#try' + x).style.display = x === k ? 'block' : 'none');
+  if (localStorage.getItem('fsc_try_ok')) showTry('C');
+  $('#tryForm').onsubmit = async (e) => {
+    e.preventDefault(); $('#tryErr').textContent = '';
+    tryEmail = e.target.email.value.trim();
+    const j = await post('/api/fsc/try/start', { email: tryEmail, fp: await fingerprint(), company: e.target.company.value }).catch(() => ({}));
+    if (j.ok) { $('#tryEmail').textContent = tryEmail; showTry('B'); setTimeout(() => $('#codeForm input').focus(), 50); }
+    else $('#tryErr').textContent = j.error || 'Network hiccup. Try again.';
+  };
+  $('#codeForm').onsubmit = async (e) => {
+    e.preventDefault(); $('#tryErr').textContent = '';
+    const j = await post('/api/fsc/try/verify', { email: tryEmail, code: e.target.code.value, fp: await fingerprint() }).catch(() => ({}));
+    if (j.ok) { try { localStorage.setItem('fsc_try_ok', '1'); } catch {} showTry('C'); }
+    else $('#tryErr').textContent = j.error || 'Network hiccup. Try again.';
+  };
+
   // ---------- welcome / manage ----------
   const qs = new URLSearchParams(location.search), sid = qs.get('welcome');
   if (qs.get('canceled')) { const w = $('#welcome'); w.style.display = 'block'; w.innerHTML = '<b>No worries, checkout was cancelled.</b> Your trial is waiting whenever you are.'; }
@@ -408,7 +458,8 @@ footer{padding:36px 0 50px;color:var(--mut);font-size:14px;text-align:center}
           <div class="toggle" id="wvoice"><button type="button" data-v="male" class="${j.voice === 'male' ? 'on' : ''}">🧔 Glen</button><button type="button" data-v="female" class="${j.voice === 'female' ? 'on' : ''}">👩 Jess</button></div>
           <a class="btn amb sm" href="#setup">Set up forwarding</a>
           <button class="btn ghost sm" type="button" id="manage">Manage or cancel plan</button>
-        </div>`;
+        </div>
+        <p style="margin:14px 0 0">Your WePrize referral code: <b>${j.ref_code || ''}</b> · Share link: <b>weprize.net/?ref=${j.ref_code || ''}</b> · Your rev share: <b>$${(j.rev_share_cad || 0).toFixed(2)}</b> <span class="fine">(rev share coming soon)</span></p>`;
       $$('#wvoice button').forEach(b => b.onclick = async () => {
         const r = await fetch('/api/fsc/voice', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid, voice: b.dataset.v }) }).then(r => r.json());
         if (r.ok) $$('#wvoice button').forEach(x => x.classList.toggle('on', x.dataset.v === r.voice));
