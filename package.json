@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/b64-assets.mjs && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "start": "bash scripts/start-autoscale.sh",
