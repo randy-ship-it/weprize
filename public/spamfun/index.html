@@ -437,15 +437,23 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;font-size:14px;color
     if (!body.consent) { err.textContent = 'Please tick the consent box to continue.'; return; }
     if (body.phone.replace(/\D/g, '').length < 10) { err.textContent = 'Enter the 10-digit mobile number you forward from.'; return; }
     go.disabled = true; go.textContent = 'Opening secure checkout…';
+    let j = null;
     try {
       const r = await fetch('/api/fsc/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-      const j = await r.json();
+      j = await r.json();
       if (j.url) { location.href = j.url; return; }
       err.textContent = j.error || 'Something went sideways. Please try again.';
     } catch { err.textContent = 'Network hiccup. Please try again.'; }
-    go.disabled = false; go.textContent = 'Start my 3 free days';
+    go.disabled = false; go.textContent = j && j.waitlisted ? 'Spot saved' : 'Start my 3 free days';
   };
 
+  // interim: paid checkout opens once the database is back
+  fetch('/api/fsc/health').then(r => r.json()).then(j => {
+    if (j.paid_open) return;
+    $('#go').textContent = 'Paid plans opening shortly: save my spot';
+    $$('[data-plan]').forEach(b => b.textContent = 'Opening shortly');
+    const n = document.createElement('p'); n.className = 'fine'; n.style.marginTop = '14px'; n.textContent = 'Paid plans are opening shortly. The free try works now.'; $('#pricing .cols').after(n);
+  }).catch(() => {});
   // ---------- free try (one per device) ----------
   async function fingerprint() {
     let fp = localStorage.getItem('fsc_fp'); if (fp) return fp;
