@@ -42,6 +42,175 @@
     "notes": "EXAMPLE hub shown: DR-HO industry insider store. Winner store credit redeemable across participating Scale insider hubs. Supply brands showcase only — not medical claims."
   },
   {
+    "id": "c-sc-1022",
+    "slug": "sleep-country-bedroom-makeover-2026",
+    "name": "Sleep Country Bedroom Makeover",
+    "url": "https://en.sleepcountry.ca/bedroom-makeover-contest/",
+    "rules_url": "https://en.sleepcountry.ca/bedroom-makeover-contest/",
+    "prize_text": "10 x $10,000 bedroom makeovers, one per province",
+    "prize_tiers": [
+      {
+        "n": 1,
+        "arv_cad": 100000.0,
+        "type": "product"
+      }
+    ],
+    "prize_pool_cad": 100000.0,
+    "close_at_et": "2026-10-27T23:59:00-04:00",
+    "days_left": 0,
+    "region": "ca",
+    "qc_ok": true,
+    "free_entry": true,
+    "platform_family": "sleepcountry",
+    "friction_badges": [
+      "email"
+    ],
+    "auto_class": "NEEDS_YOU",
+    "household_rule": "unknown",
+    "ev_low": 0.0,
+    "ev_mid": 0.0,
+    "ev_high": 0.0,
+    "minutes_to_enter": 3,
+    "health": "live",
+    "last_ok_at": "2026-10-22T08:15:00-04:00",
+    "third_party_entry_banned": false,
+    "confirm_email_expected": false,
+    "pool_source": "sponsor",
+    "soft_field": false,
+    "source": "manual_2026-10-22",
+    "new_live": true,
+    "eligibility_summary": "Canada residents 18+. Free no-purchase entry by email per official rules. Closes Oct 27, 2026 11:59 PM ET.",
+    "exclusive": false,
+    "category": "health_wellness"
+  },
+  {
+    "id": "c-tm-1022",
+    "slug": "trakmaps-fcmq-garmin-gps-2026",
+    "name": "TrakMaps x FCMQ Garmin GPS",
+    "url": "https://www.trakmaps.com/en/fcmq-contest/",
+    "rules_url": "https://www.trakmaps.com/en/fcmq-contest/",
+    "prize_text": "Garmin GPS (approx. $700)",
+    "prize_tiers": [
+      {
+        "n": 1,
+        "arv_cad": 700.0,
+        "type": "product"
+      }
+    ],
+    "prize_pool_cad": 700.0,
+    "close_at_et": "2026-11-15T23:59:00-05:00",
+    "days_left": 0,
+    "region": "ca",
+    "qc_ok": true,
+    "free_entry": true,
+    "platform_family": "trakmaps",
+    "friction_badges": [
+      "form",
+      "captcha"
+    ],
+    "auto_class": "NEEDS_YOU",
+    "household_rule": "unknown",
+    "ev_low": 0.0,
+    "ev_mid": 0.0,
+    "ev_high": 0.0,
+    "minutes_to_enter": 3,
+    "health": "live",
+    "last_ok_at": "2026-10-22T08:15:00-04:00",
+    "third_party_entry_banned": false,
+    "confirm_email_expected": false,
+    "pool_source": "sponsor",
+    "soft_field": false,
+    "source": "manual_2026-10-22",
+    "new_live": true,
+    "eligibility_summary": "Canada; see official rules. Closes Nov 15, 2026.",
+    "exclusive": false
+  },
+  {
+    "id": "c-ex-1022",
+    "slug": "exclaim-orville-peck-toronto-tickets-vinyl-2026",
+    "name": "Exclaim! Orville Peck Toronto tickets + vinyl",
+    "url": "https://exclaim.ca/contests/orville-peck-win-tickets-to-the-toronto-show-and-mule-on-vinyl",
+    "rules_url": "https://exclaim.ca/contests/orville-peck-win-tickets-to-the-toronto-show-and-mule-on-vinyl",
+    "prize_text": "Orville Peck Toronto show tickets + Mule on vinyl",
+    "prize_tiers": [
+      {
+        "n": 1,
+        "arv_cad": 0.0,
+        "type": "product"
+      }
+    ],
+    "prize_pool_cad": 0.0,
+    "close_at_et": "2026-11-09T23:59:00-05:00",
+    "days_left": 0,
+    "region": "ca",
+    "qc_ok": true,
+    "free_entry": true,
+    "platform_family": "exclaim",
+    "friction_badges": [
+      "form",
+      "quiz"
+    ],
+    "auto_class": "NEEDS_YOU",
+    "household_rule": "unknown",
+    "ev_low": 0.0,
+    "ev_mid": 0.0,
+    "ev_high": 0.0,
+    "minutes_to_enter": 3,
+    "health": "live",
+    "last_ok_at": "2026-10-22T08:15:00-04:00",
+    "third_party_entry_banned": false,
+    "confirm_email_expected": false,
+    "pool_source": "sponsor",
+    "soft_field": false,
+    "source": "manual_2026-10-22",
+    "new_live": true,
+    "eligibility_summary": "Canada; skill-testing question; see official rules. Closes Nov 9, 2026.",
+    "exclusive": false
+  },
+  {
+    "id": "c-kt-1022",
+    "slug": "krolltravel-book-bundle-2026",
+    "name": "KrollTravel book bundle",
+    "url": "https://www.krolltravel.com/Contest.html",
+    "rules_url": "https://www.krolltravel.com/Contest.html",
+    "prize_text": "Travel book bundle ($220)",
+    "prize_tiers": [
+      {
+        "n": 1,
+        "arv_cad": 220.0,
+        "type": "product"
+      }
+    ],
+    "prize_pool_cad": 220.0,
+    "close_at_et": "2026-11-24T23:59:00-05:00",
+    "days_left": 0,
+    "region": "ca",
+    "qc_ok": true,
+    "free_entry": true,
+    "platform_family": "krolltravel",
+    "friction_badges": [
+      "form",
+      "quiz",
+      "daily"
+    ],
+    "auto_class": "NEEDS_YOU",
+    "household_rule": "unknown",
+    "ev_low": 0.0,
+    "ev_mid": 0.0,
+    "ev_high": 0.0,
+    "minutes_to_enter": 3,
+    "health": "live",
+    "last_ok_at": "2026-10-22T08:15:00-04:00",
+    "third_party_entry_banned": false,
+    "confirm_email_expected": false,
+    "pool_source": "sponsor",
+    "soft_field": false,
+    "source": "manual_2026-10-22",
+    "new_live": true,
+    "eligibility_summary": "See official rules; one entry per day until Nov 24, 2026.",
+    "exclusive": false
+  },
+  {
     "id": "c-001",
     "slug": "jann-arden-tickets-sun-peaks-package-castanet",
     "name": "Jann Arden Tickets / Sun Peaks Package (Castanet)",
