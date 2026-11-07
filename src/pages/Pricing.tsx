@@ -19,12 +19,12 @@ export function Pricing() {
           Unlock the time. Leave the contests free.
         </h1>
         <p className="text-slate-700 text-base sm:text-lg mt-3 leading-relaxed">
-          You would never fill all these contests yourself. Once, Triple, or year-round buys research and time so
-          applying to hundreds takes about as long as applying to one.
+          Once, Triple, or year-round records a payment and queues contests that are still open. A contest is not
+          submitted until your order shows a receipt.
         </p>
         <p className="text-sm text-slate-600 mt-2 leading-relaxed">
           The fee is research and time for free contest entries. One personal profile. Friends only with their consent
-          and identity. You tap codes when a contest asks.
+          and identity. You tap a code only when a brand asks, after a real submission.
         </p>
       </header>
 

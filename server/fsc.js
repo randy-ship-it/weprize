@@ -20,6 +20,7 @@
 import crypto from 'node:crypto'
 import express from 'express'
 import { decide, normPhone, callCostUsd, LIMITS, PLANS } from './fsc-core.js'
+import { srRoute, srStatus } from './spamroast.js'
 
 const SITE = 'https://weprize.net'
 const PAGE = SITE + '/spamfun'
@@ -140,6 +141,9 @@ export function createFscRouter({ stripe }) {
 
   async function checkout(req, res, admin = false) {
     const b = req.body || {}
+    if (process.env.FSC_PAID_CHECKOUT !== '1' && process.env.SR_PAID_CHECKOUT !== '1') {
+      return res.status(503).json({ ok: false, paid_not_open: true, error: 'Paid plans are not open for new checkout.' })
+    }
     if (b.company) return res.json({ ok: true, url: PAGE })
     const phone = normPhone(b.phone)
     const email = String(b.email || '').trim().toLowerCase()
@@ -186,6 +190,10 @@ export function createFscRouter({ stripe }) {
 
   async function route(req, res) {
     if (!safeEq(req.headers['x-fsc-secret'], env('FSC_HOOK_SECRET'))) return res.status(403).json({ error: 'forbidden' })
+    if (!(await dbOk())) {
+      // SpamRoast customers (Blob-backed) are recognised by the forwarding number and treated per plan.
+      try { const sr = await srRoute(req.body || {}); if (sr) return res.json(sr) } catch (e) { console.error('[fsc] srRoute', String(e?.message || e).slice(0, 160)) }
+    }
     if (!(await dbOk())) return res.json(env('FSC_OFF') === '1' ? { action: 'say', reason: 'off', text: "Hi! This line's assistant is taking a nap. Bye for now!" } : { action: 'fallback', reason: 'db_down' })
     const b = req.body || {}
     const callSid = String(b.callSid || '').slice(0, 64) || 'sim-' + crypto.randomUUID()
@@ -243,6 +251,7 @@ export function createFscRouter({ stripe }) {
   async function status(req, res) {
     const params = req.body || {}
     if (!verifyTwilio(SITE + '/api/fsc/status', params, req.headers['x-twilio-signature'], env('FSC_TWILIO_AUTH_TOKEN'))) return res.status(403).send('forbidden')
+    if (!(await dbOk())) { await srStatus(params).catch((e) => console.error('[fsc] srStatus', String(e?.message || e).slice(0, 160))); return res.type('text/plain').send('ok') }
     const dur = Number(params.CallDuration || 0)
     const row = (await sql('select used_ai, pro, user_id from fsc.calls where call_sid = $1', [params.CallSid]))[0]
     if (row) await sql('update fsc.calls set duration_s=$2, cost_usd=$3, final=true where call_sid=$1', [params.CallSid, dur, callCostUsd(dur, row.used_ai)])

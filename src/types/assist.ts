@@ -74,7 +74,7 @@ export const PACK_LABELS: Record<PackId, { name: string; price: string; blurb: s
   year_round: {
     name: 'Year-round',
     price: '$19.99/mo',
-    blurb: 'Continuous AUTO_OK applies for one person as contests open.',
+    blurb: 'Records one person for the month and queues current open contests once. Repeat entry is not running.',
   },
 }
 

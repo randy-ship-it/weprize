@@ -10,8 +10,8 @@ const steps = [
     body: 'Legal name + one real mailbox + phone you own. We do not provision second identities or plus-alias farms.',
   },
   {
-    title: 'Contest Bot queues AUTO_OK',
-    body: 'Statuses: queued → applying → applied → confirm_sent → needs_you → confirmed | failed. Leverage: hundreds of free applies in the time of one. Dashboard nudges when you must tap a code.',
+    title: 'Contest Bot queues open AUTO_OK contests',
+    body: 'Queued is not a submission. A contest counts as submitted only when the order has a receipt. Statuses include queued, failed, needs_you, and confirmed. You tap a code only after a brand asks.',
   },
   {
     title: 'Stop before CAPTCHA / OTP',
@@ -19,7 +19,7 @@ const steps = [
   },
   {
     title: 'Entry confirms',
-    body: 'Applied to X. Check email/SMS. Estimate, not a guarantee.',
+    body: 'A receipt on the order is the submission record. Your own "I finished this" note is not a brand receipt. Estimates are not a guarantee.',
   },
   {
     title: 'Year-round after receipts',
@@ -32,7 +32,7 @@ export function HowItWorks() {
     <div className="max-w-3xl space-y-6">
       <h1 className="text-2xl font-bold text-navy-950">How it works</h1>
       <p className="text-slate-600 text-sm leading-relaxed">
-        You would never fill all these free contests yourself. Not worth your time. What if it was, because you can apply to hundreds in the time it takes to apply to one?
+        Browse the free board first. Paid packs queue contests that are still open. Nothing on this site is a brand-site submission until an order shows a receipt.
       </p>
       <p className="text-slate-600 text-sm leading-relaxed">
         Contests stay free. Fee is research and time assist on eligible forms. Estimates only. We do not know what you will get. We cannot influence who wins.

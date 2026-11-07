@@ -12,7 +12,7 @@ export function LiveTally({ tally, autoOkLive }: { tally: Tally; autoOkLive: num
     { label: 'Total pot', value: `~${formatPoolM(tally.face_pool_cad)} CAD` },
     { label: 'Applied', value: String(tally.person_entries) },
     { label: 'Contests tracked', value: String(tally.unique_contests) },
-    { label: 'Easy applies ready', value: String(autoOkLive) },
+    { label: 'Open AUTO_OK', value: String(autoOkLive) },
     { label: 'Open book', value: `~${tally.open_inventory_range}` },
   ]
 
@@ -32,7 +32,7 @@ export function LiveTally({ tally, autoOkLive }: { tally: Tally; autoOkLive: num
         ))}
       </div>
       <p className="text-xs text-slate-300 mb-2 leading-relaxed">
-        Browse what&apos;s live, track closings, then we apply for you.
+        Browse what&apos;s live and track closings. Paid orders queue open contests. Submitted means a receipt is on the order.
       </p>
       <p className="text-[11px] text-slate-400 leading-relaxed">
         {tally.disclaimer} · Suggested expected $ is an estimate only (listed prize ARVs × rough odds assumptions) —

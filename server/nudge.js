@@ -121,11 +121,11 @@ export async function sendOrderReadyEmail(opts) {
 
   const subject = 'WePrize — open your order & share identity'
   const text = [
-    'Payment received. We apply. You tap codes when asked.',
+    'Payment received. Your order is recorded. Nothing has been submitted to a brand site yet.',
     '',
-    `Your ${pack} is ready.`,
+    `Your ${pack} is ready for identity.`,
     '',
-    'Next: open your order and share the legal name, email, and mailing address you own so we can apply on eligible AUTO_OK contests.',
+    'Next: open your order and share the legal name, email, and mailing address you own. We queue currently open contests after that. A contest is submitted only when your order shows a receipt.',
     '',
     `Open your order: ${orderUrl}`,
     '',
@@ -137,9 +137,9 @@ export async function sendOrderReadyEmail(opts) {
   <div style="font-family:Inter,Segoe UI,system-ui,sans-serif;color:#0B1F33;line-height:1.5;max-width:540px;margin:0 auto">
     <p style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#0D9488;font-weight:700;margin:0 0 8px">WePrize</p>
     <h1 style="font-size:22px;margin:0 0 12px;letter-spacing:-0.02em">Payment received</h1>
-    <p style="margin:0 0 16px;color:#475569">We apply. You tap codes when asked. Your <strong>${escapeHtml(pack)}</strong> is ready.</p>
+    <p style="margin:0 0 16px;color:#475569">Payment received. Nothing has been submitted to a brand site yet. Your <strong>${escapeHtml(pack)}</strong> is ready for identity.</p>
     <div style="border:1px solid rgba(11,31,51,.1);border-radius:16px;padding:16px;background:#F4F8FB;margin-bottom:20px">
-      <p style="margin:0;color:#475569;font-size:14px">Next: share the legal name, email, and mailing address you own so we can apply on eligible AUTO_OK contests.</p>
+      <p style="margin:0;color:#475569;font-size:14px">Next: share the legal name, email, and mailing address you own. We queue currently open contests after that. A contest is submitted only when your order shows a receipt.</p>
     </div>
     <p style="margin:0 0 24px">
       <a href="${escapeHtml(orderUrl)}" style="display:inline-block;background:#0D9488;color:#fff;text-decoration:none;font-weight:600;padding:12px 18px;border-radius:12px">Open your order</a>
@@ -157,6 +157,9 @@ export async function sendOrderReadyEmail(opts) {
  */
 export async function maybeNudgeNeedsYou({ store, job, orderToken }) {
   if (!job || job.status !== 'needs_you') return { sent: false, reason: 'not_needs_you' }
+  if (job.needs_you_reason === 'browser_apply_not_running' || job.needs_you_reason === 'worker_stub_pending_browser_apply') {
+    return { sent: false, reason: 'not_a_customer_step' }
+  }
   if (!job.identity_id) return { sent: false, reason: 'no_identity' }
   const identities = await store.listIdentities(job.order_id)
   const identity = identities.find((i) => i.id === job.identity_id)

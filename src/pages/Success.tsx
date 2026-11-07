@@ -57,9 +57,13 @@ export function Success() {
       {
         n: '2',
         title: 'Share your identity',
-        body: 'Legal name, email, and mailing address you own — required before we apply.',
+        body: 'Legal name, email, and mailing address you own — required before any contest can be queued.',
       },
-      { n: '3', title: 'We apply · you tap codes', body: 'AUTO_OK forms only. OTP stays with you.' },
+      {
+        n: '3',
+        title: 'Queue, then a receipt',
+        body: 'Open contests are queued. A brand site is not entered until your order shows a receipt. OTP stays with you.',
+      },
     ],
     [],
   )
@@ -108,7 +112,7 @@ export function Success() {
         <p className="section-kicker">You’re in</p>
         <h1 className="text-2xl font-bold tracking-tight text-navy-950 sm:text-3xl">Payment received</h1>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-600">
-          <span className="font-semibold text-navy-950">We apply. You tap codes when asked.</span>
+          <span className="font-semibold text-navy-950">Payment is recorded. Nothing is submitted until a receipt is on your order.</span>
           {meta ? (
             <>
               {' '}

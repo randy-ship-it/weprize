@@ -16,7 +16,8 @@ import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
 import { createQrRouter } from './qr/routes.js'
 import { createFscRouter } from './fsc.js'
-import { createPrankRouter } from './prank.js'
+import { createPrankRouter, screenerGate } from './prank.js'
+import { createSpamRoastRouter, isSrEvent, setSpendGate } from './spamroast.js'
 import { creditAttributionFromSession } from './qr/ledger.js'
 import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
 import {
@@ -26,6 +27,7 @@ import {
   normalizeConsentEmail,
   waitlistConsentVersion,
 } from './audience-consent.js'
+import { isCustomerActionReason, isStoreOutage } from './fulfillment.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -38,6 +40,8 @@ const stripe = stripeSecret ? new Stripe(stripeSecret) : null
 
 const app = express()
 const fscRouter = createFscRouter({ stripe })
+const srRouter = createSpamRoastRouter({ stripe })
+setSpendGate(screenerGate)
 app.set('trust proxy', 1)
 
 /** Stripe webhook needs raw body BEFORE json parser. */
@@ -59,6 +63,12 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
       })
     }
 
+    // SpamRoast (spamroast.com) subscriptions: Blob-backed, never touch the contest-order store.
+    if (isSrEvent(event)) {
+      await srRouter.handleStripeEvent(event)
+      return res.json({ received: true, app: 'sr' })
+    }
+
     // FunSpamCover events are handled separately (and never touch the contest-order store).
     if (event.data?.object?.metadata?.app === 'fsc') {
       await fscRouter.handleStripeEvent(event)
@@ -73,14 +83,19 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 
     res.json({ received: true })
   } catch (err) {
+    if (isStoreOutage(err)) {
+      console.error('[webhook] store unavailable')
+      return res.status(503).json({ error: 'store_unavailable' })
+    }
     console.error('[webhook]', err?.message || err)
-    res.status(400).json({ error: 'webhook_error', message: err?.message || 'failed' })
+    res.status(400).json({ error: 'webhook_error', message: 'failed' })
   }
 })
 
 app.use(express.json({ limit: '1mb' }))
 app.use('/api/fsc/prank', createPrankRouter({ recordCost: (sid, dur, usd) => fscRouter.recordExternalCost(sid, dur, usd) }))
 app.use('/api/fsc', fscRouter)
+app.use('/api/sr', srRouter)
 
 app.use('/api/qr', createQrRouter({ getStore, stripe }))
 app.use('/api', createConsumersPartnersRouter({ getStore }))
@@ -100,7 +115,12 @@ app.get('/api/health', async (_req, res) => {
       time: new Date().toISOString(),
     })
   } catch (err) {
-    res.status(500).json({ ok: false, error: err?.message || 'health_failed' })
+    if (isStoreOutage(err)) {
+      console.error('[health] store unavailable')
+      return res.status(503).json({ ok: false, error: 'store_unavailable' })
+    }
+    console.error('[health]', err?.message || err)
+    res.status(500).json({ ok: false, error: 'health_failed' })
   }
 })
 
@@ -179,6 +199,14 @@ const REF_RE = /^[a-zA-Z0-9]{6,8}$/
  */
 app.post('/api/checkout', async (req, res) => {
   try {
+    // Reversible: set WEPRIZE_PAID_CHECKOUT=1 only after a real submission receipt exists.
+    // Does not cancel anyone who already paid.
+    if (process.env.WEPRIZE_PAID_CHECKOUT !== '1') {
+      return res.status(503).json({
+        error: 'paid_not_open',
+        message: 'Paid contest packs are not open. A queued contest is not an entry, and year-round repeat entry is not running.',
+      })
+    }
     if (!stripe) {
       return res.status(503).json({
         error: 'checkout_unavailable',
@@ -361,7 +389,10 @@ app.get('/api/orders/:token/jobs', async (req, res) => {
       token: order.token,
       jobs: jobs.map((j) => ({
         ...publicJob(j),
-        what_to_do: j.status === 'needs_you' || j.status === 'confirm_sent' ? humanNeedsYou(j.needs_you_reason) : null,
+        what_to_do:
+          j.status === 'needs_you' || j.status === 'confirm_sent' || j.status === 'failed'
+            ? humanNeedsYou(j.needs_you_reason)
+            : null,
       })),
       counts: publicOrder(order, [], jobs).job_counts,
     })
@@ -379,6 +410,12 @@ app.post('/api/orders/:token/jobs/:jobId/ack', async (req, res) => {
     if (!order) return res.status(404).json({ error: 'order_not_found' })
     const job = await store.getJob(req.params.jobId)
     if (!job || job.order_id !== order.id) return res.status(404).json({ error: 'job_not_found' })
+    if (!isCustomerActionReason(job.needs_you_reason)) {
+      return res.status(409).json({
+        error: 'not_submitted',
+        message: 'This contest has not been submitted to the brand site, so there is no step to confirm.',
+      })
+    }
     if (job.status !== 'needs_you' && job.status !== 'confirm_sent') {
       return res.status(400).json({ error: 'job_not_ackable', status: job.status })
     }

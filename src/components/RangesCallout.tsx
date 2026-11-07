@@ -18,7 +18,7 @@ export function RangesCallout({
       <ul className="list-disc pl-5 space-y-1">
         <li>Open inventory growing · CA-eligible preferred · ~5–10 new/day</li>
         <li>
-          AUTO_OK queued this week:{' '}
+          Open AUTO_OK contests (queued is not submitted):{' '}
           <span className="tabular font-semibold text-navy-950">{autoOkLive} (live)</span>
         </li>
         <li>
