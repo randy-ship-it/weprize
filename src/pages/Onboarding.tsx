@@ -151,11 +151,11 @@ export function Onboarding() {
       <div>
         <p className="section-kicker mb-2">BYO identity</p>
         <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight mb-2">
-          Who should we apply as?
+          Whose identity should be on the queue?
         </h1>
         <p className="text-sm text-slate-600 leading-relaxed">
-          One personal profile for you — a real legal adult. Applying for a friend? Use <em>their</em> consent and identity, not a fake email.
-          We fill AUTO_OK forms with these details. You tap email/SMS codes when a brand asks — we stop before CAPTCHA and OTP.
+          One personal profile for you — a real legal adult. Queuing for a friend? Use <em>their</em> consent and identity, not a fake email.
+          Saving identity queues open AUTO_OK contests. It does not submit them. You tap a code only after a brand asks.
           Max 10 purchases per buyer (not a bulk business tool).
         </p>
         {meta ? (
@@ -167,8 +167,8 @@ export function Onboarding() {
 
       <div className="grid gap-3 sm:grid-cols-2 text-xs">
         <div className="card-surface rounded-xl p-3.5">
-          <p className="font-semibold text-navy-950 mb-0.5">We apply</p>
-          <p className="text-slate-500 leading-relaxed">Eligible free AUTO_OK contests from the live book.</p>
+          <p className="font-semibold text-navy-950 mb-0.5">We queue</p>
+          <p className="text-slate-500 leading-relaxed">Open free AUTO_OK contests. Queued is not submitted.</p>
         </div>
         <div className="card-surface rounded-xl p-3.5">
           <p className="font-semibold text-navy-950 mb-0.5">You tap codes</p>

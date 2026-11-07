@@ -34,6 +34,7 @@ export type ServerOrder = {
   needs_identity: boolean
   job_counts: Record<string, number>
   jobs_total: number
+  submitted_count?: number
   seed_n: number
   message: string
 }
@@ -59,6 +60,8 @@ export type ServerJob = {
   contest_title: string
   status: Apply['status']
   needs_you_reason: string | null
+  submitted?: boolean
+  customer_step?: boolean
   confirm_ref: string | null
   screenshot_path: boolean
   updated_at: string

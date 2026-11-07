@@ -1,6 +1,13 @@
 import { publicIdentity } from './identity.js'
 import { PACKS, slotsFor } from './packs.js'
 import { seedMeta } from './contests.js'
+import {
+  BROWSER_APPLY_NOT_RUNNING,
+  LEGACY_STUB_REASON,
+  fulfillmentMessage,
+  isCustomerActionReason,
+  jobWasSubmitted,
+} from './fulfillment.js'
 
 /** Public order payload — no Stripe secrets, no raw dump beyond customer needs. */
 export function publicOrder(order, identities = [], jobs = []) {
@@ -18,6 +25,7 @@ export function publicOrder(order, identities = [], jobs = []) {
     if (counts[j.status] != null) counts[j.status] += 1
   }
   const meta = seedMeta()
+  const fulfillment = fulfillmentMessage(order, jobs)
   return {
     token: order.token,
     pack: order.pack,
@@ -33,9 +41,10 @@ export function publicOrder(order, identities = [], jobs = []) {
     needs_identity: identities.length < slots,
     job_counts: counts,
     jobs_total: jobs.length,
+    submitted_count: fulfillment.submitted_count,
     seed_n: meta.n,
     stripe_session_id: undefined, // never expose unless needed — omit
-    message: 'We apply. You tap codes when asked.',
+    message: fulfillment.message,
   }
 }
 
@@ -47,6 +56,10 @@ export function publicJob(job) {
     contest_title: job.contest_title,
     status: job.status,
     needs_you_reason: job.needs_you_reason,
+    submitted: jobWasSubmitted(job),
+    customer_step:
+      (job.status === 'needs_you' || job.status === 'confirm_sent') &&
+      isCustomerActionReason(job.needs_you_reason),
     confirm_ref: job.confirm_ref,
     screenshot_path: job.screenshot_path ? true : false, // existence only
     updated_at: job.updated_at,
@@ -59,8 +72,8 @@ export function humanNeedsYou(reason) {
   if (!reason) {
     return 'Open the brand site or your inbox and finish the step they asked for (code, confirm link, or account). Then return here.'
   }
-  if (reason === 'worker_stub_pending_browser_apply') {
-    return 'Our apply worker has this contest ready. When the live browser apply hits CAPTCHA or OTP, you will get a clear next step here.'
+  if (reason === LEGACY_STUB_REASON || reason === BROWSER_APPLY_NOT_RUNNING) {
+    return 'This contest is on your order, but it has not been submitted to the brand site. Automatic browser apply is not running, so there is no code to enter and nothing to mark done.'
   }
   if (reason === 'captcha') {
     return 'The brand site showed a CAPTCHA. Solve it on their page with your own browser — we stop before CAPTCHA on purpose.'

@@ -174,7 +174,7 @@ export function Dashboard() {
           <p className="section-kicker mb-1.5">Your assist</p>
           <h1 className="text-2xl sm:text-3xl font-bold text-navy-950 tracking-tight">Dashboard</h1>
           <p className="text-sm text-slate-600 mt-1.5 leading-relaxed max-w-xl">
-            We apply to free contests for you. Nudge cards appear when a brand needs a code or confirm — estimates only, never
+            This demo shows queue states. A contest is submitted only when a receipt exists. Nudge cards appear when a brand needs a code or confirm — estimates only, never
             a guarantee.
           </p>
         </div>

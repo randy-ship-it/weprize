@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import type { Contest, FilterState } from '../types/contest'
 import seed from '../data/contests.json'
 import { applyFilters, DEFAULT_FILTERS } from '../lib/filters'
+import { isEligibleCurrentContest } from '../../server/contest-eligibility.js'
 
 const FILTER_KEY = 'weprize-filters-v1'
 const LEGACY_FILTER_KEY = 'wecontest-filters-v1'
@@ -43,7 +44,7 @@ export function useContests() {
   )
 
   const autoOkCount = useMemo(
-    () => contests.filter((c) => c.auto_class === 'AUTO_OK' && c.health === 'live').length,
+    () => contests.filter((c) => isEligibleCurrentContest(c)).length,
     [contests],
   )
 

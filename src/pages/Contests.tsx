@@ -14,8 +14,9 @@ export function Contests() {
         <p className="section-kicker mb-2">Pool · not the open book</p>
         <h1 className="text-3xl font-bold text-navy-950 mb-2">Contests in motion</h1>
         <p className="text-slate-600 max-w-2xl">
-          <span className="tabular font-semibold">{autoOkCount}</span> ready this week. We show vibes and closing heat —
-          not scrapeable entry links. Start free or buy an assist pack and we apply for you.
+          <span className="tabular font-semibold">{autoOkCount}</span> open AUTO_OK contests. We show vibes and closing
+          heat — not scrapeable entry links. A paid pack queues these. It does not submit them until an order has a
+          receipt.
         </p>
       </div>
 

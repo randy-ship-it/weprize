@@ -87,23 +87,14 @@ export function Order() {
     return () => window.clearInterval(id)
   }, [refresh])
 
-  const needsYouJobs = useMemo(
-    () => jobs.filter((j) => j.status === 'needs_you' || j.status === 'confirm_sent'),
-    [jobs],
-  )
-  const appliedJobs = useMemo(
-    () => jobs.filter((j) => j.status === 'applied' || j.status === 'confirmed'),
+  const needsYouJobs = useMemo(() => jobs.filter((j) => j.customer_step), [jobs])
+  const appliedJobs = useMemo(() => jobs.filter((j) => j.submitted), [jobs])
+  const markedDoneJobs = useMemo(
+    () => jobs.filter((j) => j.status === 'confirmed' && !j.submitted),
     [jobs],
   )
   const otherJobs = useMemo(
-    () =>
-      jobs.filter(
-        (j) =>
-          j.status !== 'needs_you' &&
-          j.status !== 'confirm_sent' &&
-          j.status !== 'applied' &&
-          j.status !== 'confirmed',
-      ),
+    () => jobs.filter((j) => !j.submitted && !j.customer_step && j.status !== 'confirmed'),
     [jobs],
   )
 
@@ -187,12 +178,10 @@ export function Order() {
     <div className="mx-auto max-w-3xl space-y-8">
       <header className="space-y-3">
         <p className="section-kicker">Your assist</p>
-        <h1 className="text-2xl font-bold tracking-tight text-navy-950 sm:text-3xl">
-          {order.pack_label} · we apply, you tap codes
-        </h1>
+        <h1 className="text-2xl font-bold tracking-tight text-navy-950 sm:text-3xl">{order.pack_label}</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-slate-600">
-          {order.message || 'We apply. You tap codes when asked.'} Contests stay free on brand sites. Your fee is
-          for research and time — not odds, not influence.
+          {order.message} Contests stay free on brand sites. Your fee is for research and time — not odds, not
+          influence. Queued is not a submission.
         </p>
       </header>
 
@@ -273,7 +262,7 @@ export function Order() {
             ) : null}
             <div className="sm:col-span-2">
               <button type="submit" disabled={saving} className="btn-primary px-5 py-2.5 text-sm disabled:opacity-60">
-                {saving ? 'Saving…' : 'Save identity & queue applies'}
+                {saving ? 'Saving…' : 'Save identity and queue current contests'}
               </button>
             </div>
           </form>
@@ -284,7 +273,8 @@ export function Order() {
             <p className="text-sm font-semibold text-navy-950">Identity on file</p>
             <p className="mt-0.5 text-xs text-slate-500">
               {order.identities_count}/{order.identity_slots} slot{order.identity_slots === 1 ? '' : 's'} ·{' '}
-              {order.jobs_total} AUTO_OK jobs seeded (cap {order.seed_n}/person)
+              {order.jobs_total} current contests queued (cap {order.seed_n}/person)
+              {typeof order.submitted_count === 'number' ? ` · ${order.submitted_count} with a receipt` : ''}
             </p>
           </div>
           {order.identities_count < order.identity_slots ? (
@@ -337,7 +327,7 @@ export function Order() {
 
       {appliedJobs.length > 0 ? (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-navy-950">Applied / confirmed</h2>
+          <h2 className="text-lg font-semibold text-navy-950">Receipt on file</h2>
           <ul className="space-y-2">
             {appliedJobs.map((job) => (
               <li
@@ -354,8 +344,24 @@ export function Order() {
                   rel="noopener noreferrer"
                   className="text-xs text-teal-600 hover:underline"
                 >
-                  Receipt link
+                  Brand site
                 </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {markedDoneJobs.length > 0 ? (
+        <section className="space-y-3">
+          <div>
+            <h2 className="text-lg font-semibold text-navy-950">You marked this done</h2>
+            <p className="text-sm text-slate-600">This is your note. It is not a receipt from the brand site.</p>
+          </div>
+          <ul className="space-y-2">
+            {markedDoneJobs.map((job) => (
+              <li key={job.id} className="rounded-xl border border-navy-950/8 bg-white px-4 py-3">
+                <p className="text-sm font-medium text-navy-950">{job.contest_title}</p>
               </li>
             ))}
           </ul>
@@ -364,16 +370,19 @@ export function Order() {
 
       {otherJobs.length > 0 ? (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-navy-950">In progress</h2>
+          <h2 className="text-lg font-semibold text-navy-950">Not submitted</h2>
           <ul className="space-y-2">
             {otherJobs.map((job) => (
               <li
                 key={job.id}
                 className="flex items-center justify-between gap-2 rounded-xl border border-navy-950/8 bg-white px-4 py-3"
               >
-                <p className="text-sm text-navy-950">{job.contest_title}</p>
+                <div>
+                  <p className="text-sm text-navy-950">{job.contest_title}</p>
+                  {job.what_to_do ? <p className="mt-1 text-xs text-slate-600">{job.what_to_do}</p> : null}
+                </div>
                 <span className="text-xs font-semibold text-slate-500">
-                  {APPLY_STATUS_LABELS[job.status as ApplyStatus] || job.status}
+                  {job.status === 'queued' ? 'Queued, not submitted' : APPLY_STATUS_LABELS[job.status as ApplyStatus] || job.status}
                 </span>
               </li>
             ))}

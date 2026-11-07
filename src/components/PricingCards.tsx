@@ -31,14 +31,14 @@ function packEvLine(pack: PackId | undefined, autoOkLive: number, estEvMidCad: n
   const mid = Math.round(perContest * n * (pack === 'triple' ? 0.9 : 1) * Math.min(rounds, 2))
   const low = Math.max(1, Math.round(mid * 0.5))
   const high = Math.round(mid * 1.6)
-  return `Suggested expected value ~$${low} to $${high} CAD if we apply to ~${Math.round(n)} contests this cycle. Estimate only, not a guarantee.`
+  return `Example value ~$${low} to $${high} CAD if ~${Math.round(n)} contests were entered. Estimate only, not a guarantee, and not a submission receipt.`
 }
 
 const plans = (n: number): Plan[] => [
   {
     name: 'Free',
     price: '$0',
-    print: 'Browse and track. We apply to 10 contests for you. Share a peer link. No cash rewards.',
+    print: 'Browse and track the board. Free does not file contest entries.',
     cta: 'Browse contests',
     to: '/contests',
     soft: true,
@@ -46,7 +46,7 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Once',
     price: '$9',
-    print: `One round of applies for one person (your profile). About ${n} contests ready this week. Hundreds vs one on time. Desire the queue, not bulk farm accounts.`,
+    print: `Queues up to ${n} currently open Canada contests for one person. Queued is not submitted. A brand site is entered only when your order shows a receipt.`,
     cta: 'Unlock Once',
     pack: 'once',
     money: true,
@@ -54,7 +54,7 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Triple',
     price: '$15',
-    print: 'Three people you know (with their consent + identity), or three apply rounds. Real adults only. Not a business entry desk.',
+    print: 'Up to three people you know, with their consent and identity. Each person gets the current open queue. Queued is not submitted.',
     cta: 'Get Triple',
     pack: 'triple',
     money: true,
@@ -62,7 +62,7 @@ const plans = (n: number): Plan[] => [
   {
     name: 'Year-round',
     price: '$19.99/mo',
-    print: 'We keep applying for one person as new contests open. Personal use; max 10 purchases per buyer email.',
+    print: 'Records a monthly plan for one person and queues the current open contests once. Repeat entry as new contests open is not running.',
     cta: 'Unlock year-round',
     pack: 'year_round',
     money: true,

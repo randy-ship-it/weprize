@@ -13,7 +13,10 @@ import { slotsFor } from './packs.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DATA_DIR = join(root, 'data')
-const FILE = join(DATA_DIR, 'weprize.json')
+
+function dataFile() {
+  return process.env.WEPRIZE_JSON_PATH || join(DATA_DIR, 'weprize.json')
+}
 
 function empty() {
   const stamp = new Date().toISOString()
@@ -42,9 +45,10 @@ function empty() {
 }
 
 function load() {
-  if (!existsSync(FILE)) return empty()
+  const file = dataFile()
+  if (!existsSync(file)) return empty()
   try {
-    const parsed = JSON.parse(readFileSync(FILE, 'utf8'))
+    const parsed = JSON.parse(readFileSync(file, 'utf8'))
     return {
       customers: parsed.customers || [],
       orders: parsed.orders || [],
@@ -73,10 +77,11 @@ function load() {
 }
 
 function save(db) {
-  mkdirSync(DATA_DIR, { recursive: true })
-  const tmp = `${FILE}.tmp`
+  const file = dataFile()
+  mkdirSync(dirname(file), { recursive: true })
+  const tmp = `${file}.tmp`
   writeFileSync(tmp, JSON.stringify(db, null, 2))
-  renameSync(tmp, FILE)
+  renameSync(tmp, file)
 }
 
 let chain = Promise.resolve()
@@ -99,15 +104,16 @@ function shortCode(len = 7) {
 }
 
 export function createJsonStore() {
-  mkdirSync(DATA_DIR, { recursive: true })
-  if (!existsSync(FILE)) save(empty())
+  const file = dataFile()
+  mkdirSync(dirname(file), { recursive: true })
+  if (!existsSync(file)) save(empty())
 
   return {
     kind: 'json',
-    path: FILE,
+    path: process.env.WEPRIZE_JSON_PATH ? 'json-custom' : 'data/weprize.json',
 
     async health() {
-      return { store: 'json', path: 'data/weprize.json' }
+      return { store: 'json', path: process.env.WEPRIZE_JSON_PATH ? 'json-custom' : 'data/weprize.json' }
     },
 
     async getOrderByToken(token) {

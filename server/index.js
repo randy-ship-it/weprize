@@ -26,6 +26,7 @@ import {
   normalizeConsentEmail,
   waitlistConsentVersion,
 } from './audience-consent.js'
+import { isCustomerActionReason, isStoreOutage } from './fulfillment.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -73,8 +74,12 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 
     res.json({ received: true })
   } catch (err) {
+    if (isStoreOutage(err)) {
+      console.error('[webhook] store unavailable')
+      return res.status(503).json({ error: 'store_unavailable' })
+    }
     console.error('[webhook]', err?.message || err)
-    res.status(400).json({ error: 'webhook_error', message: err?.message || 'failed' })
+    res.status(400).json({ error: 'webhook_error', message: 'failed' })
   }
 })
 
@@ -100,7 +105,12 @@ app.get('/api/health', async (_req, res) => {
       time: new Date().toISOString(),
     })
   } catch (err) {
-    res.status(500).json({ ok: false, error: err?.message || 'health_failed' })
+    if (isStoreOutage(err)) {
+      console.error('[health] store unavailable')
+      return res.status(503).json({ ok: false, error: 'store_unavailable' })
+    }
+    console.error('[health]', err?.message || err)
+    res.status(500).json({ ok: false, error: 'health_failed' })
   }
 })
 
@@ -249,6 +259,13 @@ app.get('/api/orders/by-session/:sessionId', async (req, res) => {
     const jobs = await store.listJobs(order.id)
     res.json({ order: publicOrder(order, identities, jobs) })
   } catch (err) {
+    if (isStoreOutage(err)) {
+      console.error('[by-session] store unavailable')
+      return res.status(503).json({
+        error: 'store_unavailable',
+        message: 'Order records are temporarily unavailable.',
+      })
+    }
     console.error('[by-session]', err)
     res.status(500).json({ error: 'server_error' })
   }
@@ -318,6 +335,13 @@ app.get('/api/orders/:token', async (req, res) => {
     const jobs = await store.listJobs(order.id)
     res.json({ order: publicOrder(order, identities, jobs) })
   } catch (err) {
+    if (isStoreOutage(err)) {
+      console.error('[order] store unavailable')
+      return res.status(503).json({
+        error: 'store_unavailable',
+        message: 'Order records are temporarily unavailable.',
+      })
+    }
     console.error('[order]', err)
     res.status(500).json({ error: 'server_error' })
   }
@@ -361,11 +385,21 @@ app.get('/api/orders/:token/jobs', async (req, res) => {
       token: order.token,
       jobs: jobs.map((j) => ({
         ...publicJob(j),
-        what_to_do: j.status === 'needs_you' || j.status === 'confirm_sent' ? humanNeedsYou(j.needs_you_reason) : null,
+        what_to_do:
+          j.status === 'needs_you' || j.status === 'confirm_sent' || j.status === 'failed'
+            ? humanNeedsYou(j.needs_you_reason)
+            : null,
       })),
       counts: publicOrder(order, [], jobs).job_counts,
     })
   } catch (err) {
+    if (isStoreOutage(err)) {
+      console.error('[jobs] store unavailable')
+      return res.status(503).json({
+        error: 'store_unavailable',
+        message: 'Order records are temporarily unavailable.',
+      })
+    }
     console.error('[jobs]', err)
     res.status(500).json({ error: 'server_error' })
   }
@@ -379,6 +413,12 @@ app.post('/api/orders/:token/jobs/:jobId/ack', async (req, res) => {
     if (!order) return res.status(404).json({ error: 'order_not_found' })
     const job = await store.getJob(req.params.jobId)
     if (!job || job.order_id !== order.id) return res.status(404).json({ error: 'job_not_found' })
+    if (!isCustomerActionReason(job.needs_you_reason)) {
+      return res.status(409).json({
+        error: 'not_submitted',
+        message: 'This contest has not been submitted to the brand site, so there is no step to confirm.',
+      })
+    }
     if (job.status !== 'needs_you' && job.status !== 'confirm_sent') {
       return res.status(400).json({ error: 'job_not_ackable', status: job.status })
     }
