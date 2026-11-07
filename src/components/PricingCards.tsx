@@ -1,6 +1,5 @@
 import { useState, type FormEvent, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { paymentLinkWithRef } from '../data/stripe'
 import { createCheckout } from '../lib/api'
 import { getInboundRef } from '../lib/shareRef'
 import { loadPrepayIdentity, savePrepayIdentity } from '../lib/prepayIdentity'
@@ -73,6 +72,7 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
   const list = plans(autoOkLive)
   const inbound = getInboundRef()
   const [pendingPack, setPendingPack] = useState<PackId | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [busyPack, setBusyPack] = useState<PackId | null>(null)
   const checkoutBusy = busyPack !== null
   const [preEmail, setPreEmail] = useState('')
@@ -80,6 +80,7 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
 
   async function startCheckout(pack: PackId) {
     setBusyPack(pack)
+    setCheckoutError(null)
     try {
       const { url } = await createCheckout(pack, inbound)
       if (url) {
@@ -87,10 +88,9 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
         return
       }
       throw new Error('missing_url')
-    } catch {
-      // Fallback: Payment Links only if server Checkout fails. Prefer /api/checkout.
-      const href = paymentLinkWithRef(pack, inbound)
-      window.location.href = href
+    } catch (err) {
+      const detail = (err as { detail?: { message?: string } }).detail
+      setCheckoutError(detail?.message || 'Paid contest packs are not open. Nothing has been charged.')
     } finally {
       setBusyPack(null)
       setPendingPack(null)
@@ -175,6 +175,9 @@ export function PricingCards({ autoOkLive, teaser = false, estEvMidCad = 198 }: 
           )
         })}
       </div>
+      {checkoutError ? (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">{checkoutError}</p>
+      ) : null}
 
       {pendingPack ? (
         <div

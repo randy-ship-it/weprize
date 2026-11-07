@@ -16,7 +16,8 @@ import { resendConfigured, sendOrderReadyEmail } from './nudge.js'
 import { seedMeta } from './contests.js'
 import { createQrRouter } from './qr/routes.js'
 import { createFscRouter } from './fsc.js'
-import { createPrankRouter } from './prank.js'
+import { createPrankRouter, screenerGate } from './prank.js'
+import { createSpamRoastRouter, isSrEvent, setSpendGate } from './spamroast.js'
 import { creditAttributionFromSession } from './qr/ledger.js'
 import { createConsumersPartnersRouter } from './qr/consumers-partners.js'
 import {
@@ -39,6 +40,8 @@ const stripe = stripeSecret ? new Stripe(stripeSecret) : null
 
 const app = express()
 const fscRouter = createFscRouter({ stripe })
+const srRouter = createSpamRoastRouter({ stripe })
+setSpendGate(screenerGate)
 app.set('trust proxy', 1)
 
 /** Stripe webhook needs raw body BEFORE json parser. */
@@ -58,6 +61,12 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
         error: 'stripe_webhook_not_configured',
         hint: 'Set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET',
       })
+    }
+
+    // SpamRoast (spamroast.com) subscriptions: Blob-backed, never touch the contest-order store.
+    if (isSrEvent(event)) {
+      await srRouter.handleStripeEvent(event)
+      return res.json({ received: true, app: 'sr' })
     }
 
     // FunSpamCover events are handled separately (and never touch the contest-order store).
@@ -86,6 +95,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 app.use(express.json({ limit: '1mb' }))
 app.use('/api/fsc/prank', createPrankRouter({ recordCost: (sid, dur, usd) => fscRouter.recordExternalCost(sid, dur, usd) }))
 app.use('/api/fsc', fscRouter)
+app.use('/api/sr', srRouter)
 
 app.use('/api/qr', createQrRouter({ getStore, stripe }))
 app.use('/api', createConsumersPartnersRouter({ getStore }))
@@ -189,6 +199,14 @@ const REF_RE = /^[a-zA-Z0-9]{6,8}$/
  */
 app.post('/api/checkout', async (req, res) => {
   try {
+    // Reversible: set WEPRIZE_PAID_CHECKOUT=1 only after a real submission receipt exists.
+    // Does not cancel anyone who already paid.
+    if (process.env.WEPRIZE_PAID_CHECKOUT !== '1') {
+      return res.status(503).json({
+        error: 'paid_not_open',
+        message: 'Paid contest packs are not open. A queued contest is not an entry, and year-round repeat entry is not running.',
+      })
+    }
     if (!stripe) {
       return res.status(503).json({
         error: 'checkout_unavailable',
@@ -259,13 +277,6 @@ app.get('/api/orders/by-session/:sessionId', async (req, res) => {
     const jobs = await store.listJobs(order.id)
     res.json({ order: publicOrder(order, identities, jobs) })
   } catch (err) {
-    if (isStoreOutage(err)) {
-      console.error('[by-session] store unavailable')
-      return res.status(503).json({
-        error: 'store_unavailable',
-        message: 'Order records are temporarily unavailable.',
-      })
-    }
     console.error('[by-session]', err)
     res.status(500).json({ error: 'server_error' })
   }
@@ -335,13 +346,6 @@ app.get('/api/orders/:token', async (req, res) => {
     const jobs = await store.listJobs(order.id)
     res.json({ order: publicOrder(order, identities, jobs) })
   } catch (err) {
-    if (isStoreOutage(err)) {
-      console.error('[order] store unavailable')
-      return res.status(503).json({
-        error: 'store_unavailable',
-        message: 'Order records are temporarily unavailable.',
-      })
-    }
     console.error('[order]', err)
     res.status(500).json({ error: 'server_error' })
   }
@@ -393,13 +397,6 @@ app.get('/api/orders/:token/jobs', async (req, res) => {
       counts: publicOrder(order, [], jobs).job_counts,
     })
   } catch (err) {
-    if (isStoreOutage(err)) {
-      console.error('[jobs] store unavailable')
-      return res.status(503).json({
-        error: 'store_unavailable',
-        message: 'Order records are temporarily unavailable.',
-      })
-    }
     console.error('[jobs]', err)
     res.status(500).json({ error: 'server_error' })
   }

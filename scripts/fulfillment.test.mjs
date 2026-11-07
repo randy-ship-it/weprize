@@ -104,6 +104,20 @@ test('paid webhook queues only open contests and does not claim submission', asy
   const server = await listen(app)
   const port = server.address().port
   try {
+    const closed = await jsonRequest(port, 'POST', '/api/checkout', { pack: 'once' })
+    assert.equal(closed.status, 503)
+    assert.equal(closed.body.error, 'paid_not_open')
+
+    const smart = await jsonRequest(port, 'POST', '/api/sr/signup', {
+      name: 'Test Buyer',
+      email: 'buyer@example.com',
+      phone: '4165550100',
+      plan: 'smart',
+      consent: true,
+    })
+    assert.equal(smart.status, 503)
+    assert.equal(smart.body.paid_not_open, true)
+
     const paid = await jsonRequest(port, 'POST', '/api/stripe/webhook', {
       id: 'evt_test_once',
       type: 'checkout.session.completed',

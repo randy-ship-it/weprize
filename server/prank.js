@@ -70,6 +70,13 @@ async function spend24h() {
   for (const m of msgs.messages || []) { if (new Date(m.date_created).getTime() >= since) usd += (+m.num_segments || 1) * PRANK_RATES.smsSeg }
   return usd
 }
+/** Shared US$/24h spend gate for the screener number (also used by SpamRoast customer calls). */
+export async function screenerGate() {
+  if (env('FSC_OFF') === '1') return { ok: false, why: 'off' }
+  const cap = parseFloat(env('FSC_GLOBAL_DAILY_CAP_USD') || '3') || 3
+  const usd = await spend24h()
+  return usd + 0.122 > cap ? { ok: false, why: 'cap', usd } : { ok: true, usd }
+}
 async function gate() {
   if (env('FSC_OFF') === '1' || env('PRANK_OFF') === '1') return { ok: false, why: 'off' }
   const cap = parseFloat(env('FSC_GLOBAL_DAILY_CAP_USD') || '3') || 3
